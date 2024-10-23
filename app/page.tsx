@@ -1,6 +1,16 @@
 "use client";
 import { useEffect } from "react";
-import { Button, Flex, Image, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  HStack,
+  Image,
+  Input,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import { Field } from "@/components/ui/field";
+import { PasswordInput } from "@/components/ui/password-input";
 
 function App() {
   useEffect(() => {
@@ -67,14 +77,25 @@ function App() {
           bgColor="#031436"
           borderRadius="100px"
           position="absolute"
-          top="2"
-          left="3"
+          top="50%"
+          transform="translateY(-50%)"
+          left="2"
           src="/assets/icons/icon-512x512.png"
           width={["50px"]}
         />
-        <Flex align="" justify="center" direction="column" width="80%">
-          <Text>Agenda Castelinho</Text>
-          <Text>app.castelinhodosaber.com</Text>
+        <Flex
+          align=""
+          justify="center"
+          direction="column"
+          marginLeft="55px"
+          width="80%"
+        >
+          <Text fontSize={["16px"]} fontWeight={600}>
+            Agenda Castelinho
+          </Text>
+          <Text color="rgb(50,50,50)" fontSize={["13px"]}>
+            app.castelinhodosaber.com
+          </Text>
           <Button
             _hover={{ bgColor: "#0056b3" }}
             bgColor="#007bff"
@@ -88,20 +109,50 @@ function App() {
             transition="background-color 0.3s"
             id="install-button"
           >
-            Adicionar
+            Instalar aplicativo
           </Button>
         </Flex>
       </Flex>
       <Image
         alt="logo"
         src="/assets/icons/icon-512x512.png"
-        width={["80%", "80%", "300px"]}
+        width={["60%", "60%", "300px"]}
       />
       <Image
         alt="logo"
         src="/assets/images/fonteBranco.png"
-        width={["80%", "80%", "300px"]}
+        width={["60%", "60%", "300px"]}
       />
+      <Stack gap="10" width="70%">
+        <Field label="E-mail">
+          <Input
+            border="1px solid white"
+            borderRadius="12px"
+            variant="outline"
+          />
+        </Field>
+        <Field label="Senha">
+          <PasswordInput border="1px solid white" borderRadius="12px" />
+        </Field>
+        <Flex align="center" gap="8px" justify="center">
+          <Flex
+            height="14px"
+            borderRadius="4px"
+            width="14px"
+            bgColor="#f97837"
+          />
+          <Text>Lembre-se de mim</Text>
+        </Flex>
+        <Button
+          bgColor="#f97837"
+          borderRadius="12px"
+          color="white"
+          fontSize="18px"
+          fontWeight={700}
+        >
+          Entrar
+        </Button>
+      </Stack>
     </Flex>
   );
 }
