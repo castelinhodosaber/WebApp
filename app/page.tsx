@@ -12,7 +12,6 @@ function App() {
     window.addEventListener("beforeinstallprompt", (e: Event) => {
       // Impede que o navegador mostre o prompt de instalação automaticamente
       e.preventDefault();
-      console.log(e);
       deferredPrompt = e;
 
       // Mostre um botão para o usuário optar por instalar
@@ -63,6 +62,7 @@ function App() {
         width={["80%"]}
         maxW="320px"
         id="pwa-prompt"
+        display="none"
       >
         <Image
           alt="appLogo"
