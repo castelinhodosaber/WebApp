@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { Button, Flex, Image, Text } from "@chakra-ui/react";
+import { Button, Flex, Image } from "@chakra-ui/react";
 
 function App() {
   useEffect(() => {
