@@ -9,7 +9,6 @@ export const metadata: Metadata = {
     icon: "/assets/icons/icon-192x192.png",
     apple: "/assets/icons/icon-512x512.png",
   },
-  themeColor: "#000000",
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {

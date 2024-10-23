@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Image, Text } from "@chakra-ui/react";
 
 function App() {
   useEffect(() => {
@@ -35,10 +35,32 @@ function App() {
   }, []);
 
   return (
-    <Flex>
-      <Button id="install-button" style={{ display: "none" }}>
+    <Flex
+      align="center"
+      direction="column"
+      justify="center"
+      bgColor="#031436"
+      width="100vw"
+      height="100vh"
+    >
+      <Button
+        id="install-button"
+        position="absolute"
+        top="1"
+        style={{ display: "none" }}
+      >
         Instalar PWA
       </Button>
+      <Image
+        alt="logo"
+        src="/assets/icons/icon-512x512.png"
+        width={["80%", "80%", "300px"]}
+      />
+      <Image
+        alt="logo"
+        src="/assets/images/fonteBranco.png"
+        width={["80%", "80%", "300px"]}
+      />
     </Flex>
   );
 }
