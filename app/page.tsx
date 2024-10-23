@@ -5,7 +5,7 @@ import { Button, Flex, Image } from "@chakra-ui/react";
 function App() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let deferredPrompt: any; // Explicitamente declarado como 'any'
+    let deferredPrompt: any;
 
     window.addEventListener("beforeinstallprompt", (e: Event) => {
       // Impede que o navegador mostre o prompt de instalação automaticamente
