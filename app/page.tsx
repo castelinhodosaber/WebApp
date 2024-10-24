@@ -1,10 +1,17 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button, Flex, Image, Input, Stack, Text } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { PasswordInput } from "@/components/ui/password-input";
+import { FaCheck } from "react-icons/fa";
+import { toaster } from "@/components/ui/toaster";
+import login from "./api/castelinho/auth/login";
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [remerberUser, setRememberUser] = useState(false);
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let deferredPrompt: any;
@@ -37,14 +44,18 @@ function App() {
     });
   }, []);
 
+  const handleSubmit = () => {
+    const result = login(email, password);
+    console.log(result);
+  };
   return (
     <Flex
       align="center"
       direction="column"
       justify="center"
       bgColor="#031436"
-      width="100vw"
-      height="100vh"
+      width="100dvw"
+      height="100dvh"
     >
       <Flex
         bgColor="white"
@@ -80,26 +91,30 @@ function App() {
           justify="center"
           direction="column"
           marginLeft="55px"
+          paddingRight={["10px"]}
           width="80%"
         >
-          <Text fontSize={["16px"]} fontWeight={600}>
+          <Text fontSize={["14px", "14px", "16px"]} fontWeight={600}>
             Agenda Castelinho
           </Text>
-          <Text color="rgb(50,50,50)" fontSize={["13px"]}>
+          <Text color="rgb(50,50,50)" fontSize={["10px", "11px", "13px"]}>
             app.castelinhodosaber.com
           </Text>
           <Button
+            alignSelf={["flex-start", "flex-start"]}
             _hover={{ bgColor: "#0056b3" }}
             bgColor="#007bff"
             color="white"
             border="none"
             borderRadius="6px"
-            padding="10px 15px"
+            padding={["10px 5px", "10px 15px"]}
             cursor="pointer"
-            fontSize={["16px"]}
+            fontSize={["13px", "14px", "16px"]}
             marginTop="10px"
+            fontWeight={600}
             transition="background-color 0.3s"
             id="install-button"
+            width={["100%", "auto"]}
           >
             Instalar aplicativo
           </Button>
@@ -108,31 +123,55 @@ function App() {
       <Image
         alt="logo"
         src="/assets/icons/icon-512x512.png"
-        width={["60%", "60%", "300px"]}
+        width={["150px", "180px", "180px", "180px", "200px", "260px"]}
       />
       <Image
         alt="logo"
         src="/assets/images/fonteBranco.png"
-        width={["60%", "60%", "300px"]}
+        width={["180px", "210px", "210px", "220px", "280px", "400px"]}
       />
-      <Stack gap="10" width="70%">
-        <Field label="E-mail">
+      <Stack
+        fontSize={["12px", "12px", "14px", "14px"]}
+        gap={["2", "2", "4"]}
+        marginTop={["20px"]}
+      >
+        <Field label="Usuário">
           <Input
             border="1px solid white"
-            borderRadius="12px"
+            borderRadius={["8px"]}
+            size={["xs", "xs", "sm", "sm", "lg"]}
+            type="email"
+            value={email}
+            onChange={(ev) => setEmail(ev.target.value)}
             variant="outline"
           />
         </Field>
         <Field label="Senha">
-          <PasswordInput border="1px solid white" borderRadius="12px" />
+          <PasswordInput
+            border="1px solid white"
+            size={["xs", "xs", "sm", "sm", "lg"]}
+            onChange={(ev) => setPassword(ev.target.value)}
+            value={password}
+            borderRadius={["8px"]}
+          />
         </Field>
-        <Flex align="center" gap="8px" justify="center">
+        <Flex
+          align="center"
+          gap="8px"
+          onClick={() => setRememberUser(!remerberUser)}
+          justify="center"
+        >
           <Flex
+            align="center"
+            color="#f97837"
             height="14px"
+            justify="center"
             borderRadius="4px"
             width="14px"
-            bgColor="#f97837"
-          />
+            border="2px solid #f97837"
+          >
+            {remerberUser ? <FaCheck /> : ""}
+          </Flex>
           <Text>Lembre-se de mim</Text>
         </Flex>
         <Button
@@ -141,6 +180,7 @@ function App() {
           color="white"
           fontSize="18px"
           fontWeight={700}
+          onClick={handleSubmit}
         >
           Entrar
         </Button>
