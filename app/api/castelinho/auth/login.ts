@@ -29,12 +29,9 @@ const login = async (
       username,
       password,
     })) as CastelinhoApiAuthLoginResponse;
-    toaster.create({
-      type: "success",
-      title: "Bem vindo(a), " + response.data.data.person.name + ".",
-    });
+    localStorage.setItem("accessToken", response.data.data.accessToken);
 
-    return response.data.data;
+    return response;
   } catch (error) {
     if (error instanceof AxiosError) {
       toaster.create({ type: "error", title: error.response?.data.message });

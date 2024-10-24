@@ -2,6 +2,8 @@ import { Provider } from "@/components/ui/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import "./globals.css";
+import { GlobalProvider } from "./context/GlobalContext";
 
 export const metadata: Metadata = {
   title: "Agenda Castelinho",
@@ -21,7 +23,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         <Provider>
           <ThemeProvider attribute="class" disableTransitionOnChange>
             <Toaster />
-            {children}
+            <GlobalProvider>{children}</GlobalProvider>
           </ThemeProvider>
         </Provider>
       </body>

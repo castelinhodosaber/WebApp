@@ -1,16 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button, Flex, Image, Input, Stack, Text } from "@chakra-ui/react";
+import { Flex, Image, Input, Stack, Text } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { PasswordInput } from "@/components/ui/password-input";
 import { FaCheck } from "react-icons/fa";
-import { toaster } from "@/components/ui/toaster";
 import login from "./api/castelinho/auth/login";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import routes from "./routes";
+import { useGlobalContext } from "./context/GlobalContext";
+import { toaster } from "@/components/ui/toaster";
 
 function App() {
+  const globalContext = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [remerberUser, setRememberUser] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,9 +51,21 @@ function App() {
     });
   }, []);
 
-  const handleSubmit = () => {
-    const result = login(email, password);
-    console.log(result);
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    const result = await login(email, password);
+    if (result) {
+      toaster.create({
+        type: "success",
+        title: "Bem vindo(a), " + result.data.data.person.name + ".",
+      });
+      globalContext.login(result.data.data);
+    }
+    setIsLoading(false);
+
+    if (result) {
+      router.push(routes.dashboard);
+    }
   };
   return (
     <Flex
@@ -180,6 +199,7 @@ function App() {
           color="white"
           fontSize="18px"
           fontWeight={700}
+          loading={isLoading}
           onClick={handleSubmit}
         >
           Entrar
