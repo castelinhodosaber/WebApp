@@ -10,7 +10,7 @@ export type CastelinhoApiResponseData = AxiosResponse & {
 };
 
 const castelinhoApiInstance = axios.create({
-  baseURL: process.env.CASTELINHO_API || "//localhost:3001",
+  baseURL: process.env.NEXT_PUBLIC_CASTELINHO_API || "//localhost:3001",
   timeout: 5000,
 });
 
