@@ -1,4 +1,6 @@
 import axios, { AxiosResponse } from "axios";
+import login from "./auth/login";
+import validateToken from "./auth/validateToken";
 
 export type CastelinhoApiResponseData = AxiosResponse & {
   response: {
@@ -7,6 +9,13 @@ export type CastelinhoApiResponseData = AxiosResponse & {
       status: number;
     };
   };
+};
+
+export const CASTELINHO_API = {
+  auth: {
+    login,
+    validateToken,
+  },
 };
 
 const castelinhoApiInstance = axios.create({

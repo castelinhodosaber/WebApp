@@ -4,15 +4,15 @@ import { Flex, Image, Input, Stack, Text } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { PasswordInput } from "@/components/ui/password-input";
 import { FaCheck } from "react-icons/fa";
-import login from "./api/castelinho/auth/login";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import routes from "./routes";
+import ROUTES from "./routes";
 import { useGlobalContext } from "./context/GlobalContext";
 import { toaster } from "@/components/ui/toaster";
+import { CASTELINHO_API } from "./api/castelinho";
 
 function App() {
-  const globalContext = useGlobalContext();
+  const { login: globalContextLogin } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -53,18 +53,19 @@ function App() {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    const result = await login(email, password);
+    const result = await CASTELINHO_API.auth.login(email, password);
+
     if (result) {
       toaster.create({
         type: "success",
         title: "Bem vindo(a), " + result.data.data.person.name + ".",
       });
-      globalContext.login(result.data.data);
+      globalContextLogin(result.data.data);
     }
     setIsLoading(false);
 
     if (result) {
-      router.push(routes.dashboard);
+      router.push(ROUTES.dashboard);
     }
   };
   return (

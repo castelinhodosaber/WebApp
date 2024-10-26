@@ -1,14 +1,17 @@
-const UNAUTHENTICATED_ROUTES = {
+export const PUBLIC_ROUTES = {
   login: "/",
 };
 
-const AUTHENTICATED_ROUTES = {
+export const PRIVATE_ROUTES = {
+  annotation: "/annotation",
+  announcement: "/announcement",
   dashboard: "/dashboard",
+  message: "/message",
 };
 
-const routes = {
-  ...UNAUTHENTICATED_ROUTES,
-  ...AUTHENTICATED_ROUTES,
+const ROUTES = {
+  ...PUBLIC_ROUTES,
+  ...PRIVATE_ROUTES,
 };
 
-export default routes;
+export default ROUTES;
