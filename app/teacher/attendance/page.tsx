@@ -1,13 +1,9 @@
 "use client";
-import { Flex } from "@chakra-ui/react";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { Flex, List } from "@chakra-ui/react";
 import Footer from "../../components/Footer";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 
 const TeacherAttendance = () => {
-  const {
-    state: { person },
-  } = useGlobalContext();
   const {
     state: { selectedClass },
   } = useTeacherContext();
@@ -20,8 +16,11 @@ const TeacherAttendance = () => {
       height="100dvh"
     >
       Teacher Attendance
-      {JSON.stringify(person)}
-      {JSON.stringify(selectedClass)}
+      <List.Root>
+        {selectedClass?.students.map((student) => (
+          <List.Item key={student.id}>{student.name}</List.Item>
+        ))}
+      </List.Root>
       <Footer />
     </Flex>
   );
