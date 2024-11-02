@@ -1,8 +1,11 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import login from "./auth/login";
 import validateToken from "./auth/validateToken";
+import getDetailsById from "./teacher/getDetailsById";
+import getAll from "./class/getAll";
+import getById from "./class/getById";
 
-export type CastelinhoApiResponseData = AxiosResponse & {
+export type CastelinhoApiResponseData = {
   response: {
     data: {
       message: string;
@@ -11,10 +14,17 @@ export type CastelinhoApiResponseData = AxiosResponse & {
   };
 };
 
-export const CASTELINHO_API = {
+export const CASTELINHO_API_ENDPOINTS = {
   auth: {
     login,
     validateToken,
+  },
+  teacher: {
+    getDetailsById,
+  },
+  class: {
+    getAll,
+    getById,
   },
 };
 

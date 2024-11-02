@@ -9,7 +9,7 @@ import React, {
 import { Gender, Role } from "../types/api/castelinho";
 import { usePathname, useRouter } from "next/navigation";
 import ROUTES from "../routes";
-import { CASTELINHO_API } from "../api/castelinho";
+import { CASTELINHO_API_ENDPOINTS } from "../api/castelinho";
 import verifyRoute from "../utils/verifyRoute";
 import { SkeletonText } from "@/components/ui/skeleton";
 // import apiLogin from "../api/castelinho/auth/login";
@@ -24,6 +24,7 @@ interface GlobalState {
     id: number;
     name: string;
     role: Role;
+    roleId: number;
   } | null;
 }
 
@@ -45,6 +46,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     accessToken: null,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [redirectPath, setRedirectPath] = useState<string>();
+
   const login = (data: GlobalState) => {
     setState({ ...state, person: data.person, accessToken: data.accessToken });
   };
@@ -52,32 +55,67 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setState({ ...state, person: null, accessToken: null });
     localStorage.removeItem("accessToken");
-    router.push(ROUTES.login);
+    router.push(ROUTES.public.login);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    const accessToken = localStorage.getItem("accessToken");
-    const routeType = verifyRoute(pathname);
+    const validateAndRedirect = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      const routeType = verifyRoute(pathname);
 
-    if (routeType === "private" || routeType === "unknown") {
       if (!accessToken) {
-        setIsLoading(false);
-        return router.push(ROUTES.login);
+        setRedirectPath(ROUTES.public.login);
+        return;
       }
-      CASTELINHO_API.auth
-        .validateToken(accessToken)
-        .then((result) => {
-          if (result) {
-            setState((oldState) => ({ ...oldState, person: result.data }));
-            if (routeType === "unknown") router.push(ROUTES.dashboard);
-          } else localStorage.removeItem("accessToken");
-          setIsLoading(false);
-        })
-        .catch(() => router.push(ROUTES.login));
-    }
-    setIsLoading(false);
+
+      try {
+        const result = await CASTELINHO_API_ENDPOINTS.auth.validateToken(
+          accessToken
+        );
+        if (result) {
+          const {
+            data: { birthDate, cpf, gender, name, personId: id, roleId, role },
+          } = result;
+          setState((oldState) => ({
+            ...oldState,
+            person: { birthDate, cpf, gender, name, id, roleId, role },
+            accessToken: accessToken,
+          }));
+
+          if (routeType === "unknown" || ROUTES.public.login === pathname) {
+            switch (role) {
+              case "teacher":
+                return setRedirectPath(ROUTES.private.teacher.dashboard);
+
+              default:
+                break;
+            }
+            setRedirectPath(ROUTES.public.login);
+          } else setRedirectPath(pathname);
+        } else {
+          localStorage.removeItem("accessToken");
+          setRedirectPath(ROUTES.public.login);
+        }
+      } catch {
+        setRedirectPath(ROUTES.public.login);
+      }
+    };
+
+    validateAndRedirect();
   }, []);
+
+  useEffect(() => {
+    if (redirectPath) {
+      if (redirectPath !== pathname) router.push(redirectPath);
+
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [redirectPath]);
 
   return (
     <GlobalContext.Provider value={{ state, login, logout }}>

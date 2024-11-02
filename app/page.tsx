@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import ROUTES from "./routes";
 import { useGlobalContext } from "./context/GlobalContext";
 import { toaster } from "@/components/ui/toaster";
-import { CASTELINHO_API } from "./api/castelinho";
+import { CASTELINHO_API_ENDPOINTS } from "./api/castelinho";
 
 function App() {
   const { login: globalContextLogin } = useGlobalContext();
@@ -53,19 +53,19 @@ function App() {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    const result = await CASTELINHO_API.auth.login(email, password);
+    const data = await CASTELINHO_API_ENDPOINTS.auth.login(email, password);
 
-    if (result) {
+    if (data) {
       toaster.create({
         type: "success",
-        title: "Bem vindo(a), " + result.data.data.person.name + ".",
+        title: "Bem vindo(a), " + data.data.person.name + ".",
       });
-      globalContextLogin(result.data.data);
+      globalContextLogin(data.data);
     }
     setIsLoading(false);
 
-    if (result) {
-      router.push(ROUTES.dashboard);
+    if (data) {
+      router.push(ROUTES.private[data.data.person.role].dashboard);
     }
   };
   return (
@@ -73,7 +73,7 @@ function App() {
       align="center"
       direction="column"
       justify="center"
-      bgColor="#031436"
+      bgColor="principal.solid"
       width="100dvw"
       height="100dvh"
     >
@@ -97,8 +97,8 @@ function App() {
       >
         <Image
           alt="appLogo"
-          bgColor="#031436"
           borderRadius="100px"
+          bgColor="principal.solid"
           position="absolute"
           top="50%"
           transform="translateY(-50%)"

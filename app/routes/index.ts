@@ -1,17 +1,25 @@
-export const PUBLIC_ROUTES = {
+export const TEACHER_ROUTES: { [key: string]: string } = {
+  annotation: "/teacher/annotation",
+  announcement: "/teacher/announcement",
+  dashboard: "/teacher/dashboard",
+  message: "/teacher/message",
+  attendance: "/teacher/attendance",
+};
+
+export const PUBLIC_ROUTES: { [key: string]: string } = {
   login: "/",
+} as const;
+
+export const PRIVATE_ROUTES: { [key: string]: { [key: string]: string } } = {
+  teacher: { ...TEACHER_ROUTES },
 };
 
-export const PRIVATE_ROUTES = {
-  annotation: "/annotation",
-  announcement: "/announcement",
-  dashboard: "/dashboard",
-  message: "/message",
-};
-
-const ROUTES = {
-  ...PUBLIC_ROUTES,
-  ...PRIVATE_ROUTES,
+const ROUTES: {
+  public: { [key: string]: string };
+  private: { [key: string]: { [key: string]: string } };
+} = {
+  public: { ...PUBLIC_ROUTES },
+  private: { ...PRIVATE_ROUTES },
 };
 
 export default ROUTES;

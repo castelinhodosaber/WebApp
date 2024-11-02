@@ -1,7 +1,7 @@
+import Footer from "@/app/components/Footer";
 import { Flex } from "@chakra-ui/react";
-import Footer from "../components/Footer";
 
-const Messages = () => {
+const Annotations = () => {
   return (
     <Flex
       direction="column"
@@ -10,10 +10,10 @@ const Messages = () => {
       width="100dvw"
       height="100dvh"
     >
-      Messages
+      Annotations
       <Footer />
     </Flex>
   );
 };
 
-export default Messages;
+export default Annotations;

@@ -10,34 +10,41 @@ import { BiSolidMessageDetail } from "react-icons/bi";
 import { useGlobalContext } from "../context/GlobalContext";
 
 const Footer = () => {
-  const { logout } = useGlobalContext();
-  const FOOTER_OPTIONS = [
-    {
-      icon: <IoHome style={{ height: "100%", width: "100%" }} />,
-      name: "Início",
-      pathname: ROUTES.dashboard,
-    },
-    {
-      icon: <BiSolidMessageDetail style={{ height: "100%", width: "100%" }} />,
-      name: "Recados",
-      pathname: ROUTES.annotation,
-    },
-    {
-      icon: <FaBookOpen style={{ height: "100%", width: "100%" }} />,
-      name: "Anotações",
-      pathname: ROUTES.message,
-    },
-    {
-      icon: <FaEnvelope style={{ height: "100%", width: "100%" }} />,
-      name: "Comunicados",
-      pathname: ROUTES.announcement,
-    },
-    {
-      icon: <RiLogoutBoxFill style={{ height: "100%", width: "100%" }} />,
-      name: "Sair",
-      pathname: "",
-    },
-  ];
+  const {
+    logout,
+    state: { person },
+  } = useGlobalContext();
+  const FOOTER_OPTIONS = person
+    ? [
+        {
+          icon: <IoHome style={{ height: "100%", width: "100%" }} />,
+          name: "Início",
+          pathname: ROUTES.private[person.role].dashboard,
+        },
+        {
+          icon: (
+            <BiSolidMessageDetail style={{ height: "100%", width: "100%" }} />
+          ),
+          name: "Recados",
+          pathname: ROUTES.private[person.role].annotation,
+        },
+        {
+          icon: <FaBookOpen style={{ height: "100%", width: "100%" }} />,
+          name: "Anotações",
+          pathname: ROUTES.private[person.role].message,
+        },
+        {
+          icon: <FaEnvelope style={{ height: "100%", width: "100%" }} />,
+          name: "Comunicados",
+          pathname: ROUTES.private[person.role].announcement,
+        },
+        {
+          icon: <RiLogoutBoxFill style={{ height: "100%", width: "100%" }} />,
+          name: "Sair",
+          pathname: "",
+        },
+      ]
+    : null;
   const pathname = usePathname();
   const router = useRouter();
 
@@ -47,10 +54,12 @@ const Footer = () => {
       bgColor="#1C1C1C"
       borderTopLeftRadius={["6px"]}
       borderTopRightRadius={["6px"]}
+      bottom="0"
       fontSize={["14px"]}
       fontWeight={600}
       height={["50px"]}
       justify="space-evenly"
+      position="fixed"
       width={["100%"]}
     >
       {FOOTER_OPTIONS?.map((opt, index) => (

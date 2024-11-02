@@ -1,21 +1,19 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import castelinhoApiInstance, { CastelinhoApiResponseData } from "..";
 import { toaster } from "@/components/ui/toaster";
+import { Gender, Role } from "@/app/types/api/castelinho";
 
 export type CastelinhoApiAuthLoginResponse = CastelinhoApiResponseData & {
-  response: {
-    data: {
-      data: {
-        accessToken: string;
-        person: {
-          birthDate: string;
-          cpf: string;
-          gender: "Masculino" | "Feminino";
-          id: number;
-          name: string;
-          role: "";
-        };
-      };
+  data: {
+    accessToken: string;
+    person: {
+      birthDate: string;
+      cpf: string;
+      gender: Gender;
+      id: number;
+      name: string;
+      role: Role;
+      roleId: number;
     };
   };
 };
@@ -25,13 +23,14 @@ const login = async (
   password: string
 ): Promise<CastelinhoApiAuthLoginResponse | undefined> => {
   try {
-    const response = (await castelinhoApiInstance.post("/auth/login", {
-      username,
-      password,
-    })) as CastelinhoApiAuthLoginResponse;
+    const response: AxiosResponse<CastelinhoApiAuthLoginResponse> =
+      await castelinhoApiInstance.post("/auth/login", {
+        username,
+        password,
+      });
     localStorage.setItem("accessToken", response.data.data.accessToken);
 
-    return response;
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       toaster.create({ type: "error", title: error.response?.data.message });

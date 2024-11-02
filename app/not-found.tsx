@@ -8,7 +8,7 @@ const NotFound = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push(ROUTES.login);
+    router.push(ROUTES.public.login);
   }, [router]);
   return <></>;
 };

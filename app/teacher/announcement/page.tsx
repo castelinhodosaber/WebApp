@@ -1,5 +1,5 @@
+import Footer from "@/app/components/Footer";
 import { Flex } from "@chakra-ui/react";
-import Footer from "../components/Footer";
 
 const Announcements = () => {
   return (
