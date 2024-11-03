@@ -37,6 +37,18 @@ const customConfig = defineConfig({
           800: { value: "#87341d" },
           900: { value: "#612113" },
         },
+        secondaryButton: {
+          50: { value: "#f9fafc" },
+          100: { value: "#f0f2f5" },
+          200: { value: "#e6e9ed" },
+          300: { value: "#dce0e7" },
+          400: { value: "#d1d6df" },
+          500: { value: "#c6cbd6" },
+          600: { value: "#bcc1cc" },
+          700: { value: "#b1b7c3" },
+          800: { value: "#a7acb9" },
+          900: { value: "#9ca2b0" },
+        },
       },
     },
     semanticTokens: {
