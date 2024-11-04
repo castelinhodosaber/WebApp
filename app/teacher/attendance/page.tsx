@@ -4,7 +4,7 @@ import Footer from "../../components/Footer";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ROUTES from "@/app/routes";
 import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
@@ -13,7 +13,10 @@ import { toaster } from "@/components/ui/toaster";
 import { formatInTimeZone } from "date-fns-tz";
 
 const TeacherAttendance = () => {
+  const searchParams = useSearchParams();
+  const editAttendance = searchParams.get("edit");
   const router = useRouter();
+
   const {
     state: { accessToken },
   } = useGlobalContext();
@@ -40,7 +43,8 @@ const TeacherAttendance = () => {
         )
         .then((result) => {
           if (result?.data?.length) {
-            router.push(ROUTES.private.teacher.home);
+            if (!editAttendance)
+              return router.push(ROUTES.private.teacher.home);
             setAttendances(
               result.data
                 .filter((attendance) => attendance.student)
@@ -50,6 +54,7 @@ const TeacherAttendance = () => {
                   name: attendance.student!.name,
                 }))
             );
+            setIsLoading(false);
           } else {
             setIsLoading(false);
             setAttendances(

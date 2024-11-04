@@ -83,7 +83,14 @@ const Home = () => {
           </Flex>
         ))}
       </Flex>
-      <Button colorPalette="secondary" fontSize={["18px"]} padding="5px 20px">
+      <Button
+        colorPalette="secondary"
+        fontSize={["18px"]}
+        onClick={() =>
+          router.push(ROUTES.private.teacher.attendance + "?edit=true")
+        }
+        padding="5px 20px"
+      >
         Editar Presença
       </Button>
       <Footer />
