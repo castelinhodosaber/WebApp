@@ -5,6 +5,10 @@ export const TEACHER_ROUTES = {
   message: "/teacher/message",
   attendance: "/teacher/attendance",
   home: "/teacher/home",
+  meal: "/teacher/meal",
+  nap: "/teacher/nap",
+  bath: "/teacher/bath",
+  bathroom: "/teacher/bathroom",
 } as const;
 
 export const PUBLIC_ROUTES: { [key: string]: string } = {

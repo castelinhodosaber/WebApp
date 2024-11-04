@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/app/components/Footer";
 import { useTeacherContext } from "@/app/context/TeacherContext";
+import ROUTES from "@/app/routes";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FaBath, FaToilet } from "react-icons/fa";
@@ -15,22 +16,22 @@ const Home = () => {
   const HOME_ITEMS = [
     {
       name: "Alimentação",
-      path: "/meal",
+      path: ROUTES.private.teacher.meal,
       icon: <GiKnifeFork size="100%" />,
     },
     {
       name: "Soneca",
-      path: "/nap",
+      path: ROUTES.private.teacher.nap,
       icon: <GiNightSleep size="100%" />,
     },
     {
       name: "Banho",
-      path: "/bath",
+      path: ROUTES.private.teacher.bath,
       icon: <FaBath size="100%" />,
     },
     {
       name: "Banheiro",
-      path: "/bathroom",
+      path: ROUTES.private.teacher.bathroom,
       icon: <FaToilet size="100%" />,
     },
     {
