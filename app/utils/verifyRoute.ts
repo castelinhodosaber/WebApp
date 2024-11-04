@@ -9,7 +9,10 @@ const verifyRoute = (route: string, role?: Role) => {
       case "teacher":
         const teacherPrivateRoutesArr = Object.values(PRIVATE_ROUTES.teacher);
 
-        if (teacherPrivateRoutesArr.includes(route)) return "private";
+        if (
+          teacherPrivateRoutesArr.some((teacherRoute) => teacherRoute === route)
+        )
+          return "private";
 
       default:
         break;

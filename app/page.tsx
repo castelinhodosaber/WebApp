@@ -65,7 +65,13 @@ function App() {
     setIsLoading(false);
 
     if (data) {
-      router.push(ROUTES.private[data.data.person.role].dashboard);
+      switch (data.data.person.role) {
+        case "teacher":
+          return router.push(ROUTES.private.teacher.dashboard);
+
+        default:
+          break;
+      }
     }
   };
   return (

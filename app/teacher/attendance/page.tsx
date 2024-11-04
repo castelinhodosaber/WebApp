@@ -6,12 +6,19 @@ import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import ROUTES from "@/app/routes";
+import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
+import { useGlobalContext } from "@/app/context/GlobalContext";
+import { SkeletonText } from "@/components/ui/skeleton";
 
 const TeacherAttendance = () => {
   const router = useRouter();
   const {
+    state: { accessToken },
+  } = useGlobalContext();
+  const {
     state: { selectedClass },
   } = useTeacherContext();
+  const [isLoading, setIsLoading] = useState(true);
   const [attendance, setAttendance] =
     useState<{ studentId: number; present: boolean; name: string }[]>();
 
@@ -19,19 +26,44 @@ const TeacherAttendance = () => {
   const indeterminate = attendance?.some((item) => item.present) && !allChecked;
 
   useEffect(() => {
-    if (selectedClass) {
-      setAttendance(
-        selectedClass.students?.map((student) => ({
-          studentId: student.id,
-          present: false,
-          name: student.name,
-        }))
-      );
+    if (selectedClass && accessToken) {
+      CASTELINHO_API_ENDPOINTS.attendance
+        .getByClassIdAndDate(
+          accessToken,
+          selectedClass.id,
+          new Date()
+            .toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+            .split(",")[0]
+        )
+        .then((result) => {
+          if (result?.data?.length) {
+            router.push(ROUTES.private.teacher.home);
+            setAttendance(
+              result.data.map((attendance) => ({
+                studentId: attendance.student.id,
+                present: attendance.present,
+                name: attendance.student.name,
+              }))
+            );
+          } else {
+            setIsLoading(false);
+            setAttendance(
+              selectedClass.students?.map((student) => ({
+                studentId: student.id,
+                present: false,
+                name: student.name,
+              }))
+            );
+          }
+        });
     }
-  }, [selectedClass]);
+  }, []);
 
-  const handleSaveAttendance = () => {};
-  return (
+  const handleSaveAttendance = () => { };
+  
+  return isLoading ? (
+    <SkeletonText noOfLines={6} />
+  ) : (
     <Flex
       direction="column"
       align="center"

@@ -1,50 +1,15 @@
 "use client";
 import { Flex, Text } from "@chakra-ui/react";
-import { FaBookOpen, FaEnvelope } from "react-icons/fa";
-import { RiLogoutBoxFill } from "react-icons/ri";
 import { usePathname, useRouter } from "next/navigation";
-import ROUTES from "../routes";
-import { IoHome } from "react-icons/io5";
-import { BiSolidMessageDetail } from "react-icons/bi";
-
 import { useGlobalContext } from "../context/GlobalContext";
+import handleFooterOptions from "../utils/HandleFooterOptions";
 
 const Footer = () => {
   const {
     logout,
     state: { person },
   } = useGlobalContext();
-  const FOOTER_OPTIONS = person
-    ? [
-        {
-          icon: <IoHome style={{ height: "100%", width: "100%" }} />,
-          name: "Início",
-          pathname: ROUTES.private[person.role].dashboard,
-        },
-        {
-          icon: (
-            <BiSolidMessageDetail style={{ height: "100%", width: "100%" }} />
-          ),
-          name: "Recados",
-          pathname: ROUTES.private[person.role].annotation,
-        },
-        {
-          icon: <FaBookOpen style={{ height: "100%", width: "100%" }} />,
-          name: "Anotações",
-          pathname: ROUTES.private[person.role].message,
-        },
-        {
-          icon: <FaEnvelope style={{ height: "100%", width: "100%" }} />,
-          name: "Comunicados",
-          pathname: ROUTES.private[person.role].announcement,
-        },
-        {
-          icon: <RiLogoutBoxFill style={{ height: "100%", width: "100%" }} />,
-          name: "Sair",
-          pathname: "",
-        },
-      ]
-    : null;
+  const FOOTER_OPTIONS = person ? handleFooterOptions(person.role) : null;
   const pathname = usePathname();
   const router = useRouter();
 

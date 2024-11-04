@@ -33,7 +33,6 @@ interface GlobalContextType {
   state: GlobalState;
   login: (data: GlobalState) => void;
   logout: () => void;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 // Criando o contexto
@@ -119,7 +118,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [redirectPath]);
 
   return (
-    <GlobalContext.Provider value={{ state, login, logout, setIsLoading }}>
+    <GlobalContext.Provider value={{ state, login, logout }}>
       {isLoading ? <SkeletonText noOfLines={6} /> : children}
     </GlobalContext.Provider>
   );

@@ -4,6 +4,7 @@ import validateToken from "./auth/validateToken";
 import getDetailsById from "./teacher/getDetailsById";
 import getAll from "./class/getAll";
 import getById from "./class/getById";
+import getByClassIdAndDate from "./attendance/getByClassIdAndDate";
 
 export type CastelinhoApiResponseData = {
   response: {
@@ -15,6 +16,9 @@ export type CastelinhoApiResponseData = {
 };
 
 export const CASTELINHO_API_ENDPOINTS = {
+  attendance: {
+    getByClassIdAndDate,
+  },
   auth: {
     login,
     validateToken,
