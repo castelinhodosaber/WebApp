@@ -16,9 +16,10 @@ export type Person = {
 };
 
 export type Attendance = {
-  id: number;
-  comments: string;
+  id?: number;
+  comments?: string;
   date: string;
   present: boolean;
-  student: Person;
+  student?: Person;
+  studentId: number;
 };

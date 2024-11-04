@@ -9,6 +9,8 @@ import ROUTES from "@/app/routes";
 import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { SkeletonText } from "@/components/ui/skeleton";
+import { toaster } from "@/components/ui/toaster";
+import { formatInTimeZone } from "date-fns-tz";
 
 const TeacherAttendance = () => {
   const router = useRouter();
@@ -19,11 +21,12 @@ const TeacherAttendance = () => {
     state: { selectedClass },
   } = useTeacherContext();
   const [isLoading, setIsLoading] = useState(true);
-  const [attendance, setAttendance] =
+  const [attendances, setAttendances] =
     useState<{ studentId: number; present: boolean; name: string }[]>();
 
-  const allChecked = attendance?.every((item) => item.present);
-  const indeterminate = attendance?.some((item) => item.present) && !allChecked;
+  const allChecked = attendances?.every((attendance) => attendance.present);
+  const indeterminate =
+    attendances?.some((attendance) => attendance.present) && !allChecked;
 
   useEffect(() => {
     if (selectedClass && accessToken) {
@@ -38,16 +41,18 @@ const TeacherAttendance = () => {
         .then((result) => {
           if (result?.data?.length) {
             router.push(ROUTES.private.teacher.home);
-            setAttendance(
-              result.data.map((attendance) => ({
-                studentId: attendance.student.id,
-                present: attendance.present,
-                name: attendance.student.name,
-              }))
+            setAttendances(
+              result.data
+                .filter((attendance) => attendance.student)
+                .map((attendance) => ({
+                  studentId: attendance.student!.id,
+                  present: attendance.present,
+                  name: attendance.student!.name,
+                }))
             );
           } else {
             setIsLoading(false);
-            setAttendance(
+            setAttendances(
               selectedClass.students?.map((student) => ({
                 studentId: student.id,
                 present: false,
@@ -59,8 +64,31 @@ const TeacherAttendance = () => {
     }
   }, []);
 
-  const handleSaveAttendance = () => { };
-  
+  const handleSaveAttendance = async () => {
+    setIsLoading(true);
+    if (accessToken && attendances) {
+      const date = formatInTimeZone(
+        new Date(),
+        "America/Sao_Paulo",
+        "yyyy-MM-dd"
+      );
+
+      const result = await CASTELINHO_API_ENDPOINTS.attendance.createMany(
+        accessToken,
+        attendances.map((attendance) => ({ ...attendance, date }))
+      );
+
+      if (result) {
+        setIsLoading(false);
+        router.push(ROUTES.private.teacher.home);
+        toaster.create({ type: "sucess", title: "Lista salva com sucesso." });
+      } else {
+        setIsLoading(false);
+      }
+    }
+    setIsLoading(false);
+  };
+
   return isLoading ? (
     <SkeletonText noOfLines={6} />
   ) : (
@@ -75,21 +103,21 @@ const TeacherAttendance = () => {
         <Checkbox
           checked={indeterminate ? "indeterminate" : allChecked}
           onCheckedChange={(e) => {
-            setAttendance((curr) =>
-              curr?.map((value) => ({ ...value, present: !!e.checked }))
+            setAttendances((attendance) =>
+              attendance?.map((value) => ({ ...value, present: !!e.checked }))
             );
           }}
         >
           Presença
         </Checkbox>
-        {attendance?.map((item, index) => (
+        {attendances?.map((attendance, index) => (
           <Checkbox
-            key={item.studentId}
+            key={attendance.studentId}
             ms="6"
-            checked={item.present}
+            checked={attendance.present}
             onCheckedChange={(ev) => {
-              setAttendance((current) => {
-                const newValues = current ? [...current] : [];
+              setAttendances((attendance) => {
+                const newValues = attendance ? [...attendance] : [];
                 newValues[index] = {
                   ...newValues[index],
                   present: !!ev.checked,
@@ -98,7 +126,7 @@ const TeacherAttendance = () => {
               });
             }}
           >
-            {item.name}
+            {attendance.name}
           </Checkbox>
         ))}
       </Flex>

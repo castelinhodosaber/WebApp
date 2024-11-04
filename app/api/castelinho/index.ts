@@ -5,6 +5,7 @@ import getDetailsById from "./teacher/getDetailsById";
 import getAll from "./class/getAll";
 import getById from "./class/getById";
 import getByClassIdAndDate from "./attendance/getByClassIdAndDate";
+import createMany from "./attendance/createMany";
 
 export type CastelinhoApiResponseData = {
   response: {
@@ -18,6 +19,7 @@ export type CastelinhoApiResponseData = {
 export const CASTELINHO_API_ENDPOINTS = {
   attendance: {
     getByClassIdAndDate,
+    createMany,
   },
   auth: {
     login,
