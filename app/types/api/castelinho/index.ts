@@ -15,6 +15,29 @@ export type Person = {
   gender: Gender;
 };
 
+export type MealTypes =
+  | "afternoonFruit"
+  | "afternoonSnack"
+  | "lunch"
+  | "milkFeeding"
+  | "morningFruit"
+  | "morningSnack";
+
+export type MealType = {
+  id: number;
+  name: MealTypes;
+};
+
+export type Meal = {
+  id?: number;
+  rating: number;
+  date: string;
+  student?: Person;
+  studentId: number;
+  mealTypeId: number;
+  mealType?: MealTypes;
+};
+
 export type Attendance = {
   id?: number;
   comments?: string;

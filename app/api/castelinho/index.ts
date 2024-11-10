@@ -4,8 +4,10 @@ import validateToken from "./auth/validateToken";
 import getDetailsById from "./teacher/getDetailsById";
 import getAll from "./class/getAll";
 import getById from "./class/getById";
-import getByClassIdAndDate from "./attendance/getByClassIdAndDate";
+import getAttendanceByClassIdAndDate from "./attendance/getByClassIdAndDate";
 import createMany from "./attendance/createMany";
+import getMealByClassIdAndDate from "./meal/getByClassIdAndDate";
+import getMealTypeByClassId from "./mealType/getByClassId";
 
 export type CastelinhoApiResponseData = {
   response: {
@@ -18,19 +20,25 @@ export type CastelinhoApiResponseData = {
 
 export const CASTELINHO_API_ENDPOINTS = {
   attendance: {
-    getByClassIdAndDate,
+    getByClassIdAndDate: getAttendanceByClassIdAndDate,
     createMany,
   },
   auth: {
     login,
     validateToken,
   },
-  teacher: {
-    getDetailsById,
-  },
   class: {
     getAll,
     getById,
+  },
+  meal: {
+    getByClassIdAndDate: getMealByClassIdAndDate,
+  },
+  mealType: {
+    getByClassId: getMealTypeByClassId,
+  },
+  teacher: {
+    getDetailsById,
   },
 };
 
