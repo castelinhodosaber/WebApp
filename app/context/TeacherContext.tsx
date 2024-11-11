@@ -42,7 +42,6 @@ export const TeacherProvider = ({ children }: { children: ReactNode }) => {
         .getDetailsById(accessToken, person?.roleId)
         .then((result) => {
           if (result) {
-            console.log(result);
             setState((oldState) => ({
               ...oldState,
               teacherClasses: result?.data.classes,

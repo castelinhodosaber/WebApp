@@ -83,16 +83,33 @@ const Home = () => {
           </Flex>
         ))}
       </Flex>
-      <Button
-        colorPalette="secondary"
-        fontSize={["18px"]}
-        onClick={() =>
-          router.push(ROUTES.private.teacher.attendance + "?edit=true")
-        }
-        padding="5px 20px"
-      >
-        Editar Presença
-      </Button>
+      <Flex gap="20px">
+        <Button
+          colorPalette="secondaryButton"
+          fontSize={["16px"]}
+          fontWeight={700}
+          onClick={() =>
+            router.push(ROUTES.private.teacher.attendance + "?edit=true")
+          }
+          lineBreak="anywhere"
+          padding="5px 20px"
+          maxW={["150px"]}
+        >
+          Selecionar Turma
+        </Button>
+        <Button
+          colorPalette="secondary"
+          fontSize={["18px"]}
+          fontWeight={700}
+          onClick={() =>
+            router.push(ROUTES.private.teacher.attendance + "?edit=true")
+          }
+          padding="5px 20px"
+        >
+          Editar Presença
+        </Button>
+      </Flex>
+
       <Footer />
     </Flex>
   );

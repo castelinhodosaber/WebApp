@@ -5,8 +5,9 @@ import getDetailsById from "./teacher/getDetailsById";
 import getAll from "./class/getAll";
 import getById from "./class/getById";
 import getAttendanceByClassIdAndDate from "./attendance/getByClassIdAndDate";
-import createMany from "./attendance/createMany";
+import createManyAttendance from "./attendance/createMany";
 import getMealByClassIdAndDate from "./meal/getByClassIdAndDate";
+import createManyMeals from "./meal/createMany";
 import getMealTypeByClassId from "./mealType/getByClassId";
 
 export type CastelinhoApiResponseData = {
@@ -21,7 +22,7 @@ export type CastelinhoApiResponseData = {
 export const CASTELINHO_API_ENDPOINTS = {
   attendance: {
     getByClassIdAndDate: getAttendanceByClassIdAndDate,
-    createMany,
+    createMany: createManyAttendance,
   },
   auth: {
     login,
@@ -33,6 +34,7 @@ export const CASTELINHO_API_ENDPOINTS = {
   },
   meal: {
     getByClassIdAndDate: getMealByClassIdAndDate,
+    createMany: createManyMeals,
   },
   mealType: {
     getByClassId: getMealTypeByClassId,
