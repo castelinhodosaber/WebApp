@@ -28,6 +28,15 @@ export type MealType = {
   name: MealTypes;
 };
 
+export type Nap = {
+  id?: number;
+  date: string;
+  student?: Person;
+  studentId: number;
+  hour: string;
+  napTimeMinutes: number;
+};
+
 export type Meal = {
   id?: number;
   rating: number;

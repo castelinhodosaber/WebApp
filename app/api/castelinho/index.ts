@@ -9,6 +9,9 @@ import createManyAttendance from "./attendance/createMany";
 import getMealByClassIdAndDate from "./meal/getByClassIdAndDate";
 import createManyMeals from "./meal/createMany";
 import getMealTypeByClassId from "./mealType/getByClassId";
+import createManyNaps from "./nap/createMany";
+import getNapsByClassIdAndDate from "./nap/getByClassIdAndDate";
+import deleteNapById from "./nap/deleteById";
 
 export type CastelinhoApiResponseData = {
   response: {
@@ -38,6 +41,11 @@ export const CASTELINHO_API_ENDPOINTS = {
   },
   mealType: {
     getByClassId: getMealTypeByClassId,
+  },
+  nap: {
+    createMany: createManyNaps,
+    getByClassIdAndDate: getNapsByClassIdAndDate,
+    deleteById: deleteNapById,
   },
   teacher: {
     getDetailsById,

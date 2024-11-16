@@ -31,7 +31,7 @@ const MealPage = () => {
 
   useEffect(() => {
     const newDate = new Date()
-      .toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+      .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
       .split(",")[0];
 
     const formattedDate = formatInTimeZone(
@@ -42,7 +42,7 @@ const MealPage = () => {
     setDate(newDate);
     if (accessToken && selectedClass) {
       CASTELINHO_API_ENDPOINTS.meal
-        .getByClassIdAndDate(accessToken, selectedClass?.id, newDate)
+        .getByClassIdAndDate(accessToken, selectedClass?.id, formattedDate)
         .then((getMealsRes) => {
           const allMeals = getMealsRes?.data?.length
             ? [...getMealsRes.data]
@@ -53,7 +53,11 @@ const MealPage = () => {
             .then((mealTypeRes) => {
               if (mealTypeRes?.data.length) {
                 CASTELINHO_API_ENDPOINTS.attendance
-                  .getByClassIdAndDate(accessToken, selectedClass?.id, newDate)
+                  .getByClassIdAndDate(
+                    accessToken,
+                    selectedClass?.id,
+                    formattedDate
+                  )
                   .then((attendanceResult) => {
                     if (attendanceResult?.data.length) {
                       mealTypeRes.data.forEach((mealType) => {
@@ -96,28 +100,6 @@ const MealPage = () => {
         });
     }
   }, []);
-
-  useEffect(() => {
-    if (meals.length) {
-      const orderedMeals = meals.sort((a, b) => {
-        const nameA = a.student?.name.toLowerCase() || "";
-        const nameB = b.student?.name.toLowerCase() || "";
-        return nameA.localeCompare(nameB);
-      });
-
-      const isEqual = orderedMeals.every(
-        (newMeal, index) => newMeal === meals[index]
-      );
-
-      if (!isEqual) {
-        console.log(orderedMeals);
-      } else {
-        console.log("igual");
-        console.log(orderedMeals);
-        console.log(meals);
-      }
-    }
-  }, [meals]);
 
   const updateMeal = (index: number, newMeal: Meal) => {
     setMeals((prevValues) => {
