@@ -81,7 +81,7 @@ const TeacherNap = () => {
     }
   };
 
-  const saveNaps = (studentId: number) => {};
+  const saveNaps = (_studentId: number) => {};
   return (
     <Flex
       align="center"
@@ -138,13 +138,15 @@ const TeacherNap = () => {
             </Flex>
             <Flex
               align="center"
-              backgroundColor="#f0f2f5"
+              backgroundColor="#ffcbb4"
               borderBottomLeftRadius={["6px"]}
               borderBottomRightRadius={["6px"]}
               color="#031436"
               direction="column"
               display={student.display ? "flex" : "none"}
+              gap={["10px"]}
               justify="center"
+              padding={["15px 0 10px 0"]}
               width={["80%"]}
             >
               {naps?.map((nap, index) =>
@@ -173,6 +175,7 @@ const TeacherNap = () => {
                 ) : null
               )}
               <Flex>
+                <Flex></Flex>
                 <Button
                   colorPalette="secondary"
                   fontSize={["12px"]}

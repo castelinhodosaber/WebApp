@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Meal, MealType } from "@/app/types/api/castelinho";
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Button, Flex, Image, Text } from "@chakra-ui/react";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useTeacherContext } from "@/app/context/TeacherContext";
@@ -152,6 +152,7 @@ const MealPage = () => {
           <Flex
             align="center"
             direction="column"
+            gap={["15px"]}
             justify="center"
             key={index}
             width={["100%"]}
@@ -187,6 +188,7 @@ const MealPage = () => {
             <Flex
               align="center"
               direction="column"
+              gap={["10px"]}
               justify="center"
               width="100%"
             >
@@ -195,22 +197,47 @@ const MealPage = () => {
                   <Flex
                     align="center"
                     display={mealType.display ? "flex" : "none"}
-                    gap="5px"
+                    gap="10px"
                     justify="space-between"
                     key={mealIndex}
                     width={["70%"]}
                   >
-                    <Text>{meal.student?.name}</Text>
-                    <Flex>
+                    <Flex
+                      align="center"
+                      gap={["10px"]}
+                      grow={1}
+                      justify="flex-start"
+                    >
+                      <Image
+                        src={
+                          meal.student?.photo
+                            ? `${process.env.NEXT_PUBLIC_CASTELINHO_API}${meal.student.photo}`
+                            : "/assets/images/defaultProfilePhoto.png"
+                        }
+                        height={["40px"]}
+                        width={["40px"]}
+                        alt="profile"
+                        borderRadius="16px"
+                      />
+                      <Text
+                        fontSize={["16px"]}
+                        fontWeight={700}
+                        textAlign="left"
+                      >
+                        {meal.student?.name}
+                      </Text>
+                    </Flex>
+
+                    <Flex align="center" grow={1} justify="flex-end">
                       {[1, 2, 3, 4, 5].map((rate, ratingIndex) => (
-                        <Flex key={ratingIndex}>
-                          <RiStarSFill
-                            color={rate <= meal.rating ? "yellow" : "white"}
-                            onClick={() =>
-                              updateMeal(mealIndex, { ...meal, rating: rate })
-                            }
-                          />
-                        </Flex>
+                        <RiStarSFill
+                          color={rate <= meal.rating ? "yellow" : "white"}
+                          key={ratingIndex}
+                          onClick={() =>
+                            updateMeal(mealIndex, { ...meal, rating: rate })
+                          }
+                          size={18}
+                        />
                       ))}
                     </Flex>
                   </Flex>

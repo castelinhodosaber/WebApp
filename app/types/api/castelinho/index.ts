@@ -11,6 +11,7 @@ export type Person = {
   name: string;
   birthDate: string;
   cpf: string;
+  photo?: string;
   createdAt: string;
   gender: Gender;
 };

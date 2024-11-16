@@ -1,5 +1,5 @@
 "use client";
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Image, Text } from "@chakra-ui/react";
 import Footer from "../../components/Footer";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ const TeacherAttendance = () => {
   const editAttendance = searchParams.get("edit");
   const router = useRouter();
 
+  const [date, setDate] = useState("");
   const {
     state: { accessToken },
   } = useGlobalContext();
@@ -25,13 +26,20 @@ const TeacherAttendance = () => {
   } = useTeacherContext();
   const [isLoading, setIsLoading] = useState(true);
   const [attendances, setAttendances] =
-    useState<{ studentId: number; present: boolean; name: string }[]>();
+    useState<
+      { studentId: number; present: boolean; name: string; photo?: string }[]
+    >();
 
   const allChecked = attendances?.every((attendance) => attendance.present);
   const indeterminate =
     attendances?.some((attendance) => attendance.present) && !allChecked;
 
   useEffect(() => {
+    const newDate = new Date()
+      .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+      .split(",")[0];
+
+    setDate(newDate);
     if (selectedClass && accessToken) {
       CASTELINHO_API_ENDPOINTS.attendance
         .getByClassIdAndDate(
@@ -52,6 +60,7 @@ const TeacherAttendance = () => {
                   studentId: attendance.student!.id,
                   present: attendance.present,
                   name: attendance.student!.name,
+                  photo: attendance.student!.photo,
                 }))
             );
             setIsLoading(false);
@@ -62,6 +71,7 @@ const TeacherAttendance = () => {
                 studentId: student.id,
                 present: false,
                 name: student.name,
+                photo: student.photo,
               }))
             );
           }
@@ -100,39 +110,81 @@ const TeacherAttendance = () => {
     <Flex
       direction="column"
       align="center"
-      justify="space-around"
+      padding={["50px 0 80px 0 "]}
       width="100dvw"
+      maxH="100dvh"
       height="100dvh"
     >
-      <Flex direction="column">
+      <Text fontSize={["20px"]} fontWeight={[700]}>
+        Lista de Presença - {date}
+      </Text>
+      <Flex
+        align="center"
+        direction="column"
+        gap={["5px"]}
+        grow={1}
+        margin={["30px 0"]}
+        overflowY="scroll"
+        paddingRight={["30px"]}
+        width={["80%"]}
+      >
         <Checkbox
+          alignSelf="flex-end"
+          borderRadius="3px"
+          border="1px solid white"
           checked={indeterminate ? "indeterminate" : allChecked}
           onCheckedChange={(e) => {
             setAttendances((attendance) =>
               attendance?.map((value) => ({ ...value, present: !!e.checked }))
             );
           }}
-        >
-          Presença
-        </Checkbox>
+          overflow="hidden"
+        ></Checkbox>
+
         {attendances?.map((attendance, index) => (
-          <Checkbox
-            key={attendance.studentId}
-            ms="6"
-            checked={attendance.present}
-            onCheckedChange={(ev) => {
-              setAttendances((attendance) => {
-                const newValues = attendance ? [...attendance] : [];
-                newValues[index] = {
-                  ...newValues[index],
-                  present: !!ev.checked,
-                };
-                return newValues;
-              });
-            }}
+          <Flex
+            align="center"
+            justify="space-between"
+            height={["100px"]}
+            key={index}
+            width="100%"
           >
-            {attendance.name}
-          </Checkbox>
+            <Flex align="center" gap={["10px"]} grow={1} justify="flex-start">
+              <Image
+                src={
+                  attendance.photo
+                    ? `${process.env.NEXT_PUBLIC_CASTELINHO_API}${attendance.photo}`
+                    : "/assets/images/defaultProfilePhoto.png"
+                }
+                height={["60px"]}
+                width={["60px"]}
+                alt="profile"
+                borderRadius="100%"
+              />
+              <Text fontSize={["14px"]} fontWeight={700} textAlign="left">
+                {attendance.name}
+              </Text>
+            </Flex>
+
+            <Checkbox
+              borderRadius="3px"
+              border="1px solid white"
+              key={attendance.studentId}
+              ms="6"
+              checked={attendance.present}
+              onCheckedChange={(ev) => {
+                setAttendances((attendance) => {
+                  const newValues = attendance ? [...attendance] : [];
+                  newValues[index] = {
+                    ...newValues[index],
+                    present: !!ev.checked,
+                  };
+                  return newValues;
+                });
+              }}
+              overflow="hidden"
+            />
+          </Flex>
         ))}
       </Flex>
       <Flex justify="center" gap={["20px"]} width={["100%"]}>
