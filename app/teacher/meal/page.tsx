@@ -152,7 +152,6 @@ const MealPage = () => {
           <Flex
             align="center"
             direction="column"
-            gap={["15px"]}
             justify="center"
             key={index}
             width={["100%"]}
@@ -161,7 +160,8 @@ const MealPage = () => {
               align="center"
               bgColor="secondary.solid"
               border="2px solid #f97837"
-              borderRadius={["6px"]}
+              borderTopLeftRadius={["6px"]}
+              borderTopRightRadius={["6px"]}
               color="secondary.50"
               fontSize={["18px"]}
               fontWeight={[700]}
@@ -176,7 +176,7 @@ const MealPage = () => {
                 ])
               }
               position="relative"
-              width={["70%"]}
+              width={["80%"]}
             >
               {formatMealName(mealType.name)}
               {mealType.display ? (
@@ -187,10 +187,12 @@ const MealPage = () => {
             </Flex>
             <Flex
               align="center"
+              backgroundColor="#ffcbb4"
+              color="black"
               direction="column"
               gap={["10px"]}
               justify="center"
-              width="100%"
+              width="80%"
             >
               {meals?.map((meal, mealIndex) =>
                 meal.mealTypeId !== mealType.id ? null : (
@@ -200,7 +202,7 @@ const MealPage = () => {
                     gap="10px"
                     justify="space-between"
                     key={mealIndex}
-                    width={["70%"]}
+                    width={["100%"]}
                   >
                     <Flex
                       align="center"

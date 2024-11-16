@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Button, Flex, Input, Text } from "@chakra-ui/react";
 import { formatInTimeZone } from "date-fns-tz";
 import { Nap, Person } from "@/app/types/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
@@ -174,8 +174,31 @@ const TeacherNap = () => {
                   </Flex>
                 ) : null
               )}
-              <Flex>
-                <Flex></Flex>
+              <Flex
+                align="flex-end"
+                justify="space-between"
+                padding={["0 15px"]}
+                width="100%"
+              >
+                <Flex align="center" gap="15px" grow={1} justify="flex-start">
+                  <Flex align="center" direction="column" justify="center">
+                    <Text>Início</Text>
+                    <Input
+                      color="black !important"
+                      type="time"
+                      placeholder="Selecione a hora"
+                      name="time"
+                    />
+                  </Flex>
+                  <Flex align="center" direction="column" justify="center">
+                    <Text>Término</Text>
+                    <Input
+                      type="time"
+                      placeholder="Selecione a hora"
+                      name="time"
+                    />
+                  </Flex>
+                </Flex>
                 <Button
                   colorPalette="secondary"
                   fontSize={["12px"]}
