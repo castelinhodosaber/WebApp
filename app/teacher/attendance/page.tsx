@@ -120,6 +120,7 @@ const TeacherAttendance = () => {
       </Text>
       <Flex
         align="center"
+        backgroundColor="#ffcbb4"
         direction="column"
         gap={["5px"]}
         grow={1}
@@ -128,18 +129,28 @@ const TeacherAttendance = () => {
         paddingRight={["30px"]}
         width={["80%"]}
       >
-        <Checkbox
-          alignSelf="flex-end"
-          borderRadius="3px"
-          border="1px solid white"
-          checked={indeterminate ? "indeterminate" : allChecked}
-          onCheckedChange={(e) => {
-            setAttendances((attendance) =>
-              attendance?.map((value) => ({ ...value, present: !!e.checked }))
-            );
-          }}
-          overflow="hidden"
-        ></Checkbox>
+        <Flex align="center" justify="space-between" width={["100%"]}>
+          <Text
+            fontSize={["14px"]}
+            fontWeight={700}
+            marginLeft={["60px"]}
+            textAlign="left"
+          >
+            {allChecked ? "Desmarcar Todos" : "Marcar Todos"}
+          </Text>
+          <Checkbox
+            alignSelf="flex-end"
+            borderRadius="3px"
+            border="1px solid white"
+            checked={indeterminate ? "indeterminate" : allChecked}
+            onCheckedChange={(e) => {
+              setAttendances((attendance) =>
+                attendance?.map((value) => ({ ...value, present: !!e.checked }))
+              );
+            }}
+            overflow="hidden"
+          ></Checkbox>
+        </Flex>
 
         {attendances?.map((attendance, index) => (
           <Flex
@@ -156,10 +167,10 @@ const TeacherAttendance = () => {
                     ? `${process.env.NEXT_PUBLIC_CASTELINHO_API}${attendance.photo}`
                     : "/assets/images/defaultProfilePhoto.png"
                 }
-                height={["60px"]}
-                width={["60px"]}
+                height={["50px"]}
+                width={["50px"]}
                 alt="profile"
-                borderRadius="100%"
+                borderRadius="16px"
               />
               <Text fontSize={["14px"]} fontWeight={700} textAlign="left">
                 {attendance.name}

@@ -14,6 +14,9 @@ import { useRouter } from "next/navigation";
 import ROUTES from "@/app/routes";
 import formatMealName from "@/app/utils/formatMealName";
 import { FaCaretRight } from "react-icons/fa";
+import { motion } from "framer-motion";
+
+const MotionFlex = motion(Flex);
 
 const MealPage = () => {
   const router = useRouter();
@@ -185,24 +188,41 @@ const MealPage = () => {
                 <FaCaretRight style={{ position: "absolute", right: "15px" }} />
               )}
             </Flex>
-            <Flex
+            <MotionFlex
               align="center"
               backgroundColor="#ffcbb4"
-              color="black"
+              borderBottomLeftRadius={["6px"]}
+              borderBottomRightRadius={["6px"]}
+              color="#031436"
               direction="column"
               gap={["10px"]}
               justify="center"
+              padding={mealType.display ? ["10px 5px"] : ""}
+              initial={{ opacity: 0, y: -20 }}
+              animate={
+                mealType.display ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }
+              }
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
               width="80%"
             >
               {meals?.map((meal, mealIndex) =>
                 meal.mealTypeId !== mealType.id ? null : (
-                  <Flex
+                  <MotionFlex
                     align="center"
-                    display={mealType.display ? "flex" : "none"}
                     gap="10px"
                     justify="space-between"
                     key={mealIndex}
                     width={["100%"]}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={
+                      mealType.display
+                        ? { opacity: 1, y: 0 }
+                        : { opacity: 0, y: -20 }
+                    }
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ display: mealType.display ? "flex" : "none" }}
                   >
                     <Flex
                       align="center"
@@ -219,7 +239,7 @@ const MealPage = () => {
                         height={["40px"]}
                         width={["40px"]}
                         alt="profile"
-                        borderRadius="16px"
+                        borderRadius="11px"
                       />
                       <Text
                         fontSize={["16px"]}
@@ -233,19 +253,19 @@ const MealPage = () => {
                     <Flex align="center" grow={1} justify="flex-end">
                       {[1, 2, 3, 4, 5].map((rate, ratingIndex) => (
                         <RiStarSFill
-                          color={rate <= meal.rating ? "yellow" : "white"}
+                          color={rate <= meal.rating ? "yellow" : "#031436"}
                           key={ratingIndex}
                           onClick={() =>
                             updateMeal(mealIndex, { ...meal, rating: rate })
                           }
-                          size={18}
+                          size={20}
                         />
                       ))}
                     </Flex>
-                  </Flex>
+                  </MotionFlex>
                 )
               )}
-            </Flex>
+            </MotionFlex>
           </Flex>
         ))}
       </Flex>

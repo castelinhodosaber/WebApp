@@ -9,6 +9,8 @@ import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useRouter } from "next/navigation";
 import ROUTES from "@/app/routes";
 import { toaster } from "@/components/ui/toaster";
+import { InputGroup } from "@/components/ui/input-group";
+import { FaRegClock } from "react-icons/fa6";
 
 const TeacherNap = () => {
   const router = useRouter();
@@ -119,6 +121,8 @@ const TeacherNap = () => {
               border="2px solid #f97837"
               borderTopLeftRadius={["6px"]}
               borderTopRightRadius={["6px"]}
+              borderBottomLeftRadius={student.display ? "" : ["6px"]}
+              borderBottomRightRadius={student.display ? "" : ["6px"]}
               color="secondary.50"
               fontSize={["18px"]}
               fontWeight={[700]}
@@ -146,28 +150,61 @@ const TeacherNap = () => {
               display={student.display ? "flex" : "none"}
               gap={["10px"]}
               justify="center"
-              padding={["15px 0 10px 0"]}
+              padding={["0px 0 10px 0"]}
               width={["80%"]}
             >
               {naps?.map((nap, index) =>
                 nap.studentId === student.id ? (
                   <Flex
                     align="center"
+                    borderBottom="2px solid #031436"
                     height={["50px"]}
                     justify="space-between"
                     key={index}
-                    padding={["0 20px"]}
+                    margin="10px 0 0"
+                    padding={["0 10px 10px 10px"]}
                     width={["100%"]}
                   >
-                    <Text>
-                      {nap.hour} - {nap.napTimeMinutes}
-                    </Text>
+                    <Flex align="center" gap={["8px"]} grow="1">
+                      <Flex
+                        align="center"
+                        direction="column"
+                        justify="center"
+                        width={["100px"]}
+                      >
+                        <Text
+                          fontSize={["12px"]}
+                          fontWeight={600}
+                          textTransform="uppercase"
+                        >
+                          Início
+                        </Text>
+                        <Text>{nap.hour}</Text>
+                      </Flex>
+                      <Flex
+                        align="center"
+                        direction="column"
+                        justify="center"
+                        width={["100px"]}
+                      >
+                        <Text
+                          fontSize={["12px"]}
+                          fontWeight={600}
+                          textTransform="uppercase"
+                        >
+                          Término
+                        </Text>
+                        <Text>{nap.napTimeMinutes}</Text>
+                      </Flex>
+                    </Flex>
+
                     <Button
                       colorPalette="secondary"
-                      fontSize={["12px"]}
+                      color="#ffe9e0"
+                      fontSize={["14px"]}
                       fontWeight={[800]}
                       onClick={() => deleteNap(nap.id!)}
-                      padding={["3px 10px"]}
+                      width={["90px"]}
                     >
                       APAGAR
                     </Button>
@@ -177,34 +214,102 @@ const TeacherNap = () => {
               <Flex
                 align="flex-end"
                 justify="space-between"
-                padding={["0 15px"]}
+                padding={["10px 10px 0px 10px"]}
                 width="100%"
               >
-                <Flex align="center" gap="15px" grow={1} justify="flex-start">
+                <Flex align="center" gap="8px" grow={1} justify="flex-start">
                   <Flex align="center" direction="column" justify="center">
-                    <Text>Início</Text>
-                    <Input
-                      color="black !important"
-                      type="time"
-                      placeholder="Selecione a hora"
-                      name="time"
-                    />
+                    <Text
+                      fontSize={["12px"]}
+                      fontWeight={600}
+                      textTransform="uppercase"
+                    >
+                      Início
+                    </Text>
+                    <InputGroup
+                      endElement={
+                        <FaRegClock
+                          color="#031436"
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            right: "15px",
+                            zIndex: "0 !important",
+                          }}
+                        />
+                      }
+                    >
+                      <Input
+                        border="1px solid #031436"
+                        color="#031436"
+                        type="time"
+                        placeholder="Selecione a hora"
+                        name="time"
+                        css={{
+                          "&::-webkit-calendar-picker-indicator": {
+                            color: "#031436 !important",
+                            fontSize: "20px",
+                            zIndex: 1000,
+                            backgroundImage: "none",
+                          },
+                        }}
+                        padding="0px 10px 0px 10px !important"
+                        width={["100px"]}
+                        zIndex={999}
+                      />
+                    </InputGroup>
                   </Flex>
                   <Flex align="center" direction="column" justify="center">
-                    <Text>Término</Text>
-                    <Input
-                      type="time"
-                      placeholder="Selecione a hora"
-                      name="time"
-                    />
+                    <Text
+                      fontSize={["12px"]}
+                      fontWeight={600}
+                      textTransform="uppercase"
+                    >
+                      Término
+                    </Text>
+                    <InputGroup
+                      endElement={
+                        <FaRegClock
+                          color="#031436"
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            right: "15px",
+                            zIndex: "0 !important",
+                          }}
+                        />
+                      }
+                    >
+                      <Input
+                        border="1px solid #031436"
+                        color="#031436"
+                        type="time"
+                        placeholder="Selecione a hora"
+                        name="time"
+                        css={{
+                          "&::-webkit-calendar-picker-indicator": {
+                            color: "#031436 !important",
+                            fontSize: "20px",
+                            zIndex: 1000,
+                            backgroundImage: "none",
+                          },
+                        }}
+                        padding="0px 10px 0px 10px !important"
+                        step="300"
+                        width={["100px"]}
+                        zIndex={999}
+                      />
+                    </InputGroup>
                   </Flex>
                 </Flex>
                 <Button
                   colorPalette="secondary"
-                  fontSize={["12px"]}
+                  color="#ffe9e0"
+                  fontSize={["14px"]}
                   fontWeight={[800]}
                   onClick={() => saveNaps(student.id!)}
-                  padding={["3px 10px"]}
+                  padding={["3px 7px"]}
+                  maxWidth={["90px"]}
                 >
                   ADICIONAR
                 </Button>
