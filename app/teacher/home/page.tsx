@@ -1,5 +1,4 @@
 "use client";
-import Footer from "@/app/components/Footer";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import ROUTES from "@/app/routes";
 import { Button, Flex, Text } from "@chakra-ui/react";
@@ -12,6 +11,7 @@ const Home = () => {
   const router = useRouter();
   const {
     state: { selectedClass },
+    setSelectedClass,
   } = useTeacherContext();
   const HOME_ITEMS = [
     {
@@ -43,9 +43,10 @@ const Home = () => {
   return (
     <Flex
       align="center"
-      height={["calc(100dvh - 50px)"]}
-      justify="center"
-      padding={["20px 10px"]}
+      direction="column"
+      height={"100dvh"}
+      maxH="100dvh"
+      padding={["50px 0 80px 0"]}
       wrap="wrap"
       width={["100%"]}
     >
@@ -55,62 +56,79 @@ const Home = () => {
       <Flex
         align="center"
         alignContent="center"
-        gap={["60px 0px"]}
+        grow="1"
         justify="center"
         width="100dvw"
-        wrap="wrap"
       >
-        {HOME_ITEMS.map((item, index) => (
-          <Flex
-            align="center"
-            color="secondary.solid"
-            direction="column"
-            justify="center"
-            key={index}
-            onClick={() => router.push(item.path)}
-            width={["130px", "150px", "180px"]}
-          >
+        <Flex
+          borderRadius={["12px"]}
+          gap={["60px 20px"]}
+          justify="center"
+          padding={["20px 0"]}
+          width={["80%"]}
+          wrap="wrap"
+        >
+          {HOME_ITEMS.map((item, index) => (
             <Flex
               align="center"
-              height={["30px"]}
+              color="secondary.500"
+              direction="column"
+              gap={["10px"]}
               justify="center"
-              width={["30px"]}
+              key={index}
+              onClick={() => router.push(item.path)}
+              width={["130px", "150px", "150px"]}
             >
-              {item.icon}
+              <Flex
+                align="center"
+                height={["30px"]}
+                justify="center"
+                width={["30px"]}
+              >
+                {item.icon}
+              </Flex>
+              <Text
+                color="white"
+                fontSize={["16px"]}
+                fontWeight={700}
+                textTransform="uppercase"
+              >
+                {item.name}
+              </Text>
             </Flex>
-
-            <Text color="white">{item.name}</Text>
-          </Flex>
-        ))}
+          ))}
+        </Flex>
       </Flex>
       <Flex gap="20px">
         <Button
           colorPalette="secondaryButton"
           fontSize={["16px"]}
           fontWeight={700}
-          onClick={() =>
-            router.push(ROUTES.private.teacher.attendance + "?edit=true")
-          }
+          onClick={() => {
+            setSelectedClass();
+            router.push(ROUTES.private.teacher.dashboard);
+          }}
           lineBreak="anywhere"
           padding="5px 20px"
-          maxW={["150px"]}
+          textTransform="uppercase"
+          maxW={["180px"]}
         >
           Selecionar Turma
         </Button>
         <Button
           colorPalette="secondary"
-          fontSize={["18px"]}
+          color="secondary.100"
+          fontSize={["16px"]}
           fontWeight={700}
           onClick={() =>
             router.push(ROUTES.private.teacher.attendance + "?edit=true")
           }
+          textTransform="uppercase"
           padding="5px 20px"
         >
           Editar Presença
         </Button>
       </Flex>
-
-      <Footer />
     </Flex>
   );
 };

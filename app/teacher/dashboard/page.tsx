@@ -1,5 +1,4 @@
 "use client";
-import Footer from "@/app/components/Footer";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import ROUTES from "@/app/routes";
 import { Classes } from "@/app/types/api/castelinho";
@@ -7,6 +6,7 @@ import {
   NativeSelectField,
   NativeSelectRoot,
 } from "@/components/ui/native-select";
+import { SkeletonCircle } from "@/components/ui/skeleton";
 import {
   Button,
   createListCollection,
@@ -28,7 +28,7 @@ const TeacherDashboard = () => {
     setSelectedClass,
   } = useTeacherContext();
   const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [classCollection, setClassCollection] = useState<
     ListCollection<{
       label: string;
@@ -50,13 +50,26 @@ const TeacherDashboard = () => {
       );
   }, [classes, teacherClasses]);
 
-  const handleSelectedClass = async (classId: number) => {
-    await setSelectedClass(classId);
-    if (selectedClass) router.push(ROUTES.private.teacher.attendance);
+  const handleSelectedClass = (classId: number) => {
+    setIsLoading(true);
+    setSelectedClass(classId);
   };
 
-  return (
-    <Flex align="center" direction="column" justify="center" width="100%">
+  useEffect(() => {
+    if (selectedClass) router.push(ROUTES.private.teacher.attendance);
+  }, [selectedClass, router]);
+
+  return isLoading ? (
+    <SkeletonCircle />
+  ) : (
+    <Flex
+      align="center"
+      direction="column"
+      height="100dvh"
+      justify="flex-start"
+      padding={["50px 0 80px 0 "]}
+      width="100%"
+    >
       <Text fontSize={["18px"]} fontWeight={700}>
         Selecionar Turma
       </Text>
@@ -64,11 +77,13 @@ const TeacherDashboard = () => {
         align="center"
         direction="column"
         gap={["20px"]}
+        grow="1"
         justify="center"
         width="100%"
       >
         {teacherClasses?.map((teacherClass, index) => (
           <Button
+            color="secondary.100"
             colorPalette="secondary"
             border="1px solid orange"
             borderRadius={["12px"]}
@@ -79,6 +94,7 @@ const TeacherDashboard = () => {
             onClick={() => {
               handleSelectedClass(teacherClass.id);
             }}
+            textTransform="uppercase"
             width={["180px"]}
           >
             {teacherClass.name}
@@ -102,7 +118,6 @@ const TeacherDashboard = () => {
           ) : null}
         </label>
       </Flex>
-      <Footer />
     </Flex>
   );
 };

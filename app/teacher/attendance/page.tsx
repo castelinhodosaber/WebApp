@@ -1,6 +1,5 @@
 "use client";
 import { Button, Flex, Image, Text } from "@chakra-ui/react";
-import Footer from "../../components/Footer";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ROUTES from "@/app/routes";
 import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
-import { SkeletonText } from "@/components/ui/skeleton";
+import { SkeletonCircle } from "@/components/ui/skeleton";
 import { toaster } from "@/components/ui/toaster";
 import { formatInTimeZone } from "date-fns-tz";
 
@@ -23,6 +22,7 @@ const TeacherAttendance = () => {
   } = useGlobalContext();
   const {
     state: { selectedClass },
+    setSelectedClass,
   } = useTeacherContext();
   const [isLoading, setIsLoading] = useState(true);
   const [attendances, setAttendances] =
@@ -96,16 +96,15 @@ const TeacherAttendance = () => {
       if (result) {
         setIsLoading(false);
         router.push(ROUTES.private.teacher.home);
-        toaster.create({ type: "sucess", title: "Lista salva com sucesso." });
+        toaster.create({ type: "success", title: "Lista salva com sucesso." });
       } else {
         setIsLoading(false);
       }
     }
-    setIsLoading(false);
   };
 
   return isLoading ? (
-    <SkeletonText noOfLines={6} />
+    <SkeletonCircle />
   ) : (
     <Flex
       direction="column"
@@ -120,18 +119,23 @@ const TeacherAttendance = () => {
       </Text>
       <Flex
         align="center"
-        backgroundColor="#ffcbb4"
         direction="column"
         gap={["5px"]}
         grow={1}
         margin={["30px 0"]}
         overflowY="scroll"
-        paddingRight={["30px"]}
+        padding={["10px 15px"]}
         width={["80%"]}
       >
-        <Flex align="center" justify="space-between" width={["100%"]}>
+        <Flex
+          align="center"
+          borderBottom="1px solid white"
+          justify="space-between"
+          paddingBottom="15px"
+          width={["100%"]}
+        >
           <Text
-            fontSize={["14px"]}
+            fontSize={["16px"]}
             fontWeight={700}
             marginLeft={["60px"]}
             textAlign="left"
@@ -140,6 +144,7 @@ const TeacherAttendance = () => {
           </Text>
           <Checkbox
             alignSelf="flex-end"
+            colorPalette="secondary"
             borderRadius="3px"
             border="1px solid white"
             checked={indeterminate ? "indeterminate" : allChecked}
@@ -155,6 +160,7 @@ const TeacherAttendance = () => {
         {attendances?.map((attendance, index) => (
           <Flex
             align="center"
+            borderBottom="1px solid white"
             justify="space-between"
             height={["100px"]}
             key={index}
@@ -172,7 +178,7 @@ const TeacherAttendance = () => {
                 alt="profile"
                 borderRadius="16px"
               />
-              <Text fontSize={["14px"]} fontWeight={700} textAlign="left">
+              <Text fontSize={["16px"]} fontWeight={700} textAlign="left">
                 {attendance.name}
               </Text>
             </Flex>
@@ -180,6 +186,7 @@ const TeacherAttendance = () => {
             <Checkbox
               borderRadius="3px"
               border="1px solid white"
+              colorPalette="secondary"
               key={attendance.studentId}
               ms="6"
               checked={attendance.present}
@@ -201,20 +208,30 @@ const TeacherAttendance = () => {
       <Flex justify="center" gap={["20px"]} width={["100%"]}>
         <Button
           colorPalette="secondaryButton"
-          onClick={() => router.push(ROUTES.private.teacher.dashboard)}
+          fontSize={["14px"]}
+          fontWeight={700}
+          onClick={() => {
+            setSelectedClass();
+            router.push(ROUTES.private.teacher.dashboard);
+          }}
           padding={["10px 30px"]}
+          textTransform="uppercase"
         >
           Voltar
         </Button>
         <Button
+          borderRadius="3px"
+          color="#ffe9e0"
           colorPalette="secondary"
+          fontSize={["14px"]}
+          fontWeight={700}
           onClick={handleSaveAttendance}
           padding={["10px 30px"]}
+          textTransform="uppercase"
         >
           Salvar Lista
         </Button>
       </Flex>
-      <Footer />
     </Flex>
   );
 };

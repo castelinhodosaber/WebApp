@@ -24,7 +24,7 @@ interface TeacherState {
 interface TeacherContextType {
   state: TeacherState;
   setTeacherClasses: () => void;
-  setSelectedClass: (classId: number) => Promise<void>;
+  setSelectedClass: (classId?: number) => Promise<void>;
 }
 
 // Criando o contexto
@@ -69,18 +69,22 @@ export const TeacherProvider = ({ children }: { children: ReactNode }) => {
     setClasses();
   }, []);
 
-  const setSelectedClass = async (classId: number) => {
-    const isTeacherClass = state.teacherClasses?.find(
-      (aClass) => aClass.id === classId
-    );
-    if (isTeacherClass) {
-      setState({ ...state, selectedClass: isTeacherClass });
-    } else if (accessToken) {
-      const response = await CASTELINHO_API_ENDPOINTS.class.getById(
-        accessToken,
-        classId
+  const setSelectedClass = async (classId?: number) => {
+    if (classId) {
+      const isTeacherClass = state.teacherClasses?.find(
+        (aClass) => aClass.id === classId
       );
-      if (response) setState({ ...state, selectedClass: response.data });
+      if (isTeacherClass) {
+        setState({ ...state, selectedClass: isTeacherClass });
+      } else if (accessToken) {
+        const response = await CASTELINHO_API_ENDPOINTS.class.getById(
+          accessToken,
+          classId
+        );
+        if (response) setState({ ...state, selectedClass: response.data });
+      }
+    } else {
+      setState({ ...state, selectedClass: undefined });
     }
   };
 

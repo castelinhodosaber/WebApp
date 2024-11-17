@@ -1,4 +1,3 @@
-import Footer from "@/app/components/Footer";
 import { Flex } from "@chakra-ui/react";
 
 const Announcements = () => {
@@ -11,7 +10,6 @@ const Announcements = () => {
       height="100dvh"
     >
       Announcements
-      <Footer />
     </Flex>
   );
 };

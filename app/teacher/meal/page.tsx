@@ -5,7 +5,6 @@ import { Button, Flex, Image, Text } from "@chakra-ui/react";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useTeacherContext } from "@/app/context/TeacherContext";
-import Footer from "@/app/components/Footer";
 import { FaCaretDown } from "react-icons/fa6";
 import { RiStarSFill } from "react-icons/ri";
 import { formatInTimeZone } from "date-fns-tz";
@@ -289,7 +288,6 @@ const MealPage = () => {
           Salvar
         </Button>
       </Flex>
-      <Footer />
     </Flex>
   );
 };

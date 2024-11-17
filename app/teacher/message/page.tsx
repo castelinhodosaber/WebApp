@@ -1,4 +1,3 @@
-import Footer from "@/app/components/Footer";
 import { Flex } from "@chakra-ui/react";
 
 const Messages = () => {
@@ -11,7 +10,6 @@ const Messages = () => {
       height="100dvh"
     >
       Messages
-      <Footer />
     </Flex>
   );
 };
