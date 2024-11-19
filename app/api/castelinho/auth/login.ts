@@ -33,7 +33,12 @@ const login = async (
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
-      toaster.create({ type: "error", title: error.response?.data.message });
+      toaster.create({
+        type: "error",
+        title:
+          error.response?.data.message ||
+          "Erro interno. Tente novamente mais tarde.",
+      });
     } else {
       toaster.create({
         type: "error",

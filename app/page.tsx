@@ -202,7 +202,7 @@ function App() {
         </Flex>
         <Button
           bgColor="#f97837"
-          borderRadius="12px"
+          borderRadius="8px"
           color="white"
           fontSize="18px"
           fontWeight={700}

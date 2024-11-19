@@ -11,22 +11,35 @@ export const toaster = createToaster({
   placement: "bottom-end",
   pauseOnPageIdle: true,
 });
+
 export const Toaster = () => {
   return (
     <Portal>
       <ChakraToaster
+        alignItems="center"
+        display="flex"
         toaster={toaster}
         insetInline={{ mdDown: "1rem" }}
-        width={{ md: "356px" }}
+        width={["90vw"]}
       >
         {(toast) => (
-          <Toast.Root>
+          <Toast.Root
+            alignItems="center"
+            display="flex"
+            padding={["20px 10px"]}
+          >
             {toast.type === "loading" ? (
               <Spinner size="sm" color="blue.solid" />
             ) : (
-              <Toast.Indicator />
+              <Toast.Indicator marginLeft={["20px !important"]} />
             )}
-            <Stack gap="1" flex="1" maxWidth="100%">
+            <Stack
+              align="center"
+              display="flex"
+              gap="1"
+              flex="1"
+              maxWidth="100%"
+            >
               {toast.title && <Toast.Title>{toast.title}</Toast.Title>}
               {toast.description && (
                 <Toast.Description>{toast.description}</Toast.Description>
