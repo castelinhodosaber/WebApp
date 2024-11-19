@@ -15,7 +15,7 @@ import formatMealName from "@/app/utils/formatMealName";
 import { FaCaretRight } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-const MotionFlex = motion(Flex);
+const MotionFlex = motion.create(Flex);
 
 const MealPage = () => {
   const router = useRouter();
@@ -164,7 +164,8 @@ const MealPage = () => {
               border="2px solid #f97837"
               borderTopLeftRadius={["6px"]}
               borderTopRightRadius={["6px"]}
-              color="secondary.50"
+              borderBottomLeftRadius={mealType.display ? "" : ["6px"]}
+              borderBottomRightRadius={mealType.display ? "" : ["6px"]}
               fontSize={["18px"]}
               fontWeight={[700]}
               justify="center"
@@ -189,10 +190,10 @@ const MealPage = () => {
             </Flex>
             <MotionFlex
               align="center"
-              backgroundColor="#ffcbb4"
+              backgroundColor="rgba(255, 255, 255, 0.8)"
               borderBottomLeftRadius={["6px"]}
               borderBottomRightRadius={["6px"]}
-              color="#031436"
+              border="2px solid #f97837"
               direction="column"
               gap={["10px"]}
               justify="center"
@@ -241,6 +242,7 @@ const MealPage = () => {
                         borderRadius="11px"
                       />
                       <Text
+                        color="principal.solid"
                         fontSize={["16px"]}
                         fontWeight={700}
                         textAlign="left"
@@ -252,7 +254,7 @@ const MealPage = () => {
                     <Flex align="center" grow={1} justify="flex-end">
                       {[1, 2, 3, 4, 5].map((rate, ratingIndex) => (
                         <RiStarSFill
-                          color={rate <= meal.rating ? "yellow" : "#031436"}
+                          color={rate <= meal.rating ? "#f97837" : "#031436"}
                           key={ratingIndex}
                           onClick={() =>
                             updateMeal(mealIndex, { ...meal, rating: rate })

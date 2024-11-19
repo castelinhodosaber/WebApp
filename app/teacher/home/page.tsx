@@ -65,7 +65,7 @@ const Home = () => {
           gap={["60px 20px"]}
           justify="center"
           padding={["20px 0"]}
-          width={["80%"]}
+          width={["100%", "90%"]}
           wrap="wrap"
         >
           {HOME_ITEMS.map((item, index) => (
@@ -77,7 +77,7 @@ const Home = () => {
               justify="center"
               key={index}
               onClick={() => router.push(item.path)}
-              width={["130px", "150px", "150px"]}
+              width={["100px", "120px", "120px"]}
             >
               <Flex
                 align="center"
@@ -99,7 +99,7 @@ const Home = () => {
           ))}
         </Flex>
       </Flex>
-      <Flex gap="20px">
+      <Flex align="center" gap="20px" justify="center" wrap="wrap">
         <Button
           colorPalette="secondaryButton"
           fontSize={["16px"]}
@@ -111,7 +111,6 @@ const Home = () => {
           lineBreak="anywhere"
           padding="5px 20px"
           textTransform="uppercase"
-          maxW={["180px"]}
         >
           Selecionar Turma
         </Button>

@@ -12,6 +12,12 @@ import { toaster } from "@/components/ui/toaster";
 import { InputGroup } from "@/components/ui/input-group";
 import { FaRegClock } from "react-icons/fa6";
 
+type newNap = {
+  startedAt?: string;
+  finishAt?: string;
+  studentId: number;
+};
+
 const TeacherNap = () => {
   const router = useRouter();
   const {
@@ -22,6 +28,7 @@ const TeacherNap = () => {
   } = useTeacherContext();
   const [date, setDate] = useState("");
   const [naps, setNaps] = useState<Nap[]>();
+  const [newNaps, setNewNaps] = useState<newNap[]>([]);
   const [presentStudents, setPresentStudents] =
     useState<(Person & { display: boolean })[]>();
 
@@ -83,7 +90,41 @@ const TeacherNap = () => {
     }
   };
 
-  const saveNaps = (_studentId: number) => {};
+  const updateNewNap = (nap: newNap) => {
+    const otherNaps: newNap[] = [];
+    let selectedStudentNap: newNap = nap;
+
+    newNaps.forEach((item) => {
+      if (item.studentId === nap.studentId) {
+        selectedStudentNap = { ...item, ...nap };
+      } else otherNaps.push(item);
+    });
+
+    setNewNaps([...otherNaps, selectedStudentNap]);
+  };
+
+  const saveNap = (studentId: number) => {
+    const formattedDate = formatInTimeZone(
+      new Date(),
+      "America/Sao_Paulo",
+      "dd/MM/yyyy"
+    );
+
+    const nap = newNaps.find((item) => item.studentId === studentId);
+
+    if (nap && accessToken) {
+      // CASTELINHO_API_ENDPOINTS.nap.createMany(accessToken, [nap]);
+    } else {
+      toaster.create({
+        title: "Inserir horários para salvar soneca.",
+      });
+    }
+    console.log(formattedDate);
+  };
+
+  useEffect(() => {
+    console.log(newNaps);
+  }, [newNaps]);
   return (
     <Flex
       align="center"
@@ -142,7 +183,7 @@ const TeacherNap = () => {
             </Flex>
             <Flex
               align="center"
-              backgroundColor="#ffcbb4"
+              backgroundColor="rgba(255, 255, 255, 0.8)"
               borderBottomLeftRadius={["6px"]}
               borderBottomRightRadius={["6px"]}
               color="#031436"
@@ -244,6 +285,12 @@ const TeacherNap = () => {
                         color="#031436"
                         type="time"
                         placeholder="Selecione a hora"
+                        onChange={(ev) =>
+                          updateNewNap({
+                            studentId: student.id,
+                            startedAt: ev.target.value,
+                          })
+                        }
                         name="time"
                         css={{
                           "&::-webkit-calendar-picker-indicator": {
@@ -286,6 +333,12 @@ const TeacherNap = () => {
                         type="time"
                         placeholder="Selecione a hora"
                         name="time"
+                        onChange={(ev) =>
+                          updateNewNap({
+                            studentId: student.id,
+                            finishAt: ev.target.value,
+                          })
+                        }
                         css={{
                           "&::-webkit-calendar-picker-indicator": {
                             color: "#031436 !important",
@@ -307,8 +360,16 @@ const TeacherNap = () => {
                   color="#ffe9e0"
                   fontSize={["14px"]}
                   fontWeight={[800]}
-                  onClick={() => saveNaps(student.id!)}
+                  onClick={() => saveNap(student.id!)}
                   padding={["3px 7px"]}
+                  disabled={
+                    !newNaps.some(
+                      (item) =>
+                        item.studentId === student.id &&
+                        item.finishAt &&
+                        item.startedAt
+                    )
+                  }
                   maxWidth={["90px"]}
                 >
                   ADICIONAR

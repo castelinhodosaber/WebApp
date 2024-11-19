@@ -33,13 +33,7 @@ export const Toaster = () => {
             ) : (
               <Toast.Indicator marginLeft={["20px !important"]} />
             )}
-            <Stack
-              align="center"
-              display="flex"
-              gap="1"
-              flex="1"
-              maxWidth="100%"
-            >
+            <Stack align="center" display="flex" gap="1">
               {toast.title && <Toast.Title>{toast.title}</Toast.Title>}
               {toast.description && (
                 <Toast.Description>{toast.description}</Toast.Description>
