@@ -11,6 +11,7 @@ import ROUTES from "@/app/routes";
 import { toaster } from "@/components/ui/toaster";
 import { InputGroup } from "@/components/ui/input-group";
 import { FaRegClock } from "react-icons/fa6";
+import { calculateMinutesDifference } from "@/app/utils/formatTime";
 
 type newNap = {
   startedAt?: string;
@@ -107,13 +108,40 @@ const TeacherNap = () => {
     const formattedDate = formatInTimeZone(
       new Date(),
       "America/Sao_Paulo",
-      "dd/MM/yyyy"
+      "yyyy-MM-dd"
     );
 
     const nap = newNaps.find((item) => item.studentId === studentId);
 
-    if (nap && accessToken) {
-      // CASTELINHO_API_ENDPOINTS.nap.createMany(accessToken, [nap]);
+    if (nap && accessToken && nap.startedAt && nap.finishAt) {
+      const napTimeMinutes = calculateMinutesDifference(
+        nap.startedAt,
+        nap.finishAt
+      );
+      toaster.promise(
+        CASTELINHO_API_ENDPOINTS.nap.createMany(accessToken, [
+          {
+            date: formattedDate,
+            hour: nap.startedAt,
+            napTimeMinutes,
+            studentId: nap.studentId,
+          },
+        ]),
+        {
+          success: {
+            title: "Soneca adicionada com sucesso.",
+          },
+          error: {
+            title: "Erro",
+            description:
+              "Falha ao salvar soneca. Verifique os dados e tente novamente",
+          },
+          loading: {
+            title: "Salvando soneca...",
+            description: "Por favor aguarde",
+          },
+        }
+      );
     } else {
       toaster.create({
         title: "Inserir horários para salvar soneca.",
