@@ -119,18 +119,22 @@ const TeacherAttendance = () => {
       </Text>
       <Flex
         align="center"
+        backgroundColor="rgba(255, 255, 255, 0.8)"
+        borderRadius={["8px"]}
+        color="principal.solid"
         direction="column"
         gap={["5px"]}
         grow={1}
         margin={["30px 0"]}
         overflowY="scroll"
-        padding={["10px 15px"]}
+        padding={["20px 0 0"]}
         width={["80%"]}
       >
         <Flex
           align="center"
-          borderBottom="1px solid white"
+          borderBottom="2px solid #031436"
           justify="space-between"
+          padding={["0 15px"]}
           paddingBottom="15px"
           width={["100%"]}
         >
@@ -160,10 +164,13 @@ const TeacherAttendance = () => {
         {attendances?.map((attendance, index) => (
           <Flex
             align="center"
-            borderBottom="1px solid white"
+            borderBottom={
+              index === attendances.length - 1 ? "" : "2px solid #031436"
+            }
             justify="space-between"
             height={["100px"]}
             key={index}
+            padding={["0 15px"]}
             width="100%"
           >
             <Flex align="center" gap={["10px"]} grow={1} justify="flex-start">

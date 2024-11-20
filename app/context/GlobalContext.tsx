@@ -11,7 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 import ROUTES from "../routes";
 import { CASTELINHO_API_ENDPOINTS } from "../api/castelinho";
 import verifyRoute from "../utils/verifyRoute";
-import { SkeletonText } from "@/components/ui/skeleton";
+import { SkeletonCircle } from "@/components/ui/skeleton";
 // import apiLogin from "../api/castelinho/auth/login";
 
 // Definindo o tipo para o estado global
@@ -119,7 +119,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <GlobalContext.Provider value={{ state, login, logout }}>
-      {isLoading ? <SkeletonText noOfLines={6} /> : children}
+      {isLoading ? <SkeletonCircle /> : children}
     </GlobalContext.Provider>
   );
 };

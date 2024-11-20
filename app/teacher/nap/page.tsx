@@ -11,7 +11,10 @@ import ROUTES from "@/app/routes";
 import { toaster } from "@/components/ui/toaster";
 import { InputGroup } from "@/components/ui/input-group";
 import { FaRegClock } from "react-icons/fa6";
-import { calculateMinutesDifference } from "@/app/utils/formatTime";
+import {
+  calculateEndTime,
+  calculateMinutesDifference,
+} from "@/app/utils/formatTime";
 
 type newNap = {
   startedAt?: string;
@@ -248,7 +251,7 @@ const TeacherNap = () => {
                         >
                           Início
                         </Text>
-                        <Text>{nap.hour}</Text>
+                        <Text>{nap.hour.replace(':00', '')}</Text>
                       </Flex>
                       <Flex
                         align="center"
@@ -263,7 +266,9 @@ const TeacherNap = () => {
                         >
                           Término
                         </Text>
-                        <Text>{nap.napTimeMinutes}</Text>
+                        <Text>
+                          {calculateEndTime(nap.napTimeMinutes, nap.hour)}
+                        </Text>
                       </Flex>
                     </Flex>
 
