@@ -166,19 +166,22 @@ function App() {
             border="1px solid white"
             borderRadius={["8px"]}
             size={["xs", "xs", "sm", "sm", "lg"]}
+            fontSize={["16px"]}
             type="email"
             value={email}
             onChange={(ev) => setEmail(ev.target.value)}
+            padding={["4px 10px"]}
             variant="outline"
           />
         </Field>
         <Field label="Senha">
           <PasswordInput
             border="1px solid white"
+            borderRadius={["8px"]}
             size={["xs", "xs", "sm", "sm", "lg"]}
             onChange={(ev) => setPassword(ev.target.value)}
+            padding={["4px 10px"]}
             value={password}
-            borderRadius={["8px"]}
           />
         </Field>
         <Flex

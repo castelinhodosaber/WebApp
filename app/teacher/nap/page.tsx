@@ -15,6 +15,7 @@ import {
   calculateEndTime,
   calculateMinutesDifference,
 } from "@/app/utils/formatTime";
+import isNapOverlapping from "@/app/utils/isNapOverlapping";
 
 type newNap = {
   startedAt?: string;
@@ -121,6 +122,47 @@ const TeacherNap = () => {
         nap.startedAt,
         nap.finishAt
       );
+
+      const student = selectedClass?.students.find(
+        (item) => item.id === nap.studentId
+      );
+
+      if (napTimeMinutes < 15) {
+        toaster.create({
+          duration: 8000,
+          type: "error",
+          title: "Erro!",
+          description: `A duração da soneca não pode ser inferior a quinze minutos.`,
+        });
+
+        return;
+      }
+
+      const duplicatedNap = naps?.some((item) => {
+        if (
+          item.studentId === student?.id &&
+          isNapOverlapping(
+            { startedAt: nap.startedAt || "", finishAt: nap.finishAt || "" },
+            item
+          )
+        ) {
+          return true;
+        }
+        return false;
+      });
+
+      if (duplicatedNap) {
+        toaster.create({
+          duration: 8000,
+          type: "error",
+          title: "Erro!",
+          description: `${student?.gender === "female" ? "A" : "O"} ${
+            student?.name.split(" ")[0]
+          } já possui uma soneca em horário próximo ao informado.`,
+        });
+        return;
+      }
+
       toaster.promise(
         CASTELINHO_API_ENDPOINTS.nap.createMany(accessToken, [
           {
@@ -133,6 +175,7 @@ const TeacherNap = () => {
         {
           success: {
             title: "Soneca adicionada com sucesso.",
+            description: "",
           },
           error: {
             title: "Erro",
@@ -150,12 +193,8 @@ const TeacherNap = () => {
         title: "Inserir horários para salvar soneca.",
       });
     }
-    console.log(formattedDate);
   };
 
-  useEffect(() => {
-    console.log(newNaps);
-  }, [newNaps]);
   return (
     <Flex
       align="center"
@@ -251,7 +290,7 @@ const TeacherNap = () => {
                         >
                           Início
                         </Text>
-                        <Text>{nap.hour.replace(':00', '')}</Text>
+                        <Text>{nap.hour.replace(":00", "")}</Text>
                       </Flex>
                       <Flex
                         align="center"
