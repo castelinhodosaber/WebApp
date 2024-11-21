@@ -17,6 +17,7 @@ import { SkeletonCircle } from "@/components/ui/skeleton";
 // Definindo o tipo para o estado global
 interface GlobalState {
   accessToken: string | null;
+  date: string;
   person: {
     birthDate: string;
     cpf: string;
@@ -44,6 +45,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<GlobalState>({
     person: null,
     accessToken: null,
+    date: "",
   });
   const [isLoading, setIsLoading] = useState(true);
   const [redirectPath, setRedirectPath] = useState<string>();
@@ -102,6 +104,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     };
 
     validateAndRedirect();
+    const newDate = new Date()
+      .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+      .split(",")[0];
+    setState((oldState) => ({ ...oldState, date: newDate }));
   }, []);
 
   useEffect(() => {

@@ -29,6 +29,14 @@ export type MealType = {
   name: MealTypes;
 };
 
+export type Bath = {
+  id?: number;
+  date: string;
+  student?: Person;
+  studentId: number;
+  status: boolean;
+};
+
 export type Nap = {
   id?: number;
   date: string;

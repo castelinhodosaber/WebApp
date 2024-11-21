@@ -170,6 +170,16 @@ const TeacherAttendance = () => {
             justify="space-between"
             height={["100px"]}
             key={index}
+            onClick={() => {
+              setAttendances((item) => {
+                const newValues = item ? [...item] : [];
+                newValues[index] = {
+                  ...newValues[index],
+                  present: !newValues[index].present,
+                };
+                return newValues;
+              });
+            }}
             padding={["0 15px"]}
             width="100%"
           >

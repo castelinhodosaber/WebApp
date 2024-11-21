@@ -26,28 +26,22 @@ type newNap = {
 const TeacherNap = () => {
   const router = useRouter();
   const {
-    state: { accessToken },
+    state: { accessToken, date },
   } = useGlobalContext();
   const {
     state: { selectedClass },
   } = useTeacherContext();
-  const [date, setDate] = useState("");
   const [naps, setNaps] = useState<Nap[]>();
   const [newNaps, setNewNaps] = useState<newNap[]>([]);
   const [presentStudents, setPresentStudents] =
     useState<(Person & { display: boolean })[]>();
 
   useEffect(() => {
-    const newDate = new Date()
-      .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-      .split(",")[0];
-
     const formattedDate = formatInTimeZone(
       new Date(),
       "America/Sao_Paulo",
       "yyyy-MM-dd"
     );
-    setDate(newDate);
     if (accessToken && selectedClass) {
       CASTELINHO_API_ENDPOINTS.nap
         .getByClassIdAndDate(accessToken, selectedClass?.id, formattedDate)

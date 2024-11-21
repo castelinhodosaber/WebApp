@@ -20,7 +20,7 @@ const MotionFlex = motion.create(Flex);
 const MealPage = () => {
   const router = useRouter();
   const {
-    state: { accessToken },
+    state: { accessToken, date },
   } = useGlobalContext();
   const {
     state: { selectedClass },
@@ -29,19 +29,14 @@ const MealPage = () => {
   const [mealTypes, setMealTypes] = useState<
     (MealType & { display: boolean })[]
   >([]);
-  const [date, setDate] = useState<string>("");
 
   useEffect(() => {
-    const newDate = new Date()
-      .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-      .split(",")[0];
-
     const formattedDate = formatInTimeZone(
       new Date(),
       "America/Sao_Paulo",
       "yyyy-MM-dd"
     );
-    setDate(newDate);
+
     if (accessToken && selectedClass) {
       CASTELINHO_API_ENDPOINTS.meal
         .getByClassIdAndDate(accessToken, selectedClass?.id, formattedDate)
@@ -247,7 +242,7 @@ const MealPage = () => {
                         fontWeight={700}
                         textAlign="left"
                       >
-                        {meal.student?.name}
+                        {meal.student?.name.split(" ")[0]}
                       </Text>
                     </Flex>
 

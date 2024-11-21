@@ -13,6 +13,9 @@ import createManyNaps from "./nap/createMany";
 import getNapsByClassIdAndDate from "./nap/getByClassIdAndDate";
 import deleteNapById from "./nap/deleteById";
 import createOneNap from "./nap/createOne";
+import getBathsByClassIdAndDate from "./bath/getByClassIdAndDate";
+import createOneBath from "./bath/createOne";
+import createManyBath from "./bath/createMany";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -27,6 +30,11 @@ export const CASTELINHO_API_ENDPOINTS = {
   auth: {
     login,
     validateToken,
+  },
+  bath: {
+    getByClassIdAndDate: getBathsByClassIdAndDate,
+    createOne: createOneBath,
+    createMany: createManyBath,
   },
   class: {
     getAll,
