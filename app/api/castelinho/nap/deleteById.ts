@@ -2,8 +2,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import castelinhoApiInstance, { CastelinhoApiResponseData } from "..";
 import { toaster } from "@/components/ui/toaster";
 
-export type CastelinhoApiNapDeleteById =
-  CastelinhoApiResponseData["response"]["data"];
+export type CastelinhoApiNapDeleteById = CastelinhoApiResponseData;
 
 const deleteById = async (
   accessToken: string,
