@@ -12,14 +12,11 @@ import getMealTypeByClassId from "./mealType/getByClassId";
 import createManyNaps from "./nap/createMany";
 import getNapsByClassIdAndDate from "./nap/getByClassIdAndDate";
 import deleteNapById from "./nap/deleteById";
+import createOneNap from "./nap/createOne";
 
 export type CastelinhoApiResponseData = {
-  response: {
-    data: {
-      message: string;
-      status: number;
-    };
-  };
+  message: string;
+  status: number;
 };
 
 export const CASTELINHO_API_ENDPOINTS = {
@@ -46,6 +43,7 @@ export const CASTELINHO_API_ENDPOINTS = {
     createMany: createManyNaps,
     getByClassIdAndDate: getNapsByClassIdAndDate,
     deleteById: deleteNapById,
+    createOne: createOneNap,
   },
   teacher: {
     getDetailsById,

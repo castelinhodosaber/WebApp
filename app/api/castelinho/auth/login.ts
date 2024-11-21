@@ -38,7 +38,6 @@ const login = async (
         title:
           error.response?.data.message ||
           "Erro interno. Tente novamente mais tarde.",
-        duration: 200000,
       });
     } else {
       toaster.create({

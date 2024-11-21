@@ -18,8 +18,8 @@ import {
 import isNapOverlapping from "@/app/utils/isNapOverlapping";
 
 type newNap = {
-  startedAt?: string;
-  finishAt?: string;
+  startedAt: string;
+  finishAt: string;
   studentId: number;
 };
 
@@ -163,15 +163,26 @@ const TeacherNap = () => {
         return;
       }
 
+      const formattedNewNap = {
+        date: formattedDate,
+        hour: nap.startedAt,
+        napTimeMinutes,
+        studentId: nap.studentId,
+      };
+
       toaster.promise(
-        CASTELINHO_API_ENDPOINTS.nap.createMany(accessToken, [
-          {
-            date: formattedDate,
-            hour: nap.startedAt,
-            napTimeMinutes,
-            studentId: nap.studentId,
-          },
-        ]),
+        CASTELINHO_API_ENDPOINTS.nap
+          .createOne(accessToken, formattedNewNap)
+          .then((result) => {
+            if (result?.data) setNaps([...(naps || []), result?.data]);
+            setNewNaps((oldValue) =>
+              oldValue?.map((item) =>
+                item.studentId === nap.studentId
+                  ? { ...item, startedAt: "", finishAt: "" }
+                  : item
+              )
+            );
+          }),
         {
           success: {
             title: "Soneca adicionada com sucesso.",
@@ -361,6 +372,10 @@ const TeacherNap = () => {
                           updateNewNap({
                             studentId: student.id,
                             startedAt: ev.target.value,
+                            finishAt:
+                              newNaps.find(
+                                (item) => item.studentId === student.id
+                              )?.finishAt || "",
                           })
                         }
                         name="time"
@@ -409,6 +424,10 @@ const TeacherNap = () => {
                           updateNewNap({
                             studentId: student.id,
                             finishAt: ev.target.value,
+                            startedAt:
+                              newNaps.find(
+                                (item) => item.studentId === student.id
+                              )?.startedAt || "",
                           })
                         }
                         css={{
