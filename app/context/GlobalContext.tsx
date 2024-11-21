@@ -15,9 +15,8 @@ import { SkeletonCircle } from "@/components/ui/skeleton";
 // import apiLogin from "../api/castelinho/auth/login";
 
 // Definindo o tipo para o estado global
-interface GlobalState {
+interface AuthData {
   accessToken: string | null;
-  date: string;
   person: {
     birthDate: string;
     cpf: string;
@@ -29,10 +28,14 @@ interface GlobalState {
   } | null;
 }
 
+type GlobalState = AuthData & {
+  date: string;
+};
+
 // Definindo o tipo para as funções do contexto
 interface GlobalContextType {
   state: GlobalState;
-  login: (data: GlobalState) => void;
+  login: (data: AuthData) => void;
   logout: () => void;
 }
 
@@ -50,7 +53,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [redirectPath, setRedirectPath] = useState<string>();
 
-  const login = (data: GlobalState) => {
+  const login = (data: AuthData) => {
     setState({ ...state, person: data.person, accessToken: data.accessToken });
   };
 
