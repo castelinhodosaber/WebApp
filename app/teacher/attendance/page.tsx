@@ -187,7 +187,9 @@ const TeacherAttendance = () => {
               <Image
                 src={
                   attendance.photo
-                    ? `${process.env.NEXT_PUBLIC_CASTELINHO_API}${attendance.photo}`
+                    ? `/api/castelinho/imageProxy?route=${encodeURIComponent(
+                        attendance.photo
+                      )}`
                     : "/assets/images/defaultProfilePhoto.png"
                 }
                 height={["50px"]}
