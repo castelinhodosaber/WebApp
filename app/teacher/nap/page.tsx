@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Button, Flex, Input, Text } from "@chakra-ui/react";
-import { formatInTimeZone } from "date-fns-tz";
 import { Nap, Person } from "@/app/types/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { useTeacherContext } from "@/app/context/TeacherContext";
@@ -37,21 +36,16 @@ const TeacherNap = () => {
     useState<(Person & { display: boolean })[]>();
 
   useEffect(() => {
-    const formattedDate = formatInTimeZone(
-      new Date(),
-      "America/Sao_Paulo",
-      "yyyy-MM-dd"
-    );
     if (accessToken && selectedClass) {
       CASTELINHO_API_ENDPOINTS.nap
-        .getByClassIdAndDate(accessToken, selectedClass?.id, formattedDate)
+        .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
         .then((getNapsRes) => {
           const allNaps: Nap[] = getNapsRes?.data?.length
             ? [...getNapsRes.data]
             : [];
 
           CASTELINHO_API_ENDPOINTS.attendance
-            .getByClassIdAndDate(accessToken, selectedClass?.id, formattedDate)
+            .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
             .then((attendanceResult) => {
               if (attendanceResult?.data.length) {
                 const newPresentStudents: (Person & { display: boolean })[] =
@@ -103,12 +97,6 @@ const TeacherNap = () => {
   };
 
   const saveNap = (studentId: number) => {
-    const formattedDate = formatInTimeZone(
-      new Date(),
-      "America/Sao_Paulo",
-      "yyyy-MM-dd"
-    );
-
     const nap = newNaps.find((item) => item.studentId === studentId);
 
     if (nap && accessToken && nap.startedAt && nap.finishAt) {
@@ -158,7 +146,7 @@ const TeacherNap = () => {
       }
 
       const formattedNewNap = {
-        date: formattedDate,
+        date: date.iso,
         hour: nap.startedAt,
         napTimeMinutes,
         studentId: nap.studentId,
@@ -212,7 +200,7 @@ const TeacherNap = () => {
       width="100dvw"
     >
       <Text fontSize={["20px"]} fontWeight={[700]}>
-        Soneca - {date}
+        Soneca - {date.br}
       </Text>
       <Flex
         align="center"

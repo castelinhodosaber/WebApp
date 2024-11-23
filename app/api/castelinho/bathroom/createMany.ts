@@ -1,22 +1,24 @@
 import { AxiosError, AxiosResponse } from "axios";
 import castelinhoApiInstance, { CastelinhoApiResponseData } from "..";
 import { toaster } from "@/components/ui/toaster";
-import { Bath } from "@/app/types/api/castelinho";
+import { Bathroom } from "@/app/types/api/castelinho";
 
-export type CastelinhoApiBathCreateManyResponse = CastelinhoApiResponseData;
+export type CastelinhoApiBathroomCreateManyResponse = CastelinhoApiResponseData;
 
 const createMany = async (
   accessToken: string,
-  baths: Bath[]
-): Promise<CastelinhoApiBathCreateManyResponse | undefined> => {
+  bathrooms: Bathroom[]
+): Promise<CastelinhoApiBathroomCreateManyResponse | undefined> => {
   try {
-    const response: AxiosResponse<CastelinhoApiBathCreateManyResponse> =
+    const response: AxiosResponse<CastelinhoApiBathroomCreateManyResponse> =
       await castelinhoApiInstance.post(
         `/bath/list`,
-        baths.map((bath) => ({
-          date: bath.date,
-          status: bath.status,
-          studentId: bath.studentId,
+        bathrooms.map((bathroom) => ({
+          date: bathroom.date,
+          studentId: bathroom.studentId,
+          amount: bathroom.amount,
+          action: bathroom.action,
+          actionDetail: bathroom.actionDetail,
         })),
         {
           headers: {

@@ -12,6 +12,7 @@ import ROUTES from "../routes";
 import { CASTELINHO_API_ENDPOINTS } from "../api/castelinho";
 import verifyRoute from "../utils/verifyRoute";
 import { SkeletonCircle } from "@/components/ui/skeleton";
+import { formatInTimeZone } from "date-fns-tz";
 // import apiLogin from "../api/castelinho/auth/login";
 
 // Definindo o tipo para o estado global
@@ -29,7 +30,10 @@ interface AuthData {
 }
 
 type GlobalState = AuthData & {
-  date: string;
+  date: {
+    br: string;
+    iso: string;
+  };
 };
 
 // Definindo o tipo para as funções do contexto
@@ -48,7 +52,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<GlobalState>({
     person: null,
     accessToken: null,
-    date: "",
+    date: { br: "", iso: "" },
   });
   const [isLoading, setIsLoading] = useState(true);
   const [redirectPath, setRedirectPath] = useState<string>();
@@ -107,10 +111,17 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     };
 
     validateAndRedirect();
-    const newDate = new Date()
-      .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-      .split(",")[0];
-    setState((oldState) => ({ ...oldState, date: newDate }));
+    const newDate = new Date();
+
+    setState((oldState) => ({
+      ...oldState,
+      date: {
+        br: newDate
+          .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+          .split(",")[0],
+        iso: formatInTimeZone(newDate, "America/Sao_Paulo", "yyyy-MM-dd"),
+      },
+    }));
   }, []);
 
   useEffect(() => {

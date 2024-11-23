@@ -9,16 +9,14 @@ import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { SkeletonCircle } from "@/components/ui/skeleton";
 import { toaster } from "@/components/ui/toaster";
-import { formatInTimeZone } from "date-fns-tz";
 
 const TeacherAttendance = () => {
   const searchParams = useSearchParams();
   const editAttendance = searchParams.get("edit");
   const router = useRouter();
 
-  const [date, setDate] = useState("");
   const {
-    state: { accessToken },
+    state: { accessToken, date },
   } = useGlobalContext();
   const {
     state: { selectedClass },
@@ -35,20 +33,9 @@ const TeacherAttendance = () => {
     attendances?.some((attendance) => attendance.present) && !allChecked;
 
   useEffect(() => {
-    const newDate = new Date()
-      .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-      .split(",")[0];
-
-    setDate(newDate);
     if (selectedClass && accessToken) {
       CASTELINHO_API_ENDPOINTS.attendance
-        .getByClassIdAndDate(
-          accessToken,
-          selectedClass.id,
-          new Date()
-            .toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
-            .split(",")[0]
-        )
+        .getByClassIdAndDate(accessToken, selectedClass.id, date.iso)
         .then((result) => {
           if (result?.data?.length) {
             if (!editAttendance)
@@ -82,15 +69,9 @@ const TeacherAttendance = () => {
   const handleSaveAttendance = async () => {
     setIsLoading(true);
     if (accessToken && attendances) {
-      const date = formatInTimeZone(
-        new Date(),
-        "America/Sao_Paulo",
-        "yyyy-MM-dd"
-      );
-
       const result = await CASTELINHO_API_ENDPOINTS.attendance.createMany(
         accessToken,
-        attendances.map((attendance) => ({ ...attendance, date }))
+        attendances.map((attendance) => ({ ...attendance, date: date.iso }))
       );
 
       if (result) {
@@ -118,7 +99,7 @@ const TeacherAttendance = () => {
       height="100dvh"
     >
       <Text fontSize={["20px"]} fontWeight={[700]}>
-        Lista de Presença - {date}
+        Lista de Presença - {date.br}
       </Text>
       <Flex
         align="center"

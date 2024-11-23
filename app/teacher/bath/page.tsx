@@ -7,7 +7,6 @@ import { Bath, Person } from "@/app/types/api/castelinho";
 import { Radio, RadioGroup } from "@/components/ui/radio";
 import { toaster } from "@/components/ui/toaster";
 import { Button, Flex, Image, Text } from "@chakra-ui/react";
-import { formatInTimeZone } from "date-fns-tz";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -24,15 +23,9 @@ const TeacherBath = () => {
     useState<(Person & { display: boolean })[]>();
 
   useEffect(() => {
-    const formattedDate = formatInTimeZone(
-      new Date(),
-      "America/Sao_Paulo",
-      "yyyy-MM-dd"
-    );
-
     if (accessToken && selectedClass) {
       CASTELINHO_API_ENDPOINTS.attendance
-        .getByClassIdAndDate(accessToken, selectedClass?.id, formattedDate)
+        .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
         .then((attendanceResult) => {
           if (attendanceResult?.data.length) {
             const newPresentStudents: (Person & { display: boolean })[] = [];
@@ -44,7 +37,7 @@ const TeacherBath = () => {
           }
         });
       CASTELINHO_API_ENDPOINTS.bath
-        .getByClassIdAndDate(accessToken, selectedClass?.id, formattedDate)
+        .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
         .then((getBathsRes) => {
           const allBaths = getBathsRes?.data?.length
             ? [...getBathsRes.data.map((item) => ({ ...item, display: true }))]
@@ -59,11 +52,6 @@ const TeacherBath = () => {
     const bathAlreadyExist = baths?.find(
       (item) => item.studentId === studentId
     );
-    const formattedDate = formatInTimeZone(
-      new Date(),
-      "America/Sao_Paulo",
-      "yyyy-MM-dd"
-    );
     if (bathAlreadyExist) {
       setBaths(
         baths?.map((item) =>
@@ -77,7 +65,7 @@ const TeacherBath = () => {
       );
     } else {
       const newBath = {
-        date: formattedDate,
+        date: date.iso,
         status: newValue,
         studentId,
       };
@@ -109,7 +97,7 @@ const TeacherBath = () => {
       width="100dvw"
     >
       <Text fontSize={["20px"]} fontWeight={[700]}>
-        Banho - {date}
+        Banho - {date.br}
       </Text>
       <Flex
         align="center"

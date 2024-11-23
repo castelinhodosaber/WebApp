@@ -8,10 +8,10 @@ export type CastelinhoApiBathCreateOneResponse = CastelinhoApiResponseData & {
 
 const createOne = async (
   accessToken: string,
-  nap: Bath
+  bath: Bath
 ): Promise<CastelinhoApiBathCreateOneResponse | undefined> => {
   const response: AxiosResponse<CastelinhoApiBathCreateOneResponse> =
-    await castelinhoApiInstance.post(`/bath/`, nap, {
+    await castelinhoApiInstance.post(`/bath/`, bath, {
       headers: {
         Authorization: accessToken,
       },

@@ -7,7 +7,6 @@ import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import { FaCaretDown } from "react-icons/fa6";
 import { RiStarSFill } from "react-icons/ri";
-import { formatInTimeZone } from "date-fns-tz";
 import { toaster } from "@/components/ui/toaster";
 import { useRouter } from "next/navigation";
 import ROUTES from "@/app/routes";
@@ -31,15 +30,9 @@ const MealPage = () => {
   >([]);
 
   useEffect(() => {
-    const formattedDate = formatInTimeZone(
-      new Date(),
-      "America/Sao_Paulo",
-      "yyyy-MM-dd"
-    );
-
     if (accessToken && selectedClass) {
       CASTELINHO_API_ENDPOINTS.meal
-        .getByClassIdAndDate(accessToken, selectedClass?.id, formattedDate)
+        .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
         .then((getMealsRes) => {
           const allMeals = getMealsRes?.data?.length
             ? [...getMealsRes.data]
@@ -50,11 +43,7 @@ const MealPage = () => {
             .then((mealTypeRes) => {
               if (mealTypeRes?.data.length) {
                 CASTELINHO_API_ENDPOINTS.attendance
-                  .getByClassIdAndDate(
-                    accessToken,
-                    selectedClass?.id,
-                    formattedDate
-                  )
+                  .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
                   .then((attendanceResult) => {
                     if (attendanceResult?.data.length) {
                       mealTypeRes.data.forEach((mealType) => {
@@ -68,7 +57,7 @@ const MealPage = () => {
                             att.present
                           ) {
                             allMeals.push({
-                              date: formattedDate,
+                              date: date.iso,
                               rating: 0,
                               studentId: att.student?.id || 0,
                               student: att.student,
@@ -134,7 +123,7 @@ const MealPage = () => {
       width="100dvw"
     >
       <Text fontSize={["20px"]} fontWeight={[700]}>
-        Alimentação - {date}
+        Alimentação - {date.br}
       </Text>
       <Flex
         align="center"

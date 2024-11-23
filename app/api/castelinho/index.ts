@@ -16,6 +16,9 @@ import createOneNap from "./nap/createOne";
 import getBathsByClassIdAndDate from "./bath/getByClassIdAndDate";
 import createOneBath from "./bath/createOne";
 import createManyBath from "./bath/createMany";
+import getBathroomsByClassIdAndDate from "./bathroom/getByClassIdAndDate";
+import createOneBathroom from "./bathroom/createOne";
+import createManyBathroom from "./bathroom/createMany";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -35,6 +38,11 @@ export const CASTELINHO_API_ENDPOINTS = {
     getByClassIdAndDate: getBathsByClassIdAndDate,
     createOne: createOneBath,
     createMany: createManyBath,
+  },
+  bathroom: {
+    getByClassIdAndDate: getBathroomsByClassIdAndDate,
+    createOne: createOneBathroom,
+    createMany: createManyBathroom,
   },
   class: {
     getAll,

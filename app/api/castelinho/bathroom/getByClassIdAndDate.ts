@@ -1,29 +1,29 @@
 import { AxiosError, AxiosResponse } from "axios";
 import castelinhoApiInstance, { CastelinhoApiResponseData } from "..";
 import { toaster } from "@/components/ui/toaster";
-import { Bath } from "@/app/types/api/castelinho";
+import { Bathroom } from "@/app/types/api/castelinho";
 
-export type CastelinhoApiBathCreateManyResponse = CastelinhoApiResponseData;
+export type CastelinhoApiBathroomGetByClassIdAndDateResponse =
+  CastelinhoApiResponseData & {
+    data: Bathroom[];
+  };
 
-const createMany = async (
+const getByClassIdAndDate = async (
   accessToken: string,
-  baths: Bath[]
-): Promise<CastelinhoApiBathCreateManyResponse | undefined> => {
+  classId: number,
+  date: string
+): Promise<CastelinhoApiBathroomGetByClassIdAndDateResponse | undefined> => {
   try {
-    const response: AxiosResponse<CastelinhoApiBathCreateManyResponse> =
-      await castelinhoApiInstance.post(
-        `/bath/list`,
-        baths.map((bath) => ({
-          date: bath.date,
-          status: bath.status,
-          studentId: bath.studentId,
-        })),
+    const response: AxiosResponse<CastelinhoApiBathroomGetByClassIdAndDateResponse> =
+      await castelinhoApiInstance.get(
+        `/bathroom/?classId=${classId}&date=${date}`,
         {
           headers: {
             Authorization: accessToken,
           },
         }
       );
+
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -37,4 +37,4 @@ const createMany = async (
   }
 };
 
-export default createMany;
+export default getByClassIdAndDate;
