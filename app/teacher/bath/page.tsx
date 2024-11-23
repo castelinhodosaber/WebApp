@@ -142,8 +142,10 @@ const TeacherBath = () => {
             >
               <Image
                 src={
-                  student?.photo
-                    ? `${process.env.NEXT_PUBLIC_CASTELINHO_API}${student.photo}`
+                  student.photo
+                    ? `/api/castelinho/imageProxy?route=${encodeURIComponent(
+                        student.photo
+                      )}`
                     : "/assets/images/defaultProfilePhoto.png"
                 }
                 height={["40px"]}

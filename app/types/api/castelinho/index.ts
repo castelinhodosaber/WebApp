@@ -37,6 +37,16 @@ export type Bath = {
   status: boolean;
 };
 
+export type Bathroom = {
+  id?: number;
+  date: string;
+  student?: Person;
+  studentId: number;
+  amount: number;
+  action: "PEE" | "POOP";
+  actionDetail: "NORMAL" | "HARD" | "DIARRHEA";
+};
+
 export type Nap = {
   id?: number;
   date: string;

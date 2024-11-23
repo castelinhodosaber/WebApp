@@ -1,11 +1,16 @@
 "use client";
 import { useGlobalContext } from "@/app/context/GlobalContext";
+import { useTeacherContext } from "@/app/context/TeacherContext";
 import { Flex, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 const BathroomTeacher = () => {
   const {
     state: { date },
   } = useGlobalContext();
+  const { selectedClass } = useTeacherContext;
+
+  useEffect(() => {}, []);
 
   return (
     <Flex

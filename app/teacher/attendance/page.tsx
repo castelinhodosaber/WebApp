@@ -94,10 +94,13 @@ const TeacherAttendance = () => {
       );
 
       if (result) {
-        setIsLoading(false);
         router.push(ROUTES.private.teacher.home);
         toaster.create({ type: "success", title: "Lista salva com sucesso." });
       } else {
+        toaster.create({
+          type: "error",
+          title: "Erro desconhecido. Tente novamente.",
+        });
         setIsLoading(false);
       }
     }
@@ -134,6 +137,15 @@ const TeacherAttendance = () => {
           align="center"
           borderBottom="2px solid #031436"
           justify="space-between"
+          onClick={() => {
+            setAttendances((attendance) =>
+              attendance?.map((value) =>
+                allChecked
+                  ? { ...value, present: false }
+                  : { ...value, present: true }
+              )
+            );
+          }}
           padding={["0 15px"]}
           paddingBottom="15px"
           width={["100%"]}
@@ -152,10 +164,20 @@ const TeacherAttendance = () => {
             borderRadius="3px"
             border="1px solid white"
             checked={indeterminate ? "indeterminate" : allChecked}
-            onCheckedChange={(e) => {
-              setAttendances((attendance) =>
-                attendance?.map((value) => ({ ...value, present: !!e.checked }))
-              );
+            onClick={() => {
+              setAttendances((attendance) => {
+                if (allChecked) {
+                  return attendance?.map((value) => ({
+                    ...value,
+                    present: true,
+                  }));
+                } else {
+                  return attendance?.map((value) => ({
+                    ...value,
+                    present: false,
+                  }));
+                }
+              });
             }}
             overflow="hidden"
           ></Checkbox>
@@ -209,6 +231,16 @@ const TeacherAttendance = () => {
               key={attendance.studentId}
               ms="6"
               checked={attendance.present}
+              onClick={() => {
+                setAttendances((item) => {
+                  const newValues = item ? [...item] : [];
+                  newValues[index] = {
+                    ...newValues[index],
+                    present: !newValues[index].present,
+                  };
+                  return newValues;
+                });
+              }}
               onCheckedChange={(ev) => {
                 setAttendances((attendance) => {
                   const newValues = attendance ? [...attendance] : [];
