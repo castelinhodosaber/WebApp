@@ -198,7 +198,59 @@ const BathroomTeacher = () => {
                 ))}
               </Flex>
             </Tabs.Content>
-            <Tabs.Content value="POOP">Manage your POOP</Tabs.Content>
+            <Tabs.Content
+              display="flex"
+              justifyContent="center"
+              value="POOP"
+              width="100dvw"
+            >
+              <Flex
+                align="center"
+                direction="column"
+                gap={["20px"]}
+                height="100%"
+                marginTop={["20px"]}
+                width={["80%"]}
+              >
+                {attendance?.map((attendanceItem, attendanceIndex) => (
+                  <Flex
+                    align="center"
+                    justify="space-between"
+                    key={attendanceIndex}
+                    width="100%"
+                  >
+                    <Flex grow="1">
+                      <Text>{attendanceItem.student?.name}</Text>
+                    </Flex>
+                    <StepperInput
+                      variant="subtle"
+                      size={["xs"]}
+                      min={0}
+                      max={10}
+                      onValueChange={(ev) =>
+                        handleBathroomUpdate(
+                          "POOP",
+                          Number(ev.value),
+                          attendanceItem.student?.id || 0
+                        )
+                      }
+                      value={
+                        bathroomList
+                          ?.find(
+                            (bathroomItem) =>
+                              (bathroomItem.studentId ===
+                                attendanceItem.student?.id ||
+                                bathroomItem.student?.id ===
+                                  attendanceItem.student?.id) &&
+                              bathroomItem.action === "POOP"
+                          )
+                          ?.amount.toString() || "0"
+                      }
+                    />
+                  </Flex>
+                ))}
+              </Flex>
+            </Tabs.Content>
           </Tabs.Root>
         </SimpleGrid>
       </Flex>
