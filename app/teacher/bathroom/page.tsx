@@ -5,6 +5,7 @@ import { useTeacherContext } from "@/app/context/TeacherContext";
 import ROUTES from "@/app/routes";
 import { Attendance, Bathroom } from "@/app/types/api/castelinho";
 import { StepperInput } from "@/components/ui/stepper-input";
+import { toaster } from "@/components/ui/toaster";
 import { Button, Flex, SimpleGrid, Tabs, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -36,6 +37,60 @@ const BathroomTeacher = () => {
         });
     }
   }, []);
+
+  const handleBathroomUpdate = (
+    type: "PEE" | "POOP",
+    newValue: number,
+    studentId: number,
+    actionDetail: "NORMAL" | "DIARRHEA" | "HARD" = "NORMAL"
+  ) => {
+    const newBathroomList: Bathroom[] = [];
+
+    let registryAlreadyExist = false;
+
+    bathroomList?.forEach((item) => {
+      if (
+        (item.student?.id === studentId || item.studentId === studentId) &&
+        item.action === type
+      ) {
+        registryAlreadyExist = true;
+        newBathroomList.push({ ...item, amount: newValue, actionDetail });
+      } else if (item.action === type) newBathroomList.push(item);
+    });
+
+    setBathroomList(
+      registryAlreadyExist
+        ? newBathroomList
+        : [
+            ...newBathroomList,
+            {
+              action: type,
+              actionDetail,
+              amount: newValue,
+              date: date.iso,
+              studentId,
+            },
+          ]
+    );
+  };
+
+  const saveBathroomList = () => {
+    if (accessToken && bathroomList)
+      toaster.promise(
+        CASTELINHO_API_ENDPOINTS.bathroom.createMany(accessToken, bathroomList),
+        {
+          success: {
+            title: "Itens salvos com sucesso.",
+          },
+          error: {
+            title: "Erro ao salvar lista. Tente novamente",
+          },
+          loading: {
+            title: "Salvando lista. Por favor, aguarde...",
+          },
+        }
+      );
+  };
 
   return (
     <Flex
@@ -119,12 +174,21 @@ const BathroomTeacher = () => {
                       size={["xs"]}
                       min={0}
                       max={10}
+                      onValueChange={(ev) =>
+                        handleBathroomUpdate(
+                          "PEE",
+                          Number(ev.value),
+                          attendanceItem.student?.id || 0
+                        )
+                      }
                       value={
                         bathroomList
                           ?.find(
                             (bathroomItem) =>
-                              bathroomItem.studentId ===
-                                attendanceItem.studentId &&
+                              (bathroomItem.studentId ===
+                                attendanceItem.student?.id ||
+                                bathroomItem.student?.id ===
+                                  attendanceItem.student?.id) &&
                               bathroomItem.action === "PEE"
                           )
                           ?.amount.toString() || "0"
@@ -147,6 +211,15 @@ const BathroomTeacher = () => {
           padding={["5px 20px"]}
         >
           Voltar
+        </Button>
+        <Button
+          colorPalette="secondary"
+          fontSize={["18px"]}
+          fontWeight={[600]}
+          onClick={saveBathroomList}
+          padding={["5px 20px"]}
+        >
+          Salvar
         </Button>
       </Flex>
     </Flex>

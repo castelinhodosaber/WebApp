@@ -33,7 +33,7 @@ export type Bath = {
   id?: number;
   date: string;
   student?: Person;
-  studentId: number;
+  studentId?: number;
   status: boolean;
 };
 
@@ -41,7 +41,7 @@ export type Bathroom = {
   id?: number;
   date: string;
   student?: Person;
-  studentId: number;
+  studentId?: number;
   amount: number;
   action: "PEE" | "POOP";
   actionDetail: "NORMAL" | "HARD" | "DIARRHEA";
@@ -51,7 +51,7 @@ export type Nap = {
   id?: number;
   date: string;
   student?: Person;
-  studentId: number;
+  studentId?: number;
   hour: string;
   napTimeMinutes: number;
 };
@@ -61,7 +61,7 @@ export type Meal = {
   rating: number;
   date: string;
   student?: Person;
-  studentId: number;
+  studentId?: number;
   mealTypeId: number;
   mealType?: MealTypes;
 };
@@ -72,5 +72,5 @@ export type Attendance = {
   date: string;
   present: boolean;
   student?: Person;
-  studentId: number;
+  studentId?: number;
 };

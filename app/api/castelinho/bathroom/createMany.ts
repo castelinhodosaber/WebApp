@@ -12,7 +12,7 @@ const createMany = async (
   try {
     const response: AxiosResponse<CastelinhoApiBathroomCreateManyResponse> =
       await castelinhoApiInstance.post(
-        `/bath/list`,
+        `/bathroom/list`,
         bathrooms.map((bathroom) => ({
           date: bathroom.date,
           studentId: bathroom.studentId,
