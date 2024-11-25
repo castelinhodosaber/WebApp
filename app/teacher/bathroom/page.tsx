@@ -3,7 +3,13 @@ import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import ROUTES from "@/app/routes";
-import { Attendance, Bathroom } from "@/app/types/api/castelinho";
+import {
+  Attendance,
+  Bathroom,
+  BATHROOM_ACTIONS_DETAILS,
+  BathroomAction,
+  BathroomActionDetails,
+} from "@/app/types/api/castelinho";
 import { StepperInput } from "@/components/ui/stepper-input";
 import { toaster } from "@/components/ui/toaster";
 import { Button, Flex, SimpleGrid, Tabs, Text } from "@chakra-ui/react";
@@ -22,7 +28,11 @@ const BathroomTeacher = () => {
   } = useTeacherContext();
   const [attendance, setAttendance] = useState<Attendance[]>();
   const [bathroomList, setBathroomList] = useState<Bathroom[]>();
-
+  const BATHROOM_ACTION_DETAILS_ARR = BATHROOM_ACTIONS_DETAILS.map((item) => ({
+    name: item,
+    displayName:
+      item === "DIARRHEA" ? "Diarréia" : item === "NORMAL" ? "Normal" : "Duro",
+  }));
   useEffect(() => {
     if (accessToken && selectedClass) {
       CASTELINHO_API_ENDPOINTS.attendance
@@ -39,27 +49,27 @@ const BathroomTeacher = () => {
   }, []);
 
   const handleBathroomUpdate = (
-    type: "PEE" | "POOP",
+    type: BathroomAction,
     newValue: number,
     studentId: number,
-    actionDetail: "NORMAL" | "DIARRHEA" | "HARD" = "NORMAL"
+    actionDetail: BathroomActionDetails = "NORMAL"
   ) => {
-    const newBathroomList: Bathroom[] = [];
+    setBathroomList((oldState) => {
+      let registryAlreadyExist = false;
+      const newBathroomList: Bathroom[] = [];
 
-    let registryAlreadyExist = false;
+      oldState?.forEach((item) => {
+        if (
+          (item.student?.id === studentId || item.studentId === studentId) &&
+          item.action === type &&
+          item.actionDetail === actionDetail
+        ) {
+          registryAlreadyExist = true;
+          newBathroomList.push({ ...item, amount: newValue, actionDetail });
+        } else newBathroomList.push(item);
+      });
 
-    bathroomList?.forEach((item) => {
-      if (
-        (item.student?.id === studentId || item.studentId === studentId) &&
-        item.action === type
-      ) {
-        registryAlreadyExist = true;
-        newBathroomList.push({ ...item, amount: newValue, actionDetail });
-      } else if (item.action === type) newBathroomList.push(item);
-    });
-
-    setBathroomList(
-      registryAlreadyExist
+      return registryAlreadyExist
         ? newBathroomList
         : [
             ...newBathroomList,
@@ -70,8 +80,8 @@ const BathroomTeacher = () => {
               date: date.iso,
               studentId,
             },
-          ]
-    );
+          ];
+    });
   };
 
   const saveBathroomList = () => {
@@ -146,6 +156,7 @@ const BathroomTeacher = () => {
               </Tabs.Trigger>
             </Tabs.List>
             <Tabs.Content
+              color="principal.solid"
               display="flex"
               justifyContent="center"
               value="PEE"
@@ -153,20 +164,29 @@ const BathroomTeacher = () => {
             >
               <Flex
                 align="center"
+                backgroundColor="secondary.50"
+                border="2px solid #f97837"
+                borderRadius={["7px"]}
                 direction="column"
-                gap={["20px"]}
                 height="100%"
                 marginTop={["20px"]}
+                padding={["10px"]}
                 width={["80%"]}
               >
                 {attendance?.map((attendanceItem, attendanceIndex) => (
                   <Flex
                     align="center"
+                    borderBottom={
+                      attendanceIndex === attendance.length - 1
+                        ? ""
+                        : "1px solid #031436"
+                    }
                     justify="space-between"
                     key={attendanceIndex}
+                    padding={["10px 0"]}
                     width="100%"
                   >
-                    <Flex grow="1">
+                    <Flex fontSize={["16px"]} fontWeight={700} grow="1">
                       <Text>{attendanceItem.student?.name}</Text>
                     </Flex>
                     <StepperInput
@@ -210,43 +230,83 @@ const BathroomTeacher = () => {
                 gap={["20px"]}
                 height="100%"
                 marginTop={["20px"]}
-                width={["80%"]}
+                width={["95%", "90%", "90%", "90%", "400px"]}
               >
                 {attendance?.map((attendanceItem, attendanceIndex) => (
                   <Flex
                     align="center"
+                    color="principa.solid"
+                    direction="column"
                     justify="space-between"
                     key={attendanceIndex}
                     width="100%"
                   >
-                    <Flex grow="1">
+                    <Flex
+                      align="center"
+                      backgroundColor="secondary.solid"
+                      borderTopLeftRadius={["5px"]}
+                      borderTopRightRadius={["5px"]}
+                      color="secondary.50"
+                      fontSize={["18px"]}
+                      fontWeight={700}
+                      grow="1"
+                      justify="center"
+                      width={"100%"}
+                    >
                       <Text>{attendanceItem.student?.name}</Text>
                     </Flex>
-                    <StepperInput
-                      variant="subtle"
-                      size={["xs"]}
-                      min={0}
-                      max={10}
-                      onValueChange={(ev) =>
-                        handleBathroomUpdate(
-                          "POOP",
-                          Number(ev.value),
-                          attendanceItem.student?.id || 0
-                        )
-                      }
-                      value={
-                        bathroomList
-                          ?.find(
-                            (bathroomItem) =>
-                              (bathroomItem.studentId ===
-                                attendanceItem.student?.id ||
-                                bathroomItem.student?.id ===
-                                  attendanceItem.student?.id) &&
-                              bathroomItem.action === "POOP"
-                          )
-                          ?.amount.toString() || "0"
-                      }
-                    />
+                    <Flex
+                      align="center"
+                      backgroundColor={"secondary.50"}
+                      borderBottomLeftRadius={["5px"]}
+                      borderBottomRightRadius={["5px"]}
+                      color="principal.solid"
+                      justify="space-evenly"
+                      padding={["10px"]}
+                      width="100%"
+                    >
+                      {BATHROOM_ACTION_DETAILS_ARR.map((item, index) => (
+                        <Flex
+                          align="center"
+                          direction="column"
+                          justify="center"
+                          key={index}
+                        >
+                          <Text fontSize={["16px"]} fontWeight={600}>
+                            {item.displayName}
+                          </Text>
+                          <StepperInput
+                            variant="subtle"
+                            colorPalette="secondary"
+                            color="principal.solid"
+                            size={["xs"]}
+                            min={0}
+                            max={10}
+                            onValueChange={(ev) =>
+                              handleBathroomUpdate(
+                                "POOP",
+                                Number(ev.value),
+                                attendanceItem.student?.id || 0,
+                                item.name
+                              )
+                            }
+                            value={
+                              bathroomList
+                                ?.find(
+                                  (bathroomItem) =>
+                                    (bathroomItem.studentId ===
+                                      attendanceItem.student?.id ||
+                                      bathroomItem.student?.id ===
+                                        attendanceItem.student?.id) &&
+                                    bathroomItem.action === "POOP" &&
+                                    bathroomItem.actionDetail === item.name
+                                )
+                                ?.amount.toString() || "0"
+                            }
+                          />
+                        </Flex>
+                      ))}
+                    </Flex>
                   </Flex>
                 ))}
               </Flex>

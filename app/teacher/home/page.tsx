@@ -5,7 +5,6 @@ import { Button, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FaBath, FaToilet } from "react-icons/fa";
 import { GiKnifeFork, GiNightSleep } from "react-icons/gi";
-import { HiAnnotation } from "react-icons/hi";
 
 const Home = () => {
   const router = useRouter();
@@ -33,11 +32,6 @@ const Home = () => {
       name: "Banheiro",
       path: ROUTES.private.teacher.bathroom,
       icon: <FaToilet size="100%" />,
-    },
-    {
-      name: "Ocorrências",
-      path: "/occurrence",
-      icon: <HiAnnotation size="100%" />,
     },
   ];
   return (

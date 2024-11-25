@@ -246,7 +246,7 @@ const TeacherNap = () => {
             </Flex>
             <Flex
               align="center"
-              backgroundColor="rgba(255, 255, 255, 0.8)"
+              backgroundColor="secondary.50"
               borderBottomLeftRadius={["6px"]}
               borderBottomRightRadius={["6px"]}
               color="#031436"
@@ -333,6 +333,7 @@ const TeacherNap = () => {
                       Início
                     </Text>
                     <InputGroup
+                      backgroundColor="principal.50"
                       endElement={
                         <FaRegClock
                           color="#031436"
@@ -384,6 +385,7 @@ const TeacherNap = () => {
                       Término
                     </Text>
                     <InputGroup
+                      backgroundColor="principal.50"
                       endElement={
                         <FaRegClock
                           color="#031436"

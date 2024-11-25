@@ -174,7 +174,7 @@ const MealPage = () => {
             </Flex>
             <MotionFlex
               align="center"
-              backgroundColor="rgba(255, 255, 255, 0.8)"
+              backgroundColor="secondary.50"
               borderBottomLeftRadius={["6px"]}
               borderBottomRightRadius={["6px"]}
               border="2px solid #f97837"

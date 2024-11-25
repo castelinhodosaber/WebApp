@@ -37,14 +37,22 @@ export type Bath = {
   status: boolean;
 };
 
+export const BATHROOM_ACTIONS = ["PEE", "POOP"] as const;
+
+export type BathroomAction = (typeof BATHROOM_ACTIONS)[number];
+
+export const BATHROOM_ACTIONS_DETAILS = ["NORMAL", "HARD", "DIARRHEA"] as const;
+
+export type BathroomActionDetails = (typeof BATHROOM_ACTIONS_DETAILS)[number];
+
 export type Bathroom = {
   id?: number;
   date: string;
   student?: Person;
   studentId?: number;
   amount: number;
-  action: "PEE" | "POOP";
-  actionDetail: "NORMAL" | "HARD" | "DIARRHEA";
+  action: BathroomAction;
+  actionDetail: BathroomActionDetails;
 };
 
 export type Nap = {

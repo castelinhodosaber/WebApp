@@ -101,12 +101,11 @@ const TeacherBath = () => {
       </Text>
       <Flex
         align="center"
-        backgroundColor="rgba(255, 255, 255, 0.8)"
+        backgroundColor="secondary.50"
         borderRadius={["6px"]}
         border="2px solid #f97837"
         color="principal.solid"
         direction="column"
-        gap="15px"
         justify="flex-start"
         overflowY="scroll"
         padding={["10px 15px"]}
@@ -115,8 +114,14 @@ const TeacherBath = () => {
         {presentStudents?.map((student, presentIndex) => (
           <Flex
             align="center"
+            borderBottom={
+              presentIndex === presentStudents.length - 1
+                ? ""
+                : "1px solid #031436"
+            }
             justify="space-between"
             key={presentIndex}
+            padding={["5px 0"]}
             width={["100%"]}
           >
             <Flex
