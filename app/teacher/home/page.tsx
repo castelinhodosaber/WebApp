@@ -55,6 +55,8 @@ const Home = () => {
         width="100dvw"
       >
         <Flex
+          backgroundColor="secondary.50"
+          border="2px solid #f97837"
           borderRadius={["12px"]}
           gap={["60px 20px"]}
           justify="center"
@@ -82,7 +84,7 @@ const Home = () => {
                 {item.icon}
               </Flex>
               <Text
-                color="white"
+                color="principal.solid"
                 fontSize={["16px"]}
                 fontWeight={700}
                 textTransform="uppercase"

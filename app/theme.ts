@@ -72,7 +72,7 @@ const customConfig = defineConfig({
           focusRing: { value: "{colors.secondary.500}" },
         },
         secondaryButton: {
-          solid: { value: "{colors.secondaryButton.500}" },
+          solid: { value: "{colors.secondary.50}" },
           contrast: { value: "{colors.principal.500}" },
           fg: { value: "{colors.secondaryButton.700}" },
           muted: { value: "{colors.secondaryButton.100}" },
