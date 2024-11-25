@@ -6,7 +6,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { Classes, Person } from "../types/api/castelinho";
+import { Attendance, Classes, Person } from "../types/api/castelinho";
 import { useGlobalContext } from "./GlobalContext";
 import { CASTELINHO_API_ENDPOINTS } from "../api/castelinho";
 
@@ -19,12 +19,14 @@ interface TeacherState {
   })[];
   classes?: Classes[];
   selectedClass?: Classes & { students: Person[] };
+  attendance?: Attendance[];
 }
 
 interface TeacherContextType {
   state: TeacherState;
   setTeacherClasses: () => void;
   setSelectedClass: (classId?: number) => Promise<void>;
+  setAttendance: (attendance: Attendance[]) => void;
 }
 
 // Criando o contexto
@@ -32,7 +34,7 @@ const TeacherContext = createContext<TeacherContextType | undefined>(undefined);
 
 export const TeacherProvider = ({ children }: { children: ReactNode }) => {
   const {
-    state: { accessToken, person },
+    state: { accessToken, person, date },
   } = useGlobalContext();
   const [state, setState] = useState<TeacherState>({});
 
@@ -88,9 +90,24 @@ export const TeacherProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const setAttendance = (attendance: Attendance[]) =>
+    setState({ ...state, attendance });
+
+  useEffect(() => {
+    if (!state.attendance && state.selectedClass && date && accessToken) {
+      CASTELINHO_API_ENDPOINTS.attendance
+        .getByClassIdAndDate(accessToken, state.selectedClass.id, date.iso)
+        .then(
+          (attendanceRes) =>
+            attendanceRes &&
+            setState({ ...state, attendance: attendanceRes.data })
+        );
+    }
+  }, [state, date, accessToken]);
+
   return (
     <TeacherContext.Provider
-      value={{ state, setTeacherClasses, setSelectedClass }}
+      value={{ state, setTeacherClasses, setSelectedClass, setAttendance }}
     >
       {children}
     </TeacherContext.Provider>

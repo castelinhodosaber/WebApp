@@ -16,7 +16,7 @@ const TeacherBath = () => {
     state: { date, accessToken },
   } = useGlobalContext();
   const {
-    state: { selectedClass },
+    state: { selectedClass, attendance },
   } = useTeacherContext();
   const [baths, setBaths] = useState<Bath[]>();
   const [presentStudents, setPresentStudents] =
@@ -24,18 +24,15 @@ const TeacherBath = () => {
 
   useEffect(() => {
     if (accessToken && selectedClass) {
-      CASTELINHO_API_ENDPOINTS.attendance
-        .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
-        .then((attendanceResult) => {
-          if (attendanceResult?.data.length) {
-            const newPresentStudents: (Person & { display: boolean })[] = [];
-            attendanceResult.data.forEach((att) => {
-              if (att.student && att.present)
-                newPresentStudents.push({ ...att.student, display: true });
-            });
-            setPresentStudents(newPresentStudents);
-          }
+      if (attendance?.length) {
+        const newPresentStudents: (Person & { display: boolean })[] = [];
+        attendance.forEach((att) => {
+          if (att.student && att.present)
+            newPresentStudents.push({ ...att.student, display: true });
         });
+        setPresentStudents(newPresentStudents);
+      }
+
       CASTELINHO_API_ENDPOINTS.bath
         .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
         .then((getBathsRes) => {

@@ -28,7 +28,7 @@ const TeacherNap = () => {
     state: { accessToken, date },
   } = useGlobalContext();
   const {
-    state: { selectedClass },
+    state: { selectedClass, attendance: globalAttendance },
   } = useTeacherContext();
   const [naps, setNaps] = useState<Nap[]>();
   const [newNaps, setNewNaps] = useState<newNap[]>([]);
@@ -44,24 +44,18 @@ const TeacherNap = () => {
             ? [...getNapsRes.data]
             : [];
 
-          CASTELINHO_API_ENDPOINTS.attendance
-            .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
-            .then((attendanceResult) => {
-              if (attendanceResult?.data.length) {
-                const newPresentStudents: (Person & { display: boolean })[] =
-                  [];
-                attendanceResult.data.forEach((att) => {
-                  if (att.student && att.present)
-                    newPresentStudents.push({ ...att.student, display: true });
-                });
-                setPresentStudents(newPresentStudents);
-              }
-            })
-            .then(() => {
-              setTimeout(() => {
-                setNaps(allNaps);
-              }, 100);
+          if (globalAttendance?.length) {
+            const newPresentStudents: (Person & { display: boolean })[] = [];
+            globalAttendance.forEach((att) => {
+              if (att.student && att.present)
+                newPresentStudents.push({ ...att.student, display: true });
             });
+            setPresentStudents(newPresentStudents);
+          }
+
+          setTimeout(() => {
+            setNaps(allNaps);
+          }, 100);
         });
     }
   }, []);

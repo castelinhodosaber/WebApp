@@ -22,7 +22,7 @@ const MealPage = () => {
     state: { accessToken, date },
   } = useGlobalContext();
   const {
-    state: { selectedClass },
+    state: { selectedClass, attendance: globalAttendance },
   } = useTeacherContext();
   const [meals, setMeals] = useState<Meal[]>([]);
   const [mealTypes, setMealTypes] = useState<
@@ -42,40 +42,35 @@ const MealPage = () => {
             .getByClassId(accessToken, selectedClass.id)
             .then((mealTypeRes) => {
               if (mealTypeRes?.data.length) {
-                CASTELINHO_API_ENDPOINTS.attendance
-                  .getByClassIdAndDate(accessToken, selectedClass?.id, date.iso)
-                  .then((attendanceResult) => {
-                    if (attendanceResult?.data.length) {
-                      mealTypeRes.data.forEach((mealType) => {
-                        attendanceResult.data.forEach((att) => {
-                          if (
-                            !allMeals.some(
-                              (meal) =>
-                                meal.student?.id === att.student?.id &&
-                                meal.mealTypeId === mealType.id
-                            ) &&
-                            att.present
-                          ) {
-                            allMeals.push({
-                              date: date.iso,
-                              rating: 0,
-                              studentId: att.student?.id || 0,
-                              student: att.student,
-                              mealTypeId: mealType.id,
-                            });
-                          }
+                if (globalAttendance?.length) {
+                  mealTypeRes.data.forEach((mealType) => {
+                    globalAttendance.forEach((att) => {
+                      if (
+                        !allMeals.some(
+                          (meal) =>
+                            meal.student?.id === att.student?.id &&
+                            meal.mealTypeId === mealType.id
+                        ) &&
+                        att.present
+                      ) {
+                        allMeals.push({
+                          date: date.iso,
+                          rating: 0,
+                          studentId: att.student?.id || 0,
+                          student: att.student,
+                          mealTypeId: mealType.id,
                         });
-                      });
-                    }
-                  })
-                  .then(() => {
-                    setMealTypes(
-                      mealTypeRes.data.map((mealType) => ({
-                        ...mealType,
-                        display: false,
-                      }))
-                    );
+                      }
+                    });
                   });
+                }
+
+                setMealTypes(
+                  mealTypeRes.data.map((mealType) => ({
+                    ...mealType,
+                    display: false,
+                  }))
+                );
               }
             })
             .then(() => {

@@ -9,6 +9,7 @@ import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { SkeletonCircle } from "@/components/ui/skeleton";
 import { toaster } from "@/components/ui/toaster";
+import { Attendance } from "@/app/types/api/castelinho";
 
 const TeacherAttendance = () => {
   const searchParams = useSearchParams();
@@ -21,12 +22,10 @@ const TeacherAttendance = () => {
   const {
     state: { selectedClass },
     setSelectedClass,
+    setAttendance: setContextAttendance,
   } = useTeacherContext();
   const [isLoading, setIsLoading] = useState(true);
-  const [attendances, setAttendances] =
-    useState<
-      { studentId: number; present: boolean; name: string; photo?: string }[]
-    >();
+  const [attendances, setAttendances] = useState<Attendance[]>();
 
   const allChecked = attendances?.every((attendance) => attendance.present);
   const indeterminate =
@@ -40,27 +39,28 @@ const TeacherAttendance = () => {
           if (result?.data?.length) {
             if (!editAttendance)
               return router.push(ROUTES.private.teacher.home);
-            setAttendances(
-              result.data
-                .filter((attendance) => attendance.student)
-                .map((attendance) => ({
-                  studentId: attendance.student!.id,
-                  present: attendance.present,
-                  name: attendance.student!.name,
-                  photo: attendance.student!.photo,
-                }))
-            );
+
+            const newAttendances = result.data
+              .filter((attendance) => attendance.student)
+              .map((attendance) => ({
+                studentId: attendance.student!.id,
+                date: date.iso,
+                present: attendance.present,
+                student: attendance.student,
+              }));
+            setAttendances(newAttendances);
+            setContextAttendance(newAttendances);
             setIsLoading(false);
           } else {
             setIsLoading(false);
-            setAttendances(
-              selectedClass.students?.map((student) => ({
-                studentId: student.id,
-                present: false,
-                name: student.name,
-                photo: student.photo,
-              }))
-            );
+            const newAttendances = selectedClass.students?.map((student) => ({
+              studentId: student.id,
+              present: false,
+              student,
+              date: date.iso,
+            }));
+
+            setAttendances(newAttendances);
           }
         });
     }
@@ -69,13 +69,19 @@ const TeacherAttendance = () => {
   const handleSaveAttendance = async () => {
     setIsLoading(true);
     if (accessToken && attendances) {
+      const newAttendances = attendances.map((attendance) => ({
+        ...attendance,
+        date: date.iso,
+      }));
       const result = await CASTELINHO_API_ENDPOINTS.attendance.createMany(
         accessToken,
-        attendances.map((attendance) => ({ ...attendance, date: date.iso }))
+        newAttendances
       );
 
       if (result) {
         router.push(ROUTES.private.teacher.home);
+
+        setContextAttendance(newAttendances);
         toaster.create({ type: "success", title: "Lista salva com sucesso." });
       } else {
         toaster.create({
@@ -103,7 +109,8 @@ const TeacherAttendance = () => {
       </Text>
       <Flex
         align="center"
-        backgroundColor="rgba(255, 255, 255, 0.8)"
+        backgroundColor="secondary.50"
+        border="2px solid #f97837"
         borderRadius={["8px"]}
         color="principal.solid"
         direction="column"
@@ -127,9 +134,8 @@ const TeacherAttendance = () => {
               )
             );
           }}
-          padding={["0 15px"]}
           paddingBottom="15px"
-          width={["100%"]}
+          width={["90%"]}
         >
           <Text
             fontSize={["16px"]}
@@ -183,15 +189,14 @@ const TeacherAttendance = () => {
                 return newValues;
               });
             }}
-            padding={["0 15px"]}
-            width="100%"
+            width="90%"
           >
             <Flex align="center" gap={["10px"]} grow={1} justify="flex-start">
               <Image
                 src={
-                  attendance.photo
+                  attendance.student?.photo
                     ? `/api/castelinho/imageProxy?route=${encodeURIComponent(
-                        attendance.photo
+                        attendance.student?.photo
                       )}`
                     : "/assets/images/defaultProfilePhoto.png"
                 }
@@ -201,7 +206,7 @@ const TeacherAttendance = () => {
                 borderRadius="16px"
               />
               <Text fontSize={["16px"]} fontWeight={700} textAlign="left">
-                {attendance.name}
+                {attendance.student?.name}
               </Text>
             </Flex>
 

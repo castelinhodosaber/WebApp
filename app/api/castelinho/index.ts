@@ -19,6 +19,7 @@ import createManyBath from "./bath/createMany";
 import getBathroomsByClassIdAndDate from "./bathroom/getByClassIdAndDate";
 import createOneBathroom from "./bathroom/createOne";
 import createManyBathroom from "./bathroom/createMany";
+import updateCommentById from "./attendance/updateCommentById";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -29,6 +30,7 @@ export const CASTELINHO_API_ENDPOINTS = {
   attendance: {
     getByClassIdAndDate: getAttendanceByClassIdAndDate,
     createMany: createManyAttendance,
+    updateCommentById,
   },
   auth: {
     login,

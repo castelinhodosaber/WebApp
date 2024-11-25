@@ -24,7 +24,7 @@ const BathroomTeacher = () => {
     state: { date, accessToken },
   } = useGlobalContext();
   const {
-    state: { selectedClass },
+    state: { selectedClass, attendance: globalAttendance },
   } = useTeacherContext();
   const [attendance, setAttendance] = useState<Attendance[]>();
   const [bathroomList, setBathroomList] = useState<Bathroom[]>();
@@ -34,12 +34,9 @@ const BathroomTeacher = () => {
       item === "DIARRHEA" ? "Diarréia" : item === "NORMAL" ? "Normal" : "Duro",
   }));
   useEffect(() => {
-    if (accessToken && selectedClass) {
-      CASTELINHO_API_ENDPOINTS.attendance
-        .getByClassIdAndDate(accessToken, selectedClass.id, date.iso)
-        .then((attendanceRes) => {
-          setAttendance(attendanceRes?.data.filter((item) => item.present));
-        });
+    if (accessToken && selectedClass && globalAttendance?.length) {
+      setAttendance(globalAttendance.filter((item) => item.present));
+
       CASTELINHO_API_ENDPOINTS.bathroom
         .getByClassIdAndDate(accessToken, selectedClass.id, date.iso)
         .then((res) => {
