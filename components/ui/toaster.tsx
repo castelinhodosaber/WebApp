@@ -19,8 +19,9 @@ export const Toaster = () => {
         alignItems="center"
         display="flex"
         toaster={toaster}
-        insetInline={{ mdDown: "1rem" }}
+        insetInline={{ mdDown: "2rem" }}
         width={["90vw"]}
+        bottom={["80px !important"]}
       >
         {(toast) => (
           <Toast.Root

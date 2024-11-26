@@ -28,7 +28,7 @@ const TeacherDashboard = () => {
     setSelectedClass,
   } = useTeacherContext();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [classCollection, setClassCollection] = useState<
     ListCollection<{
       label: string;
@@ -48,6 +48,7 @@ const TeacherDashboard = () => {
           )
         )
       );
+    setIsLoading(false);
   }, [classes, teacherClasses]);
 
   const handleSelectedClass = (classId: number) => {
@@ -56,7 +57,9 @@ const TeacherDashboard = () => {
   };
 
   useEffect(() => {
-    if (selectedClass) router.push(ROUTES.private.teacher.attendance);
+    if (selectedClass) {
+      router.push(ROUTES.private.teacher.attendance);
+    } else setIsLoading(false);
   }, [selectedClass, router]);
 
   return isLoading ? (

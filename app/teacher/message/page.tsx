@@ -1,7 +1,10 @@
 "use client";
+import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import ROUTES from "@/app/routes";
+import { Attendance } from "@/app/types/api/castelinho";
+import { toaster } from "@/components/ui/toaster";
 import { Button, Flex, Text, Textarea } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,27 +12,45 @@ import { useState } from "react";
 const Messages = () => {
   const router = useRouter();
   const {
-    state: { date },
+    state: { date, accessToken },
   } = useGlobalContext();
   const {
     state: { attendance: globalAttendance },
   } = useTeacherContext();
-  const [updatedList, setUpdatedList] = useState(globalAttendance);
+  const [updatedList, setUpdatedList] = useState<Attendance[]>(
+    globalAttendance || []
+  );
 
   const _handleCommentUpdate = (newComment: string, index: number) => {
     const newList = updatedList;
-    console.log(newList ? newList[index] : "");
-    if (newList) newList[index].comments = newList[index].comments + newComment;
 
-    console.log(newList);
-    setUpdatedList(newList);
+    if (newList) newList[index].comments = newComment;
+
+    setUpdatedList([...newList]);
   };
 
-  const _saveComments = (index: number) => {
-    if (updatedList) {
-      console.log(index);
+  const saveComments = (index: number) => {
+    if (
+      updatedList &&
+      accessToken &&
+      updatedList[index].comments &&
+      updatedList[index].id
+    ) {
+      toaster.promise(
+        CASTELINHO_API_ENDPOINTS.attendance.updateCommentById(
+          accessToken,
+          updatedList[index].comments,
+          updatedList[index].id
+        ),
+        {
+          success: { title: "Anotação salva com sucesso." },
+          loading: { title: "Salvando anotação..." },
+          error: { title: "Erro ao salvar anotação. Tente novamente." },
+        }
+      );
     }
   };
+
   return (
     <Flex
       align="center"
@@ -93,7 +114,9 @@ const Messages = () => {
                     _handleCommentUpdate(ev.target.value, index)
                   }
                   padding="5px"
-                  value={updatedList ? updatedList[index].comments || "n" : "s"}
+                  value={
+                    updatedList.length ? updatedList[index].comments || "" : ""
+                  }
                   variant="subtle"
                   width={["60%"]}
                 />
@@ -118,7 +141,7 @@ const Messages = () => {
                   disabled={attendance.comments ? false : true}
                   fontSize={["18px"]}
                   fontWeight={[600]}
-                  onClick={() => _saveComments(index)}
+                  onClick={() => saveComments(index)}
                   padding={["5px 20px"]}
                 >
                   Salvar

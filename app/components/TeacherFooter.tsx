@@ -3,15 +3,46 @@ import { Flex, Text } from "@chakra-ui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalContext } from "../context/GlobalContext";
 import handleFooterOptions from "../utils/HandleFooterOptions";
+import { useTeacherContext } from "../context/TeacherContext";
+import ROUTES from "../routes";
+import { toaster } from "@/components/ui/toaster";
 
 const TeacherFooter = () => {
   const {
     logout,
     state: { person },
   } = useGlobalContext();
+  const {
+    state: { attendance },
+  } = useTeacherContext();
   const FOOTER_OPTIONS = person ? handleFooterOptions(person.role) : null;
   const pathname = usePathname();
   const router = useRouter();
+
+  const handleClick = (footerOption: {
+    icon: JSX.Element;
+    name: string;
+    pathname: string;
+  }) => {
+    switch (footerOption.pathname) {
+      case ROUTES.private.teacher.message:
+        if (!attendance) {
+          toaster.create({
+            type: "error",
+            title: "Erro!",
+            description: "Selecione a sala para acessar esta seção.",
+            duration: 1000000,
+          });
+        } else router.push(footerOption.pathname);
+        break;
+      case ROUTES.public.logout:
+        logout();
+        break;
+      default:
+        router.push(footerOption.pathname);
+        break;
+    }
+  };
 
   return (
     <Flex
@@ -41,9 +72,7 @@ const TeacherFooter = () => {
             color={pathname === opt.pathname ? "#F97837" : "white"}
             height={["20px"]}
             justify="center"
-            onClick={() =>
-              opt.name === "Sair" ? logout() : router.push(opt.pathname)
-            }
+            onClick={() => handleClick(opt)}
             position="relative"
             width={["20px"]}
           >

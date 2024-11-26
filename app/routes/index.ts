@@ -11,8 +11,9 @@ export const TEACHER_ROUTES = {
   bathroom: "/teacher/bathroom",
 } as const;
 
-export const PUBLIC_ROUTES: { [key: string]: string } = {
+export const PUBLIC_ROUTES = {
   login: "/",
+  logout: "/logout",
 } as const;
 
 export const PRIVATE_ROUTES = {
