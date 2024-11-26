@@ -2,7 +2,7 @@ import { PRIVATE_ROUTES, PUBLIC_ROUTES } from "../routes";
 import { Role } from "../types/api/castelinho";
 
 const verifyRoute = (route: string, role?: Role) => {
-  const publicRoutesArr = Object.values(PUBLIC_ROUTES);
+  const publicRoutesArr = Object.values(PUBLIC_ROUTES) as string[];
 
   if (role) {
     switch (role) {
