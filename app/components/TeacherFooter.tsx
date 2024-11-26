@@ -31,7 +31,6 @@ const TeacherFooter = () => {
             type: "error",
             title: "Erro!",
             description: "Selecione a sala para acessar esta seção.",
-            duration: 1000000,
           });
         } else router.push(footerOption.pathname);
         break;
