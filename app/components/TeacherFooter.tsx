@@ -30,7 +30,7 @@ const TeacherFooter = () => {
           toaster.create({
             type: "error",
             title: "Erro!",
-            description: "Selecione a sala para acessar esta seção.",
+            description: "Selecione a sala/turma para acessar esta seção.",
           });
         } else router.push(footerOption.pathname);
         break;

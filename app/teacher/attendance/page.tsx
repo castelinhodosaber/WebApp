@@ -7,9 +7,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ROUTES from "@/app/routes";
 import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import { useGlobalContext } from "@/app/context/GlobalContext";
-import { SkeletonCircle } from "@/components/ui/skeleton";
+
 import { toaster } from "@/components/ui/toaster";
 import { Attendance } from "@/app/types/api/castelinho";
+import Loading from "@/app/components/Loading";
 
 const TeacherAttendance = () => {
   const searchParams = useSearchParams();
@@ -94,7 +95,7 @@ const TeacherAttendance = () => {
   };
 
   return isLoading ? (
-    <SkeletonCircle />
+    <Loading />
   ) : (
     <Flex
       direction="column"

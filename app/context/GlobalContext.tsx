@@ -11,11 +11,9 @@ import { usePathname, useRouter } from "next/navigation";
 import ROUTES from "../routes";
 import { CASTELINHO_API_ENDPOINTS } from "../api/castelinho";
 import verifyRoute from "../utils/verifyRoute";
-import { SkeletonCircle } from "@/components/ui/skeleton";
 import { formatInTimeZone } from "date-fns-tz";
-// import apiLogin from "../api/castelinho/auth/login";
+import Loading from "../components/Loading";
 
-// Definindo o tipo para o estado global
 interface AuthData {
   accessToken: string | null;
   person: {
@@ -36,14 +34,12 @@ type GlobalState = AuthData & {
   };
 };
 
-// Definindo o tipo para as funções do contexto
 interface GlobalContextType {
   state: GlobalState;
   login: (data: AuthData) => void;
   logout: () => void;
 }
 
-// Criando o contexto
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
@@ -139,12 +135,11 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <GlobalContext.Provider value={{ state, login, logout }}>
-      {isLoading ? <SkeletonCircle /> : children}
+      {isLoading ? <Loading /> : children}
     </GlobalContext.Provider>
   );
 };
 
-// Custom hook para usar o GlobalContext
 export const useGlobalContext = () => {
   const context = useContext(GlobalContext);
   if (!context) {

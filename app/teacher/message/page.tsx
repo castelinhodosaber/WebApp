@@ -21,25 +21,20 @@ const Messages = () => {
     globalAttendance || []
   );
 
-  const _handleCommentUpdate = (newComment: string, index: number) => {
+  const handleCommentUpdate = (newComment: string, index: number) => {
     const newList = updatedList;
 
-    if (newList) newList[index].comments = newComment;
+    if (newList) newList[index].comments = newComment || "";
 
     setUpdatedList([...newList]);
   };
 
   const saveComments = (index: number) => {
-    if (
-      updatedList &&
-      accessToken &&
-      updatedList[index].comments &&
-      updatedList[index].id
-    ) {
+    if (updatedList && accessToken && updatedList[index].id) {
       toaster.promise(
         CASTELINHO_API_ENDPOINTS.attendance.updateCommentById(
           accessToken,
-          updatedList[index].comments,
+          updatedList[index].comments || "",
           updatedList[index].id
         ),
         {
@@ -110,9 +105,7 @@ const Messages = () => {
                   borderRadius="6px"
                   color="#031436"
                   height={["120px"]}
-                  onChange={(ev) =>
-                    _handleCommentUpdate(ev.target.value, index)
-                  }
+                  onChange={(ev) => handleCommentUpdate(ev.target.value, index)}
                   padding="5px"
                   value={
                     updatedList.length ? updatedList[index].comments || "" : ""
@@ -128,17 +121,7 @@ const Messages = () => {
                 marginBottom={["10px"]}
               >
                 <Button
-                  colorPalette="secondaryButton"
-                  fontSize={["18px"]}
-                  fontWeight={[600]}
-                  onClick={() => router.push(ROUTES.private.teacher.home)}
-                  padding={["5px 20px"]}
-                >
-                  Voltar
-                </Button>
-                <Button
                   colorPalette="secondary"
-                  disabled={attendance.comments ? false : true}
                   fontSize={["18px"]}
                   fontWeight={[600]}
                   onClick={() => saveComments(index)}
@@ -150,6 +133,22 @@ const Messages = () => {
             </Flex>
           ) : null
         )}
+      </Flex>
+      <Flex
+        align="center"
+        gap={["15px"]}
+        justify="center"
+        marginBottom={["10px"]}
+      >
+        <Button
+          colorPalette="secondaryButton"
+          fontSize={["18px"]}
+          fontWeight={[600]}
+          onClick={() => router.push(ROUTES.private.teacher.home)}
+          padding={["5px 20px"]}
+        >
+          Voltar
+        </Button>
       </Flex>
     </Flex>
   );

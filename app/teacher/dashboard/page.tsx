@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/app/components/Loading";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import ROUTES from "@/app/routes";
 import { Classes } from "@/app/types/api/castelinho";
@@ -6,7 +7,6 @@ import {
   NativeSelectField,
   NativeSelectRoot,
 } from "@/components/ui/native-select";
-import { SkeletonCircle } from "@/components/ui/skeleton";
 import {
   Button,
   createListCollection,
@@ -63,7 +63,7 @@ const TeacherDashboard = () => {
   }, [selectedClass, router]);
 
   return isLoading ? (
-    <SkeletonCircle />
+    <Loading />
   ) : (
     <Flex
       align="center"
