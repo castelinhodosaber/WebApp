@@ -33,7 +33,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "/assets/icons/icon-192x192.png", // Substitua pelo caminho correto do ícone
+    icon: "https://app.castelinhodosaber.com/assets/icons/icon-192x192.png", // Substitua pelo caminho correto do ícone
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
