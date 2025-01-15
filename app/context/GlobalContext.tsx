@@ -152,11 +152,12 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
           navigator.serviceWorker
             .register("/firebase-messaging-sw.js")
             .then((registration) => {
-              alert("Service Worker registered successfully:" + registration);
-              console.log(Notification);
+              console.log(
+                "Service Worker registered successfully:" + registration
+              );
             })
             .catch((err) => {
-              alert("Service Worker registration failed:" + err);
+              console.error("Service Worker registration failed:" + err);
             });
         }
       });
@@ -185,13 +186,12 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     try {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
-        alert("aq");
         const messaging = getMessaging(app);
         const token = await getToken(messaging, {
           vapidKey:
             "BLw4m1euAEwmBKDGCM-SDOvDDGNiooXLBGY8DgtLs_pngZTLaRmN6McSQ438ih8hsv3uRQRwtT3YdbNKuiwiWjw",
         });
-        alert("User FCM token: " + token);
+
         setTimeout(() => {
           navigator.clipboard
             .writeText(token)
@@ -205,10 +205,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
         // Salve este token no seu servidor para enviar notificações para este dispositivo
       } else {
-        alert("Permission not granted for notifications");
+        console.error("Permission not granted for notifications");
       }
     } catch (error) {
-      alert("Error getting permission for notifications:" + error);
+      console.error("Error getting permission for notifications:" + error);
     }
   };
 
