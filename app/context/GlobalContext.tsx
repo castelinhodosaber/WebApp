@@ -141,13 +141,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
           navigator.serviceWorker
             .register("/firebase-messaging-sw.js")
             .then((registration) => {
-              console.log(
-                "Service Worker registered successfully:",
-                registration
-              );
+              alert("Service Worker registered successfully:" + registration);
             })
             .catch((err) => {
-              console.error("Service Worker registration failed:", err);
+              alert("Service Worker registration failed:" + err);
             });
         }
       });
@@ -168,18 +165,16 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [redirectPath]);
 
   const requestPermission = async () => {
-    console.log("aq");
-
     try {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
-        console.log("aq");
+        alert("aq");
         const messaging = getMessaging(app);
         const token = await getToken(messaging, {
           vapidKey:
             "BLw4m1euAEwmBKDGCM-SDOvDDGNiooXLBGY8DgtLs_pngZTLaRmN6McSQ438ih8hsv3uRQRwtT3YdbNKuiwiWjw",
         });
-        console.log("User FCM token:", token);
+        alert("User FCM token: " + token);
 
         navigator.clipboard
           .writeText(token)
@@ -187,14 +182,14 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
             alert("Texto copiado para a área de transferência!");
           })
           .catch((err) => {
-            console.error("Erro ao copiar texto: ", err);
+            alert("Erro ao copiar texto: " + err);
           });
         // Salve este token no seu servidor para enviar notificações para este dispositivo
       } else {
-        console.error("Permission not granted for notifications");
+        alert("Permission not granted for notifications");
       }
     } catch (error) {
-      console.error("Error getting permission for notifications:", error);
+      alert("Error getting permission for notifications:" + error);
     }
   };
 
