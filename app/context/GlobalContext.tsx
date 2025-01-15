@@ -173,7 +173,15 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
             "BLw4m1euAEwmBKDGCM-SDOvDDGNiooXLBGY8DgtLs_pngZTLaRmN6McSQ438ih8hsv3uRQRwtT3YdbNKuiwiWjw",
         });
         console.log("User FCM token:", token);
-        alert(token);
+
+        navigator.clipboard
+          .writeText(token)
+          .then(() => {
+            alert("Texto copiado para a área de transferência!");
+          })
+          .catch((err) => {
+            console.error("Erro ao copiar texto: ", err);
+          });
         // Salve este token no seu servidor para enviar notificações para este dispositivo
       } else {
         console.error("Permission not granted for notifications");
