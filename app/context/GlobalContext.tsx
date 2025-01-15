@@ -137,6 +137,12 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       },
     }));
     if (
+      typeof Notification !== "undefined" &&
+      window.matchMedia("(display-mode: standalone)").matches
+    ) {
+      setShowNotificationBtn(true);
+    }
+    if (
       "serviceWorker" in navigator &&
       window.matchMedia("(display-mode: standalone)").matches
     ) {
@@ -147,9 +153,6 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
             .then((registration) => {
               alert("Service Worker registered successfully:" + registration);
               console.log(Notification);
-              if (typeof Notification !== "undefined") {
-                setShowNotificationBtn(true);
-              }
             })
             .catch((err) => {
               alert("Service Worker registration failed:" + err);
