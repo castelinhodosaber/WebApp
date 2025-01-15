@@ -138,7 +138,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     }));
     if (
       typeof Notification !== "undefined" &&
-      window.matchMedia("(display-mode: standalone)").matches
+      window.matchMedia("(display-mode: standalone)").matches &&
+      Notification.permission !== "granted"
     ) {
       setShowNotificationBtn(true);
     }
