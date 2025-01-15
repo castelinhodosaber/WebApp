@@ -175,15 +175,17 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
             "BLw4m1euAEwmBKDGCM-SDOvDDGNiooXLBGY8DgtLs_pngZTLaRmN6McSQ438ih8hsv3uRQRwtT3YdbNKuiwiWjw",
         });
         alert("User FCM token: " + token);
+        setTimeout(() => {
+          navigator.clipboard
+            .writeText(token)
+            .then(() => {
+              alert("Texto copiado para a área de transferência!");
+            })
+            .catch((err) => {
+              alert("Erro ao copiar texto: " + err);
+            });
+        }, 5000);
 
-        navigator.clipboard
-          .writeText(token)
-          .then(() => {
-            alert("Texto copiado para a área de transferência!");
-          })
-          .catch((err) => {
-            alert("Erro ao copiar texto: " + err);
-          });
         // Salve este token no seu servidor para enviar notificações para este dispositivo
       } else {
         alert("Permission not granted for notifications");
