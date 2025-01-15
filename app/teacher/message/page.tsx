@@ -122,6 +122,7 @@ const Messages = () => {
               >
                 <Button
                   colorPalette="secondary"
+                  color="secondary.50"
                   fontSize={["18px"]}
                   fontWeight={[600]}
                   onClick={() => saveComments(index)}

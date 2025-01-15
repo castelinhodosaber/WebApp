@@ -82,3 +82,7 @@ export type Attendance = {
   student?: Person;
   studentId?: number;
 };
+
+export type GuardianAnnotation = {
+  
+}

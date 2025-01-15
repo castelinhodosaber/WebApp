@@ -13,6 +13,23 @@ import { CASTELINHO_API_ENDPOINTS } from "../api/castelinho";
 import verifyRoute from "../utils/verifyRoute";
 import { formatInTimeZone } from "date-fns-tz";
 import Loading from "../components/Loading";
+import { Button } from "@chakra-ui/react";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken } from "firebase/messaging";
+
+// Configuração do Firebase (substitua pelos dados do seu projeto)
+const firebaseConfig = {
+  apiKey: "AIzaSyBbRyZgxWHV8W2s5Wt9tRI7LqeJF0Jivcs",
+  authDomain: "castelinho-notifications.firebaseapp.com",
+  projectId: "castelinho-notifications",
+  storageBucket: "castelinho-notifications.firebasestorage.app",
+  messagingSenderId: "852490723230",
+  appId: "1:852490723230:web:d210247b1cd90ae506c08f",
+  measurementId: "G-XT7ZEHMXHY",
+};
+
+// Inicialize o Firebase
+const app = initializeApp(firebaseConfig);
 
 interface AuthData {
   accessToken: string | null;
@@ -118,6 +135,16 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         iso: formatInTimeZone(newDate, "America/Sao_Paulo", "yyyy-MM-dd"),
       },
     }));
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((registration) => {
+          console.log("Service Worker registered successfully:", registration);
+        })
+        .catch((err) => {
+          console.error("Service Worker registration failed:", err);
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -133,9 +160,39 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [redirectPath]);
 
+  const requestPermission = async () => {
+    console.log("aq");
+
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        console.log("aq");
+        const messaging = getMessaging(app);
+        const token = await getToken(messaging, {
+          vapidKey:
+            "BLw4m1euAEwmBKDGCM-SDOvDDGNiooXLBGY8DgtLs_pngZTLaRmN6McSQ438ih8hsv3uRQRwtT3YdbNKuiwiWjw",
+        });
+        console.log("User FCM token:", token);
+        // Salve este token no seu servidor para enviar notificações para este dispositivo
+      } else {
+        console.error("Permission not granted for notifications");
+      }
+    } catch (error) {
+      console.error("Error getting permission for notifications:", error);
+    }
+  };
+
+  // Chame esta função em um botão ou automaticamente, dependendo da lógica do seu app
+
   return (
     <GlobalContext.Provider value={{ state, login, logout }}>
       {isLoading ? <Loading /> : children}
+      <Button
+        style={{ position: "absolute", zIndex: 1000, top: 0 }}
+        onClick={requestPermission}
+      >
+        Receber notificacoes
+      </Button>
     </GlobalContext.Provider>
   );
 };
