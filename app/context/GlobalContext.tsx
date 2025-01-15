@@ -136,14 +136,21 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       },
     }));
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/firebase-messaging-sw.js")
-        .then((registration) => {
-          console.log("Service Worker registered successfully:", registration);
-        })
-        .catch((err) => {
-          console.error("Service Worker registration failed:", err);
-        });
+      navigator.serviceWorker.ready.then((registration) => {
+        if (!registration.active) {
+          navigator.serviceWorker
+            .register("/firebase-messaging-sw.js")
+            .then((registration) => {
+              console.log(
+                "Service Worker registered successfully:",
+                registration
+              );
+            })
+            .catch((err) => {
+              console.error("Service Worker registration failed:", err);
+            });
+        }
+      });
     }
   }, []);
 
