@@ -33,9 +33,9 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "/assets/icons/favicon-48x48.png", // Substitua pelo caminho correto do ícone
-    image: "/assets/icons/favicon-48x48.png", // Substitua pelo caminho correto do ícone
-    badge: "/assets/icons/favicon-48x48.png", // Substitua pelo caminho correto do ícone
+    icon: "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png", // Substitua pelo caminho correto do ícone
+    image: "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png", // Substitua pelo caminho correto do ícone
+    badge: "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png", // Substitua pelo caminho correto do ícone
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
