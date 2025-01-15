@@ -135,7 +135,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         iso: formatInTimeZone(newDate, "America/Sao_Paulo", "yyyy-MM-dd"),
       },
     }));
-    if ("serviceWorker" in navigator) {
+    if (
+      "serviceWorker" in navigator &&
+      window.matchMedia("(display-mode: standalone)").matches
+    ) {
       navigator.serviceWorker.ready.then((registration) => {
         if (!registration.active) {
           navigator.serviceWorker
@@ -165,6 +168,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [redirectPath]);
 
   const requestPermission = async () => {
+    if (!window.matchMedia("(display-mode: standalone)").matches) return;
     try {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
