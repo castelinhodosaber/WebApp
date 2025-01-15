@@ -60,6 +60,7 @@ interface GlobalContextType {
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
+  const [showNotificationBtn, setShowNotificationBtn] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const [state, setState] = useState<GlobalState>({
@@ -145,6 +146,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
             .register("/firebase-messaging-sw.js")
             .then((registration) => {
               alert("Service Worker registered successfully:" + registration);
+              console.log(Notification);
+              if (typeof Notification !== "undefined") {
+                setShowNotificationBtn(true);
+              }
             })
             .catch((err) => {
               alert("Service Worker registration failed:" + err);
@@ -168,7 +173,11 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [redirectPath]);
 
   const requestPermission = async () => {
-    if (!window.matchMedia("(display-mode: standalone)").matches) return;
+    if (
+      !window.matchMedia("(display-mode: standalone)").matches ||
+      typeof Notification === "undefined"
+    )
+      return;
     try {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
@@ -205,7 +214,12 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     <GlobalContext.Provider value={{ state, login, logout }}>
       {isLoading ? <Loading /> : children}
       <Button
-        style={{ position: "absolute", zIndex: 1000, top: 0 }}
+        style={{
+          display: showNotificationBtn ? "block" : "none",
+          position: "absolute",
+          zIndex: 1000,
+          top: 0,
+        }}
         onClick={requestPermission}
       >
         Receber notificacoes
