@@ -33,9 +33,9 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "https://app.castelinhodosaber.com/assets/icons/icon-24x24.png", // Substitua pelo caminho correto do ícone
-    image: "https://app.castelinhodosaber.com/assets/icons/icon-24x24.png", // Substitua pelo caminho correto do ícone
-    badge: "https://app.castelinhodosaber.com/assets/icons/icon-24x24.png", // Substitua pelo caminho correto do ícone
+    icon: "/assets/icons/icon-24x24.png", // Substitua pelo caminho correto do ícone
+    image: "/assets/icons/icon-24x24.png", // Substitua pelo caminho correto do ícone
+    badge: "/assets/icons/icon-24x24.png", // Substitua pelo caminho correto do ícone
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
