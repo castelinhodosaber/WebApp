@@ -83,6 +83,25 @@ export type Attendance = {
   studentId?: number;
 };
 
+export type StudentGuardianRelationship =
+  | "grandparent"
+  | "parent"
+  | "guardian"
+  | "stepparent"
+  | "uncle";
+
 export type GuardianAnnotation = {
-  
-}
+  id?: number;
+  date: string;
+  description: string;
+  student?: Person;
+  guardian?: Person;
+  viewers?: {
+    name: string;
+    gender: string;
+    photo?: string;
+    date: string;
+    time: string;
+  }[];
+  relationship: StudentGuardianRelationship;
+};

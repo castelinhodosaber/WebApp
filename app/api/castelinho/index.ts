@@ -20,6 +20,7 @@ import getBathroomsByClassIdAndDate from "./bathroom/getByClassIdAndDate";
 import createOneBathroom from "./bathroom/createOne";
 import createManyBathroom from "./bathroom/createMany";
 import updateCommentById from "./attendance/updateCommentById";
+import getByClassId from "./guardianAnnotation/getByClassId";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -49,6 +50,9 @@ export const CASTELINHO_API_ENDPOINTS = {
   class: {
     getAll,
     getById,
+  },
+  guardianAnnotation: {
+    getByClassId: getByClassId,
   },
   meal: {
     getByClassIdAndDate: getMealByClassIdAndDate,

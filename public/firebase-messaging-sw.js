@@ -33,10 +33,23 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "/assets/icons/favicon.ico", // Substitua pelo caminho correto do ícone
-    image: "/assets/icons/favicon.ico", // Substitua pelo caminho correto do ícone
-    badge: "/assets/icons/favicon.ico", // Substitua pelo caminho correto do ícone
+    icon: "/assets/icons/icon-192x192.png", // Substitua pelo caminho correto do ícone
+    image: "/assets/icons/icon-192x192.png", // Substitua pelo caminho correto do ícone
+    badge: "/assets/icons/icon-192x192.png", // Substitua pelo caminho correto do ícone
+    data: { clickAction: "https://www.google.com" },
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
+
+  // Lidar com cliques na notificação
+  self.addEventListener("notificationclick", (event) => {
+    console.log("[Service Worker] Notificação clicada:", event.notification);
+
+    event.notification.close(); // Fechar a notificação
+
+    // Redirecionar para a URL definida no data.click_action
+    if (event.notification.data && event.notification.data.click_action) {
+      event.waitUntil(clients.openWindow(event.notification.data.click_action));
+    }
+  });
 });

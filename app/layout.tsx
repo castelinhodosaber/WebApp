@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   description: "Diário de aluno na Castelinho do Saber",
   manifest: "/manifest.json",
   icons: {
-    icon: "/assets/icons/icon-24x24.png",
-    apple: "/assets/icons/icon-512x512.png",
+    icon: "/assets/icons/icon-192x192.png",
+    apple: "/assets/icons/apple-touch-icon.png",
   },
 };
 

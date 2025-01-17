@@ -8,17 +8,16 @@ export type CastelinhoApiGuardianAnnotationGetByClassIdAndDateResponse =
     data: GuardianAnnotation[];
   };
 
-const getByClassIdAndDate = async (
+const getByClassId = async (
   accessToken: string,
-  classId: number,
-  date: string
+  classId: number
 ): Promise<
   CastelinhoApiGuardianAnnotationGetByClassIdAndDateResponse | undefined
 > => {
   try {
     const response: AxiosResponse<CastelinhoApiGuardianAnnotationGetByClassIdAndDateResponse> =
       await castelinhoApiInstance.get(
-        `/guardianAnnotation/?classId=${classId}&date=${date}`,
+        `/guardianAnnotation/all?classId=${classId}`,
         {
           headers: {
             Authorization: accessToken,
@@ -39,4 +38,4 @@ const getByClassIdAndDate = async (
   }
 };
 
-export default getByClassIdAndDate;
+export default getByClassId;
