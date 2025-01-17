@@ -36,7 +36,7 @@ messaging.onBackgroundMessage((payload) => {
     icon: "/assets/icons/icon-192x192.png", // Substitua pelo caminho correto do ícone
     image: "/assets/icons/icon-192x192.png", // Substitua pelo caminho correto do ícone
     badge: "/assets/icons/icon-192x192.png", // Substitua pelo caminho correto do ícone
-    data: { clickAction: "https://www.google.com" },
+    data: { clickAction: "https://app.castelinhodosaber.com/teacher/meal" },
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
