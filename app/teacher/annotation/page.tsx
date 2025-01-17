@@ -16,7 +16,7 @@ const Annotations = () => {
   const [annotations, setAnnotations] = useState<GuardianAnnotation[]>([]);
   useEffect(() => {
     if (selectedClass && accessToken) {
-      alert(JSON.stringify(selectedClass));
+      alert(JSON.stringify(selectedClass.id));
       CASTELINHO_API_ENDPOINTS.guardianAnnotation
         .getByClassId(accessToken, selectedClass.id)
         .then((res) => {
@@ -29,12 +29,14 @@ const Annotations = () => {
       direction="column"
       align="center"
       justify="space-between"
+      maxH={["100dvh"]}
+      maxW={["100dvw"]}
       width="100dvw"
       height="100dvh"
     >
       Annotations
       {JSON.stringify(annotations)}
-      {JSON.stringify(selectedClass)}
+      {JSON.stringify(selectedClass?.id)}
     </Flex>
   );
 };
