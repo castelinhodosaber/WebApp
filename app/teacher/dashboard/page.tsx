@@ -1,5 +1,6 @@
 "use client";
 import Loading from "@/app/components/Loading";
+import { useGlobalContext } from "@/app/context/GlobalContext";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import ROUTES from "@/app/routes";
 import { Classes } from "@/app/types/api/castelinho";
@@ -27,6 +28,9 @@ const TeacherDashboard = () => {
     state: { teacherClasses, classes, selectedClass },
     setSelectedClass,
   } = useTeacherContext();
+  const {
+    state: { person },
+  } = useGlobalContext();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [classCollection, setClassCollection] = useState<
@@ -74,7 +78,9 @@ const TeacherDashboard = () => {
       width="100%"
     >
       <Text fontSize={["18px"]} fontWeight={700}>
-        Selecionar Turma
+        {`Bem vind${person?.gender === "female" ? "a" : "o"}, ${
+          person?.name.split(" ")[0]
+        }!`}
       </Text>
       <Flex
         align="center"
@@ -84,6 +90,9 @@ const TeacherDashboard = () => {
         justify="center"
         width="100%"
       >
+        <Text fontSize={["16px"]} fontWeight={700}>
+          Selecionar Turma
+        </Text>
         {teacherClasses?.map((teacherClass, index) => (
           <Button
             color="secondary.100"

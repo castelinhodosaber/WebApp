@@ -19,7 +19,7 @@ import isNapOverlapping from "@/app/utils/isNapOverlapping";
 type newNap = {
   startedAt: string;
   finishAt: string;
-  studentId: number;
+  studentId: number | undefined;
 };
 
 const TeacherNap = () => {

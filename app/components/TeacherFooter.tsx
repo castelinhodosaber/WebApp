@@ -13,7 +13,7 @@ const TeacherFooter = () => {
     state: { person },
   } = useGlobalContext();
   const {
-    state: { attendance },
+    state: { selectedClass },
   } = useTeacherContext();
   const FOOTER_OPTIONS = person ? handleFooterOptions(person.role) : null;
   const pathname = usePathname();
@@ -22,11 +22,13 @@ const TeacherFooter = () => {
   const handleClick = (footerOption: {
     icon: JSX.Element;
     name: string;
-    pathname: string;
+    pathname: string | string[];
   }) => {
     switch (footerOption.pathname) {
       case ROUTES.private.teacher.message:
-        if (!attendance) {
+      case ROUTES.private.teacher.annotation:
+      case ROUTES.private.teacher.announcement:
+        if (!selectedClass?.id) {
           toaster.create({
             type: "error",
             title: "Erro!",
@@ -34,11 +36,20 @@ const TeacherFooter = () => {
           });
         } else router.push(footerOption.pathname);
         break;
+
       case ROUTES.public.logout:
         logout();
         break;
       default:
-        router.push(footerOption.pathname);
+        if (typeof footerOption.pathname === "string")
+          return router.push(footerOption.pathname);
+
+        if (!footerOption.pathname.includes(pathname)) {
+          return router.push(footerOption.pathname[0]);
+        } else
+          router.push(
+            footerOption.pathname.find((item) => item !== pathname) || pathname
+          );
         break;
     }
   };
@@ -68,7 +79,14 @@ const TeacherFooter = () => {
           <Flex
             _hover={{ color: "#f97837" }}
             align="center"
-            color={pathname === opt.pathname ? "#F97837" : "white"}
+            color={
+              pathname === opt.pathname ||
+              (typeof opt.pathname !== "string" &&
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                opt.pathname.includes(pathname as any))
+                ? "#F97837"
+                : "white"
+            }
             height={["20px"]}
             justify="center"
             onClick={() => handleClick(opt)}

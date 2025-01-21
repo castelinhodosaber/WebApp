@@ -4,28 +4,22 @@ import { toaster } from "@/components/ui/toaster";
 import { GuardianAnnotation } from "@/app/types/api/castelinho";
 import Pagination from "@/app/types/api/castelinho/pagination";
 
-export type CastelinhoApiGuardianAnnotationGetByClassIdResponse =
+export type CastelinhoApiAnnouncementGetAllResponse =
   CastelinhoApiResponseData & {
     data: GuardianAnnotation[];
     pagination: Pagination;
   };
 
-const getByClassId = async (
-  accessToken: string,
-  classId: number,
-  pagination: Pagination,
-  search?: string
-): Promise<CastelinhoApiGuardianAnnotationGetByClassIdResponse | undefined> => {
+const getAll = async (
+  accessToken: string
+): Promise<CastelinhoApiAnnouncementGetAllResponse | undefined> => {
   try {
-    const response: AxiosResponse<CastelinhoApiGuardianAnnotationGetByClassIdResponse> =
-      await castelinhoApiInstance.get(
-        `/guardianAnnotation/all?classId=${classId}&limit=${pagination.limit}&page=${pagination.page}&search=${search || ""}`,
-        {
-          headers: {
-            Authorization: accessToken,
-          },
-        }
-      );
+    const response: AxiosResponse<CastelinhoApiAnnouncementGetAllResponse> =
+      await castelinhoApiInstance.get(`/guardianAnnotation/all`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
 
     return response.data;
   } catch (error) {
@@ -40,4 +34,4 @@ const getByClassId = async (
   }
 };
 
-export default getByClassId;
+export default getAll;

@@ -6,11 +6,11 @@ export type Classes = {
   name: string;
 };
 export type Person = {
-  id: number;
-  personId: number;
+  id?: number;
+  personId?: number;
   name: string;
   birthDate: string;
-  cpf: string;
+  cpf?: string;
   photo?: string;
   createdAt: string;
   gender: Gender;
@@ -94,11 +94,11 @@ export type GuardianAnnotation = {
   id?: number;
   date: string;
   description: string;
-  student?: Person;
-  guardian?: Person;
-  viewers?: {
+  student: Person;
+  guardian: Person;
+  viewers: {
     name: string;
-    gender: string;
+    gender: Gender;
     photo?: string;
     date: string;
     time: string;

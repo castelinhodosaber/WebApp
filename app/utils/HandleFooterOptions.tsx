@@ -12,7 +12,10 @@ const handleFooterOptions = (userRole: Role) => {
         {
           icon: <IoHome style={{ height: "100%", width: "100%" }} />,
           name: "Início",
-          pathname: ROUTES.private.teacher.dashboard,
+          pathname: [
+            ROUTES.private.teacher.dashboard,
+            ROUTES.private.teacher.home,
+          ],
         },
         {
           icon: (
@@ -34,7 +37,7 @@ const handleFooterOptions = (userRole: Role) => {
         {
           icon: <RiLogoutBoxFill style={{ height: "100%", width: "100%" }} />,
           name: "Sair",
-          pathname: "",
+          pathname: ROUTES.public.logout,
         },
       ];
 
