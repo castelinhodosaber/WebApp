@@ -42,7 +42,13 @@ const Footer = () => {
             height={["20px"]}
             justify="center"
             onClick={() =>
-              opt.name === "Sair" ? logout() : router.push(opt.pathname)
+              opt.name === "Sair"
+                ? logout()
+                : router.push(
+                    typeof opt.pathname === "string"
+                      ? opt.pathname
+                      : opt.pathname[0]
+                  )
             }
             position="relative"
             width={["20px"]}

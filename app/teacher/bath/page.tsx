@@ -163,7 +163,7 @@ const TeacherBath = () => {
                 gap="25px"
                 onValueChange={(ev) =>
                   handleBathChange(
-                    student.id,
+                    student.id || 0,
                     ev.value === "true" ? true : false
                   )
                 }
