@@ -1,12 +1,16 @@
 "use client";
+import Loading from "@/app/components/Loading";
 import { useTeacherContext } from "@/app/context/TeacherContext";
 import ROUTES from "@/app/routes";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { FaBath, FaToilet } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { BiSolidMessageDetail } from "react-icons/bi";
+import { FaBath, FaBookOpen, FaToilet } from "react-icons/fa";
 import { GiKnifeFork, GiNightSleep } from "react-icons/gi";
 
 const Home = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const {
     state: { selectedClass },
@@ -33,8 +37,27 @@ const Home = () => {
       path: ROUTES.private.teacher.bathroom,
       icon: <FaToilet size="100%" />,
     },
+    {
+      name: "Recados",
+      path: ROUTES.private.teacher.annotation,
+      icon: <BiSolidMessageDetail size="100%" />,
+    },
+    {
+      name: "Anotações",
+      path: ROUTES.private.teacher.message,
+      icon: <FaBookOpen size="100%" />,
+    },
   ];
-  return (
+
+  useEffect(() => {
+    if (!selectedClass?.id)
+      return router.push(ROUTES.private.teacher.dashboard);
+    setIsLoading(false);
+  }, [selectedClass, router]);
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <Flex
       align="center"
       direction="column"

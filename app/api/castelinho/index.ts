@@ -2,8 +2,8 @@ import axios from "axios";
 import login from "./auth/login";
 import validateToken from "./auth/validateToken";
 import getDetailsById from "./teacher/getDetailsById";
-import getAll from "./class/getAll";
-import getById from "./class/getById";
+import getAllClass from "./class/getAll";
+import getClassById from "./class/getById";
 import getAttendanceByClassIdAndDate from "./attendance/getByClassIdAndDate";
 import createManyAttendance from "./attendance/createMany";
 import getMealByClassIdAndDate from "./meal/getByClassIdAndDate";
@@ -21,6 +21,7 @@ import createOneBathroom from "./bathroom/createOne";
 import createManyBathroom from "./bathroom/createMany";
 import updateCommentById from "./attendance/updateCommentById";
 import getByClassId from "./guardianAnnotation/getByClassId";
+import getAllAnnouncement from "./announcement/getAll";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -28,6 +29,9 @@ export type CastelinhoApiResponseData = {
 };
 
 export const CASTELINHO_API_ENDPOINTS = {
+  announcement: {
+    getAllAnnouncement,
+  },
   attendance: {
     getByClassIdAndDate: getAttendanceByClassIdAndDate,
     createMany: createManyAttendance,
@@ -48,8 +52,8 @@ export const CASTELINHO_API_ENDPOINTS = {
     createMany: createManyBathroom,
   },
   class: {
-    getAll,
-    getById,
+    getAllClass,
+    getClassById,
   },
   guardianAnnotation: {
     getByClassId: getByClassId,

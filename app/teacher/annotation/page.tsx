@@ -37,7 +37,6 @@ const Annotations = () => {
 
   const handleSearch = useCallback(
     debounce((search: string) => {
-      console.log(search);
       CASTELINHO_API_ENDPOINTS.guardianAnnotation
         .getByClassId(
           accessToken || "",
@@ -48,7 +47,6 @@ const Annotations = () => {
         .then((res) => {
           setIsLoading(false);
           if (res) {
-            console.log(res);
             setAnnotations(res.data);
             setPagination({ ...pagination, ...res.pagination });
           } else {

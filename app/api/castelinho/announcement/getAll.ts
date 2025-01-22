@@ -1,25 +1,29 @@
 import { AxiosError, AxiosResponse } from "axios";
 import castelinhoApiInstance, { CastelinhoApiResponseData } from "..";
 import { toaster } from "@/components/ui/toaster";
-import { GuardianAnnotation } from "@/app/types/api/castelinho";
+import { Announcement } from "@/app/types/api/castelinho";
 import Pagination from "@/app/types/api/castelinho/pagination";
 
 export type CastelinhoApiAnnouncementGetAllResponse =
   CastelinhoApiResponseData & {
-    data: GuardianAnnotation[];
+    data: Announcement[];
     pagination: Pagination;
   };
 
 const getAll = async (
-  accessToken: string
+  accessToken: string,
+  pagination: Pagination
 ): Promise<CastelinhoApiAnnouncementGetAllResponse | undefined> => {
   try {
     const response: AxiosResponse<CastelinhoApiAnnouncementGetAllResponse> =
-      await castelinhoApiInstance.get(`/guardianAnnotation/all`, {
-        headers: {
-          Authorization: accessToken,
-        },
-      });
+      await castelinhoApiInstance.get(
+        `/announcement/all?limit=${pagination.limit}&page=${pagination.page}`,
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      );
 
     return response.data;
   } catch (error) {

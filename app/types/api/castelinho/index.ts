@@ -105,3 +105,18 @@ export type GuardianAnnotation = {
   }[];
   relationship: StudentGuardianRelationship;
 };
+
+export type Announcement = {
+  id?: number;
+  date: string;
+  description: string;
+  title: string;
+  photo: string;
+  viewers?: {
+    name: string;
+    gender: Gender;
+    photo?: string;
+    date: string;
+    time: string;
+  }[];
+};

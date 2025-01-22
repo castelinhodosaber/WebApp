@@ -55,7 +55,7 @@ export const TeacherProvider = ({ children }: { children: ReactNode }) => {
 
   const setClasses = () => {
     if (accessToken && person) {
-      CASTELINHO_API_ENDPOINTS.class.getAll(accessToken).then((result) => {
+      CASTELINHO_API_ENDPOINTS.class.getAllClass(accessToken).then((result) => {
         if (result) {
           setState((oldState) => ({
             ...oldState,
@@ -79,7 +79,7 @@ export const TeacherProvider = ({ children }: { children: ReactNode }) => {
       if (isTeacherClass) {
         setState({ ...state, selectedClass: isTeacherClass });
       } else if (accessToken) {
-        const response = await CASTELINHO_API_ENDPOINTS.class.getById(
+        const response = await CASTELINHO_API_ENDPOINTS.class.getClassById(
           accessToken,
           classId
         );

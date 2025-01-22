@@ -3,18 +3,14 @@ import { Flex, Text } from "@chakra-ui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalContext } from "../context/GlobalContext";
 import handleFooterOptions from "../utils/HandleFooterOptions";
-import { useTeacherContext } from "../context/TeacherContext";
 import ROUTES from "../routes";
-import { toaster } from "@/components/ui/toaster";
 
 const TeacherFooter = () => {
   const {
     logout,
     state: { person },
   } = useGlobalContext();
-  const {
-    state: { selectedClass },
-  } = useTeacherContext();
+
   const FOOTER_OPTIONS = person ? handleFooterOptions(person.role) : null;
   const pathname = usePathname();
   const router = useRouter();
@@ -25,18 +21,9 @@ const TeacherFooter = () => {
     pathname: string | string[];
   }) => {
     switch (footerOption.pathname) {
-      case ROUTES.private.teacher.message:
-      case ROUTES.private.teacher.annotation:
       case ROUTES.private.teacher.announcement:
-        if (!selectedClass?.id) {
-          toaster.create({
-            type: "error",
-            title: "Erro!",
-            description: "Selecione a sala/turma para acessar esta seção.",
-          });
-        } else router.push(footerOption.pathname);
+        router.push(footerOption.pathname);
         break;
-
       case ROUTES.public.logout:
         logout();
         break;
@@ -45,7 +32,7 @@ const TeacherFooter = () => {
           return router.push(footerOption.pathname);
 
         if (!footerOption.pathname.includes(pathname)) {
-          return router.push(footerOption.pathname[0]);
+          return router.push(footerOption.pathname[1]);
         } else
           router.push(
             footerOption.pathname.find((item) => item !== pathname) || pathname
