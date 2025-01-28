@@ -4,31 +4,46 @@ import { toaster } from "@/components/ui/toaster";
 import { Gender, Role } from "@/app/types/api/castelinho";
 
 export type CastelinhoApiAuthLoginResponse = CastelinhoApiResponseData & {
-  data: {
-    accessToken: string;
-    person: {
-      birthDate: string;
-      cpf: string;
-      gender: Gender;
-      id: number;
-      name: string;
-      role: Role;
-      roleId: number;
-    };
-  };
+  data:
+    | {
+        accessToken: string;
+        person: {
+          birthDate: string;
+          cpf: string;
+          gender: Gender;
+          id: number;
+          name: string;
+          role: Role;
+          roleId: number;
+        };
+      }
+    | {
+        roles: { role: Role; roleId: number }[];
+        person: {
+          name: string;
+          cpf: string;
+          birthDate: string;
+          gender: Gender;
+          id: number;
+        };
+      };
 };
 
 const login = async (
   username: string,
-  password: string
+  password: string,
+  role?: Role
 ): Promise<CastelinhoApiAuthLoginResponse | undefined> => {
   try {
     const response: AxiosResponse<CastelinhoApiAuthLoginResponse> =
       await castelinhoApiInstance.post("/auth/login", {
         username,
         password,
+        role,
       });
-    localStorage.setItem("accessToken", response.data.data.accessToken);
+
+    if (response && "accessToken" in response.data.data)
+      localStorage.setItem("accessToken", response.data.data.accessToken);
 
     return response.data;
   } catch (error) {

@@ -93,25 +93,31 @@ const TeacherDashboard = () => {
         <Text fontSize={["16px"]} fontWeight={700}>
           Selecionar Turma
         </Text>
-        {teacherClasses?.map((teacherClass, index) => (
-          <Button
-            color="secondary.100"
-            colorPalette="secondary"
-            border="1px solid orange"
-            borderRadius={["12px"]}
-            fontSize={["20px"]}
-            fontWeight={800}
-            height={["80px"]}
-            key={index}
-            onClick={() => {
-              handleSelectedClass(teacherClass.id);
-            }}
-            textTransform="uppercase"
-            width={["180px"]}
-          >
-            {teacherClass.name}
-          </Button>
-        ))}
+        {teacherClasses?.length ? (
+          teacherClasses?.map((teacherClass, index) => (
+            <Button
+              color="secondary.100"
+              colorPalette="secondary"
+              border="1px solid orange"
+              borderRadius={["12px"]}
+              fontSize={["20px"]}
+              fontWeight={800}
+              height={["80px"]}
+              key={index}
+              onClick={() => {
+                handleSelectedClass(teacherClass.id);
+              }}
+              textTransform="uppercase"
+              width={["180px"]}
+            >
+              {teacherClass.name}
+            </Button>
+          ))
+        ) : (
+          <Text fontSize={["14px"]} fontWeight={400} textAlign="center">
+            Você não é responsável direto(a) por nenhuma turma no momento.
+          </Text>
+        )}
         <label>
           {classCollection ? (
             <NativeSelectRoot variant={"outline"} width={["180px"]}>

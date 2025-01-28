@@ -1,5 +1,10 @@
 export type Gender = "male" | "female";
 export type Role = "teacher" | "student" | "principal" | "guardian";
+export type TranslatedRole =
+  | "professor"
+  | "estudante"
+  | "diretoria"
+  | "responsável";
 export type Classes = {
   id: number;
   year: number;

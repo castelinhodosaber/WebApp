@@ -10,11 +10,16 @@ import ROUTES from "./routes";
 import { useGlobalContext } from "./context/GlobalContext";
 import { toaster } from "@/components/ui/toaster";
 import { CASTELINHO_API_ENDPOINTS } from "./api/castelinho";
+import { Role } from "./types/api/castelinho";
+import translateRole from "./utils/translateRole";
 
 function App() {
   const { login: globalContextLogin } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<Role>();
+  const [roles, setRoles] = useState<{ role: Role; roleId: number }[]>();
+  const [showSetRole, setShowSetRole] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [remerberUser, setRememberUser] = useState(false);
   const router = useRouter();
@@ -51,20 +56,37 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    if (role) handleSubmit();
+  }, [role]);
+
   const handleSubmit = async () => {
     setIsLoading(true);
-    const data = await CASTELINHO_API_ENDPOINTS.auth.login(email, password);
+    const data = await CASTELINHO_API_ENDPOINTS.auth.login(
+      email,
+      password,
+      role
+    );
 
-    if (data) {
+    if (data && "accessToken" in data.data) {
       toaster.create({
         type: "success",
         title: "Bem vindo(a), " + data.data.person.name + ".",
       });
       globalContextLogin(data.data);
+    } else if (data && "roles" in data.data) {
+      toaster.create({
+        type: "info",
+        title: "Atenção",
+        description: data.message,
+      });
+
+      setRoles(data.data.roles);
+      setShowSetRole(true);
     }
     setIsLoading(false);
 
-    if (data) {
+    if (data && "accessToken" in data.data) {
       switch (data.data.person.role) {
         case "teacher":
           return router.push(ROUTES.private.teacher.dashboard);
@@ -74,6 +96,7 @@ function App() {
       }
     }
   };
+
   return (
     <Flex
       align="center"
@@ -156,65 +179,98 @@ function App() {
         src="/assets/images/fonteBranco.png"
         width={["180px", "210px", "210px", "220px", "280px", "400px"]}
       />
-      <Stack
-        fontSize={["12px", "12px", "14px", "14px"]}
-        gap={["2", "2", "4"]}
-        marginTop={["20px"]}
-      >
-        <Field label="Usuário">
-          <Input
-            border="1px solid white"
-            borderRadius={["8px"]}
-            size={["xs", "xs", "sm", "sm", "lg"]}
-            fontSize={["16px"]}
-            type="email"
-            value={email}
-            onChange={(ev) => setEmail(ev.target.value)}
-            padding={["4px 10px"]}
-            variant="outline"
-          />
-        </Field>
-        <Field label="Senha">
-          <PasswordInput
-            border="1px solid white"
-            borderRadius={["8px"]}
-            size={["xs", "xs", "sm", "sm", "lg"]}
-            onChange={(ev) => setPassword(ev.target.value)}
-            padding={["4px 10px"]}
-            value={password}
-          />
-        </Field>
-        <Flex
-          align="center"
-          gap="8px"
-          onClick={() => setRememberUser(!remerberUser)}
-          justify="center"
+      {showSetRole ? (
+        <Flex align="center" direction="column" gap={["15px"]} justify="center">
+          <Text
+            fontSize={["14px", "14px", "16px"]}
+            fontWeight={600}
+            margin={["30px 0 10px 0"]}
+          >
+            Selecione o tipo de acesso:
+          </Text>
+          {roles?.map((roleItem, index) => (
+            <Flex key={index}>
+              <Button
+                color="secondary.100"
+                colorPalette="secondary"
+                border="1px solid orange"
+                borderRadius={["12px"]}
+                fontSize={["20px"]}
+                fontWeight={800}
+                height={["80px"]}
+                key={index}
+                onClick={() => {
+                  setRole(roleItem.role);
+                }}
+                textTransform="uppercase"
+                width={["180px"]}
+              >
+                {translateRole(roleItem.role)}
+              </Button>
+            </Flex>
+          ))}
+        </Flex>
+      ) : (
+        <Stack
+          fontSize={["12px", "12px", "14px", "14px"]}
+          gap={["2", "2", "4"]}
+          marginTop={["20px"]}
         >
+          <Field label="Usuário">
+            <Input
+              border="1px solid white"
+              borderRadius={["8px"]}
+              size={["xs", "xs", "sm", "sm", "lg"]}
+              fontSize={["16px"]}
+              type="email"
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
+              padding={["4px 10px"]}
+              variant="outline"
+            />
+          </Field>
+          <Field label="Senha">
+            <PasswordInput
+              border="1px solid white"
+              borderRadius={["8px"]}
+              size={["xs", "xs", "sm", "sm", "lg"]}
+              onChange={(ev) => setPassword(ev.target.value)}
+              padding={["4px 10px"]}
+              value={password}
+            />
+          </Field>
           <Flex
             align="center"
-            color="#f97837"
-            height="14px"
+            gap="8px"
+            onClick={() => setRememberUser(!remerberUser)}
             justify="center"
-            borderRadius="4px"
-            width="14px"
-            border="2px solid #f97837"
           >
-            {remerberUser ? <FaCheck /> : ""}
+            <Flex
+              align="center"
+              color="#f97837"
+              height="14px"
+              justify="center"
+              borderRadius="4px"
+              width="14px"
+              border="2px solid #f97837"
+            >
+              {remerberUser ? <FaCheck /> : ""}
+            </Flex>
+            <Text>Lembre-se de mim</Text>
           </Flex>
-          <Text>Lembre-se de mim</Text>
-        </Flex>
-        <Button
-          bgColor="#f97837"
-          borderRadius="8px"
-          color="white"
-          fontSize="18px"
-          fontWeight={700}
-          loading={isLoading}
-          onClick={handleSubmit}
-        >
-          Entrar
-        </Button>
-      </Stack>
+          <Button
+            bgColor="#f97837"
+            borderRadius="8px"
+            color="white"
+            fontSize="18px"
+            fontWeight={700}
+            loading={isLoading}
+            onClick={handleSubmit}
+          >
+            Entrar
+          </Button>
+        </Stack>
+      )}
     </Flex>
   );
 }

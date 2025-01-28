@@ -76,9 +76,11 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
+    setIsLoading(true);
     setState({ ...state, person: null, accessToken: null });
     localStorage.removeItem("accessToken");
     router.push(ROUTES.public.login);
+    setIsLoading(false);
   };
 
   useEffect(() => {
