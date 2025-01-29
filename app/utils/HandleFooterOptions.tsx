@@ -12,7 +12,7 @@ const handleFooterOptions = (userRole: Role) => {
         {
           icon: <IoHome style={{ height: "100%", width: "100%" }} />,
           name: "Início",
-          pathname: [ROUTES.private.guardian.home],
+          pathname: ROUTES.private.guardian.home,
         },
         {
           icon: (
