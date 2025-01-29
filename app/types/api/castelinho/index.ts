@@ -17,7 +17,7 @@ export type Person = {
   birthDate: string;
   cpf?: string;
   photo?: string;
-  createdAt: string;
+  createdAt?: string;
   gender: Gender;
 };
 

@@ -11,6 +11,15 @@ export const TEACHER_ROUTES = {
   bathroom: "/teacher/bathroom",
 } as const;
 
+export const GUARDIAN_ROUTES = {
+  annotation: "/guardian/annotation",
+  announcement: "/guardian/announcement",
+
+  message: "/guardian/message",
+  attendance: "/guardian/attendance",
+  home: "/guardian/home",
+} as const;
+
 export const PUBLIC_ROUTES = {
   login: "/",
   logout: "/logout",
@@ -18,6 +27,7 @@ export const PUBLIC_ROUTES = {
 
 export const PRIVATE_ROUTES = {
   teacher: { ...TEACHER_ROUTES },
+  guardian: { ...GUARDIAN_ROUTES },
 } as const;
 
 const ROUTES = {

@@ -91,6 +91,8 @@ function App() {
         case "teacher":
           return router.push(ROUTES.private.teacher.dashboard);
 
+        case "guardian":
+          return router.push(ROUTES.private.guardian.home);
         default:
           break;
       }

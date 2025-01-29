@@ -112,6 +112,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
               case "teacher":
                 return setRedirectPath(ROUTES.private.teacher.dashboard);
 
+              case "guardian":
+                return setRedirectPath(ROUTES.private.guardian.home);
               default:
                 break;
             }

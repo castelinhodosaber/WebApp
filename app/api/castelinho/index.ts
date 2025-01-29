@@ -1,7 +1,8 @@
 import axios from "axios";
 import login from "./auth/login";
 import validateToken from "./auth/validateToken";
-import getDetailsById from "./teacher/getDetailsById";
+import getTeacherDetailsById from "./teacher/getDetailsById";
+import getGuardianDetailsById from "./guardian/getDetailsById";
 import getAllClass from "./class/getAll";
 import getClassById from "./class/getById";
 import getAttendanceByClassIdAndDate from "./attendance/getByClassIdAndDate";
@@ -55,6 +56,9 @@ export const CASTELINHO_API_ENDPOINTS = {
     getAllClass,
     getClassById,
   },
+  guardian: {
+    getDetailsById: getGuardianDetailsById,
+  },
   guardianAnnotation: {
     getByClassId: getByClassId,
   },
@@ -72,7 +76,7 @@ export const CASTELINHO_API_ENDPOINTS = {
     createOne: createOneNap,
   },
   teacher: {
-    getDetailsById,
+    getDetailsById: getTeacherDetailsById,
   },
 };
 
