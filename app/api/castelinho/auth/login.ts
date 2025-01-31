@@ -32,6 +32,7 @@ export type CastelinhoApiAuthLoginResponse = CastelinhoApiResponseData & {
 const login = async (
   username: string,
   password: string,
+  rememberUser: boolean,
   role?: Role
 ): Promise<CastelinhoApiAuthLoginResponse | undefined> => {
   try {
@@ -42,7 +43,7 @@ const login = async (
         role,
       });
 
-    if (response && "accessToken" in response.data.data)
+    if (response && "accessToken" in response.data.data && rememberUser)
       localStorage.setItem("accessToken", response.data.data.accessToken);
 
     return response.data;

@@ -23,6 +23,7 @@ import createManyBathroom from "./bathroom/createMany";
 import updateCommentById from "./attendance/updateCommentById";
 import getByClassId from "./guardianAnnotation/getByClassId";
 import getAllAnnouncement from "./announcement/getAll";
+import getStudentDetailsByIdAndDate from "./student/getDetailsByIdAndDate";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -74,6 +75,9 @@ export const CASTELINHO_API_ENDPOINTS = {
     getByClassIdAndDate: getNapsByClassIdAndDate,
     deleteById: deleteNapById,
     createOne: createOneNap,
+  },
+  student: {
+    getDetailsByIdAndDate: getStudentDetailsByIdAndDate,
   },
   teacher: {
     getDetailsById: getTeacherDetailsById,

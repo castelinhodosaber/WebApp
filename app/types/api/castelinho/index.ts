@@ -22,11 +22,9 @@ export type Person = {
 };
 
 export type MealTypes =
-  | "afternoonFruit"
   | "afternoonSnack"
   | "lunch"
   | "milkFeeding"
-  | "morningFruit"
   | "morningSnack";
 
 export type MealType = {
@@ -74,6 +72,7 @@ export type Meal = {
   rating: number;
   date: string;
   student?: Person;
+  name?: MealType["name"];
   studentId?: number;
   mealTypeId: number;
   mealType?: MealTypes;

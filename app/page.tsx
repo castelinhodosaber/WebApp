@@ -21,7 +21,7 @@ function App() {
   const [roles, setRoles] = useState<{ role: Role; roleId: number }[]>();
   const [showSetRole, setShowSetRole] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [remerberUser, setRememberUser] = useState(false);
+  const [rememberUser, setRememberUser] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -65,6 +65,7 @@ function App() {
     const data = await CASTELINHO_API_ENDPOINTS.auth.login(
       email,
       password,
+      rememberUser,
       role
     );
 
@@ -244,7 +245,7 @@ function App() {
           <Flex
             align="center"
             gap="8px"
-            onClick={() => setRememberUser(!remerberUser)}
+            onClick={() => setRememberUser(!rememberUser)}
             justify="center"
           >
             <Flex
@@ -256,7 +257,7 @@ function App() {
               width="14px"
               border="2px solid #f97837"
             >
-              {remerberUser ? <FaCheck /> : ""}
+              {rememberUser ? <FaCheck /> : ""}
             </Flex>
             <Text>Lembre-se de mim</Text>
           </Flex>
