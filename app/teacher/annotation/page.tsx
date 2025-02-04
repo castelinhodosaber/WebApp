@@ -157,8 +157,8 @@ const Annotations = () => {
                   <Text>
                     {`${annotation.guardian?.name.split(" ")[0]} - ${capitalize(
                       formatRelationship(
-                        annotation.guardian?.gender,
-                        annotation.relationship
+                        annotation.guardian?.gender || "male",
+                        annotation.relationship || "parent"
                       )
                     )} d${annotation.student?.gender === "male" ? "o" : "a"} ${
                       annotation.student?.name
