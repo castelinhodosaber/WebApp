@@ -403,7 +403,7 @@ const Home = () => {
                               selectedStudent.gender === "female" ? "A" : "O"
                             } ${
                               selectedStudent.name.split(" ")[0]
-                            } não possui referente a data selecionada.`}
+                            } não possui anotações referente a data selecionada.`}
                       </Text>
                     </Flex>
                   ))}

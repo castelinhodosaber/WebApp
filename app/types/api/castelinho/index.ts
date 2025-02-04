@@ -98,16 +98,18 @@ export type GuardianAnnotation = {
   id?: number;
   date: string;
   description: string;
-  student: Person;
-  guardian: Person;
-  viewers: {
+  studentId?: number;
+  guardianId?: number;
+  student?: Person;
+  guardian?: Person;
+  viewers?: {
     name: string;
     gender: Gender;
     photo?: string;
     date: string;
     time: string;
   }[];
-  relationship: StudentGuardianRelationship;
+  relationship?: StudentGuardianRelationship;
 };
 
 export type Announcement = {

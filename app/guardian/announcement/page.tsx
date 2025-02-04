@@ -145,7 +145,7 @@ const Announcements = () => {
                       ))}
                     </Flex>
                   </Flex>
-                  <Text marginTop={["30px"]}>
+                  <Text fontSize={["14px"]} marginTop={["30px"]}>
                     Criado por: {annoucement.createdBy}.
                   </Text>
                 </Flex>

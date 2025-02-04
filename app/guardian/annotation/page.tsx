@@ -2,86 +2,84 @@
 import { CASTELINHO_API_ENDPOINTS } from "@/app/api/castelinho";
 import CustomSkeleton from "@/app/components/CustomSkeleton";
 import { useGlobalContext } from "@/app/context/GlobalContext";
-import { useTeacherContext } from "@/app/context/TeacherContext";
+import { useGuardianContext } from "@/app/context/GuardianContext";
 import { GuardianAnnotation } from "@/app/types/api/castelinho";
 import Pagination from "@/app/types/api/castelinho/pagination";
 import capitalize from "@/app/utils/capitalize";
-import debounce from "@/app/utils/debounce";
+
 import formatRelationship from "@/app/utils/formatRelationship";
-import { Field } from "@/components/ui/field";
+import {
+  DialogActionTrigger,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   PaginationItems,
   PaginationNextTrigger,
   PaginationPrevTrigger,
   PaginationRoot,
 } from "@/components/ui/pagination";
+import { Radio, RadioGroup } from "@/components/ui/radio";
 import { PaginationPageChangeDetails } from "@ark-ui/react";
-import { Flex, HStack, Input, Text } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import { Button, Flex, HStack, Input, Text } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 
 const Annotations = () => {
   const {
-    state: { accessToken },
+    state: { accessToken, date, person },
   } = useGlobalContext();
-  const {
-    state: { selectedClass },
-  } = useTeacherContext();
-
-  const [isLoading, setIsLoading] = useState(false);
+  const { state: guardianState } = useGuardianContext();
+  const createAnnotationDescriptionInputRef = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [annotations, setAnnotations] = useState<GuardianAnnotation[]>([]);
+  const [newOrUpdatedAnnotation, setNewOrUpdatedAnnotation] =
+    useState<GuardianAnnotation>({
+      description: "",
+      date: date.iso,
+      guardianId: person?.roleId,
+      studentId: guardianState?.students[0].id,
+    });
   const [pagination, setPagination] = useState<Pagination>({
     limit: 5,
     page: 1,
     total: 0,
   });
 
-  const handleSearch = useCallback(
-    debounce((search: string) => {
-      CASTELINHO_API_ENDPOINTS.guardianAnnotation
-        .getByClassId(
-          accessToken || "",
-          selectedClass?.id || 0,
-          pagination,
-          search
-        )
-        .then((res) => {
-          setIsLoading(false);
-          if (res) {
-            setAnnotations(res.data);
-            setPagination({ ...pagination, ...res.pagination });
-          } else {
-            setAnnotations([]);
-            setPagination({ page: 1, total: 1, limit: 10 });
-          }
-        });
-    }, 1000),
-    []
-  );
-
   useEffect(() => {
-    if (selectedClass && accessToken) {
+    if (accessToken) {
       CASTELINHO_API_ENDPOINTS.guardianAnnotation
-        .getByClassId(accessToken, selectedClass.id, pagination)
+        .getByGuardian(accessToken, pagination)
         .then((res) => {
+          if (res?.status === 204 || res?.data) setIsLoading(false);
           if (res) {
-            setAnnotations(res.data);
+            setAnnotations(res?.data || []);
             setPagination({ ...pagination, ...res.pagination });
           }
         });
     }
-  }, [accessToken, selectedClass]);
+  }, [accessToken]);
+
+  const handleSaveNewOrUpdatedAnnotation = () => {};
 
   const handlePagination = (ev: PaginationPageChangeDetails) => {
-    if (accessToken && selectedClass?.id) {
+    if (accessToken) {
+      setIsLoading(true);
       CASTELINHO_API_ENDPOINTS.guardianAnnotation
-        .getByClassId(accessToken, selectedClass.id, {
+        .getByGuardian(accessToken, {
           ...pagination,
           page: ev.page,
         })
         .then((res) => {
+          if (res?.status === 204 || res?.data) setIsLoading(false);
           if (res) {
-            setAnnotations(res.data);
+            setAnnotations(res?.data || []);
             setPagination({ ...pagination, ...res.pagination });
+            setIsLoading(false);
           }
         });
     }
@@ -99,7 +97,7 @@ const Annotations = () => {
       width="100dvw"
     >
       <Text fontSize={["20px"]} fontWeight={[700]}>
-        Recados - {selectedClass?.name}
+        Recados
       </Text>
 
       <Flex
@@ -110,17 +108,6 @@ const Annotations = () => {
         width="100%"
         overflowY="scroll" // Ativa o scroll vertical automaticamente
       >
-        <Flex>
-          <Field helperText="Procure pelo nome do responsável ou da criança.">
-            <Input
-              onChange={(ev) => {
-                setIsLoading(true);
-                handleSearch(ev.target.value);
-              }}
-              placeholder="Digite aqui sua pesquisa"
-            />
-          </Field>
-        </Flex>
         {isLoading ? (
           <>
             <CustomSkeleton />
@@ -128,8 +115,75 @@ const Annotations = () => {
             <CustomSkeleton />
           </>
         ) : null}
+        <DialogRoot
+          initialFocusEl={() => createAnnotationDescriptionInputRef.current}
+          placement="center"
+        >
+          <DialogTrigger asChild>
+            <Button
+              colorPalette="secondary"
+              fontWeight={700}
+              padding={["2px 6px"]}
+              variant="solid"
+            >
+              Criar novo recado
+            </Button>
+          </DialogTrigger>
+          <DialogContent width={["80%"]}>
+            <DialogHeader>
+              <DialogTitle>
+                {newOrUpdatedAnnotation?.id ? "Editar Recado" : "Novo Recado"}
+              </DialogTitle>
+            </DialogHeader>
+            <DialogBody pb="4">
+              <Flex direction="column" justify="center" align="center" gap="4">
+                <Input
+                  onClick={(ev) =>
+                    setNewOrUpdatedAnnotation({
+                      ...newOrUpdatedAnnotation,
+                      description: (ev.target as HTMLInputElement).value,
+                    })
+                  }
+                  placeholder="Escreva seu recado"
+                  ref={createAnnotationDescriptionInputRef}
+                />
+                <RadioGroup
+                  value={newOrUpdatedAnnotation.studentId?.toString()}
+                  onValueChange={(e) =>
+                    setNewOrUpdatedAnnotation({
+                      ...newOrUpdatedAnnotation,
+                      studentId: +e.value,
+                    })
+                  }
+                  defaultValue="1"
+                >
+                  <HStack gap="6">
+                    {guardianState?.students.map((item, index) => (
+                      <Radio key={index} value={item.id?.toString() || "1"}>
+                        {item.name.split(" ")[0]}
+                      </Radio>
+                    ))}
+                  </HStack>
+                </RadioGroup>
+              </Flex>
+            </DialogBody>
+            <DialogFooter>
+              <DialogActionTrigger asChild>
+                <Button variant="outline" colorPalette="principal">
+                  Cancelar
+                </Button>
+              </DialogActionTrigger>
+              <Button
+                colorPalette="secondary"
+                onClick={handleSaveNewOrUpdatedAnnotation}
+              >
+                {newOrUpdatedAnnotation.id ? "Atualizar" : "Salvar"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </DialogRoot>
         {annotations.length || isLoading ? null : (
-          <Text>Nenhum resultado encontrado.</Text>
+          <Text>Nenhum recado encontrado.</Text>
         )}
         {isLoading
           ? null
@@ -157,8 +211,8 @@ const Annotations = () => {
                   <Text>
                     {`${annotation.guardian?.name.split(" ")[0]} - ${capitalize(
                       formatRelationship(
-                        annotation.guardian?.gender,
-                        annotation.relationship
+                        annotation.guardian?.gender || "female",
+                        annotation.relationship || "parent"
                       )
                     )} d${annotation.student?.gender === "male" ? "o" : "a"} ${
                       annotation.student?.name
