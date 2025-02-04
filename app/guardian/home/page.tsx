@@ -135,10 +135,32 @@ const Home = () => {
         <Flex
           align="center"
           direction="column"
+          grow={1}
           justify="center"
           wrap="wrap"
           width={["100%"]}
         >
+          <Flex
+            borderRadius={["8px"]}
+            marginBottom={["10px"]}
+            position="relative"
+            overflow="hidden"
+            width={["50px"]}
+            height={["50px"]}
+          >
+            <Image
+              alt="children"
+              src={
+                selectedStudent?.photo
+                  ? `/api/castelinho/imageProxy?route=${encodeURIComponent(
+                      selectedStudent?.photo
+                    )}`
+                  : "/assets/images/defaultProfilePhoto.png"
+              }
+              objectFit="fill"
+              fill={true}
+            />
+          </Flex>
           <Text fontSize={["15px"]} fontWeight={[700]}>{`${
             selectedStudent?.name
           } - ${
@@ -279,7 +301,7 @@ const Home = () => {
                 width="100%"
               >
                 <Text fontSize={["15px"]} fontWeight={700}>
-                  Banheiro
+                  Banheiro (Trocas)
                 </Text>
                 <Flex
                   align="center"
@@ -389,11 +411,18 @@ const Home = () => {
               </Flex>
             </MotionFlex>
           ) : (
-            <Text fontSize={"13px"} textAlign="center">{`${
-              selectedStudent.gender === "female" ? "A" : "O"
-            } ${
-              selectedStudent.name.split(" ")[0]
-            } não possui registros referente a data selecionada.`}</Text>
+            <Flex align="center" grow="1" justify="center" width="100%">
+              <Text fontSize={"13px"} textAlign="center" width={["80%"]}>
+                {" "}
+                {`${selectedStudent.gender === "female" ? "A" : "O"} ${
+                  selectedStudent.name.split(" ")[0]
+                } não possui registros referente a data selecionada. ${
+                  selectedDate === date.iso
+                    ? "Aguarde até que a professora responsável preencha as informações do dia."
+                    : ""
+                }`}
+              </Text>
+            </Flex>
           )}
         </Flex>
       )}

@@ -4,7 +4,9 @@ import { toaster } from "@/components/ui/toaster";
 import { Attendance } from "@/app/types/api/castelinho";
 
 export type CastelinhoApiAttendanceCreateManyResponse =
-  CastelinhoApiResponseData;
+  CastelinhoApiResponseData & {
+    data: Attendance[];
+  };
 
 const createMany = async (
   accessToken: string,

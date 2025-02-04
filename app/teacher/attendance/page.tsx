@@ -82,7 +82,12 @@ const TeacherAttendance = () => {
       if (result) {
         router.push(ROUTES.private.teacher.home);
 
-        setContextAttendance(newAttendances);
+        setContextAttendance(
+          newAttendances.map((item, index) => ({
+            ...item,
+            id: result.data[index].id,
+          }))
+        );
         toaster.create({ type: "success", title: "Lista salva com sucesso." });
       } else {
         toaster.create({

@@ -31,7 +31,11 @@ const BathroomTeacher = () => {
   const BATHROOM_ACTION_DETAILS_ARR = BATHROOM_ACTIONS_DETAILS.map((item) => ({
     name: item,
     displayName:
-      item === "DIARRHEA" ? "Diarréia" : item === "NORMAL" ? "Normal" : "Duro",
+      item === "DIARRHEA"
+        ? "Diarréia"
+        : item === "NORMAL"
+        ? "Normal"
+        : "Ressecado",
   }));
   useEffect(() => {
     if (accessToken && selectedClass && globalAttendance?.length) {

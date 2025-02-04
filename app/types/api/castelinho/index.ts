@@ -114,8 +114,10 @@ export type Announcement = {
   id?: number;
   date: string;
   description: string;
+  createdBy: string;
   title: string;
-  photo: string;
+  classes?: Classes[];
+  photo?: string;
   viewers?: {
     name: string;
     gender: Gender;

@@ -77,13 +77,22 @@ export const TeacherProvider = ({ children }: { children: ReactNode }) => {
         (aClass) => aClass.id === classId
       );
       if (isTeacherClass) {
-        setState({ ...state, selectedClass: isTeacherClass });
+        setState({
+          ...state,
+          selectedClass: isTeacherClass,
+          attendance: undefined,
+        });
       } else if (accessToken) {
         const response = await CASTELINHO_API_ENDPOINTS.class.getClassById(
           accessToken,
           classId
         );
-        if (response) setState({ ...state, selectedClass: response.data });
+        if (response)
+          setState({
+            ...state,
+            selectedClass: response.data,
+            attendance: undefined,
+          });
       }
     } else {
       setState({ ...state, selectedClass: undefined });

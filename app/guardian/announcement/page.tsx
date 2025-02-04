@@ -13,6 +13,7 @@ import {
   PaginationRoot,
 } from "@/components/ui/pagination";
 import CustomSkeleton from "@/app/components/CustomSkeleton";
+
 const Announcements = () => {
   const {
     state: { accessToken },
@@ -28,7 +29,7 @@ const Announcements = () => {
   useEffect(() => {
     if (accessToken) {
       CASTELINHO_API_ENDPOINTS.announcement
-        .getAllAnnouncement(accessToken, pagination)
+        .getByPerson(accessToken, pagination)
         .then((res) => {
           if (res) {
             setAnnouncements(res.data);
@@ -111,9 +112,7 @@ const Announcements = () => {
                   wrap="wrap"
                   width="100%"
                 >
-                  <Text>{`${annoucement.title} - ${new Date(
-                    annoucement.date
-                  ).toLocaleDateString("pt-BR")}`}</Text>
+                  <Text>{`${annoucement.title}`}</Text>
                 </Flex>
                 <Flex
                   align="flex-start"
@@ -127,6 +126,28 @@ const Announcements = () => {
                   {annoucement.photo ? (
                     <Image src={annoucement.photo} alt="announcementPhoto" />
                   ) : null}
+                  <Flex marginTop={["10px"]}>
+                    <Flex gap={["5px"]}>
+                      {annoucement.classes?.map((item, index) => (
+                        <Flex
+                          align="center"
+                          backgroundColor={"secondary.300"}
+                          borderRadius={["7px"]}
+                          color="white"
+                          fontWeight={700}
+                          justify="center"
+                          key={index}
+                          fontSize={["13px"]}
+                          padding={["2px 5px"]}
+                        >
+                          {item.name}
+                        </Flex>
+                      ))}
+                    </Flex>
+                  </Flex>
+                  <Text marginTop={["30px"]}>
+                    Criado por: {annoucement.createdBy}.
+                  </Text>
                 </Flex>
               </Flex>
             ))}
