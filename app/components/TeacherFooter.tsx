@@ -66,14 +66,7 @@ const TeacherFooter = () => {
           <Flex
             _hover={{ color: "#f97837" }}
             align="center"
-            color={
-              pathname === opt.pathname ||
-              (typeof opt.pathname !== "string" &&
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                opt.pathname.includes(pathname as any))
-                ? "#F97837"
-                : "white"
-            }
+            color={pathname === opt.pathname ? "#F97837" : "white"}
             height={["20px"]}
             justify="center"
             onClick={() => handleClick(opt)}
