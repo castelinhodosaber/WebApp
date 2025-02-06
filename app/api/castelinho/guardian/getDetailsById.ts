@@ -32,9 +32,14 @@ const getDetailsById = async (
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
-      toaster.create({ type: "error", title: error.response?.data.message });
+      toaster.create({
+        meta: { closable: true },
+        type: "error",
+        title: error.response?.data.message,
+      });
     } else {
       toaster.create({
+        meta: { closable: true },
         type: "error",
         title: "Erro desconhecido. Tente novamente mais tarde.",
       });

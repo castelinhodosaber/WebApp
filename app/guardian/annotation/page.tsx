@@ -70,6 +70,7 @@ const Annotations = () => {
         .then((res) => {
           if (res?.status === 200) {
             toaster.create({
+              meta: { closable: true },
               description: res.message,
               type: "success",
             });
@@ -98,6 +99,7 @@ const Annotations = () => {
             );
           }
           toaster.create({
+            meta: { closable: true },
             type: "success",
             description: res?.message,
           });

@@ -100,6 +100,7 @@ const MealPage = () => {
 
     if (result) {
       toaster.create({
+        meta: { closable: true },
         title: "Refeições salvas com sucesso.",
         type: "success",
       });

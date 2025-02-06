@@ -50,6 +50,7 @@ const login = async (
   } catch (error) {
     if (error instanceof AxiosError) {
       toaster.create({
+        meta: { closable: true },
         type: "error",
         title:
           error.response?.data.message ||
@@ -57,6 +58,7 @@ const login = async (
       });
     } else {
       toaster.create({
+        meta: { closable: true },
         type: "error",
         title: "Erro desconhecido. Tente novamente mais tarde.",
       });

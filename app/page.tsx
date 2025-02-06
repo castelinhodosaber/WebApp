@@ -71,12 +71,14 @@ function App() {
 
     if (data && "accessToken" in data.data) {
       toaster.create({
+        meta: { closable: true },
         type: "success",
         title: "Bem vindo(a), " + data.data.person.name + ".",
       });
       globalContextLogin(data.data);
     } else if (data && "roles" in data.data) {
       toaster.create({
+        meta: { closable: true },
         type: "info",
         title: "Atenção",
         description: data.message,

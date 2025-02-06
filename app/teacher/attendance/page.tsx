@@ -88,9 +88,14 @@ const TeacherAttendance = () => {
             id: result.data[index].id,
           }))
         );
-        toaster.create({ type: "success", title: "Lista salva com sucesso." });
+        toaster.create({
+          meta: { closable: true },
+          type: "success",
+          title: "Lista salva com sucesso.",
+        });
       } else {
         toaster.create({
+          meta: { closable: true },
           type: "error",
           title: "Erro desconhecido. Tente novamente.",
         });

@@ -1,29 +1,39 @@
 import { AxiosError, AxiosResponse } from "axios";
 import castelinhoApiInstance, { CastelinhoApiResponseData } from "..";
 import { toaster } from "@/components/ui/toaster";
-import { Bathroom } from "@/app/types/api/castelinho";
+import { GuardianAnnotation } from "@/app/types/api/castelinho";
 
-export type CastelinhoApiBathroomGetByClassIdAndDateResponse =
+export type CastelinhoApiGuardianAnnotationCreateOrUpdateOneResponse =
   CastelinhoApiResponseData & {
-    data: Bathroom[];
+    data: [
+      {
+        id?: number;
+        title: string;
+        description: string;
+        date: string;
+        classesId: number[];
+      },
+      boolean
+    ];
   };
 
-const getByClassIdAndDate = async (
+const createOrUpdateOne = async (
   accessToken: string,
-  classId: number,
-  date: string
-): Promise<CastelinhoApiBathroomGetByClassIdAndDateResponse | undefined> => {
+  guardianAnnotation: GuardianAnnotation
+): Promise<
+  CastelinhoApiGuardianAnnotationCreateOrUpdateOneResponse | undefined
+> => {
   try {
-    const response: AxiosResponse<CastelinhoApiBathroomGetByClassIdAndDateResponse> =
-      await castelinhoApiInstance.get(
-        `/bathroom/?classId=${classId}&date=${date}`,
+    const response: AxiosResponse<CastelinhoApiGuardianAnnotationCreateOrUpdateOneResponse> =
+      await castelinhoApiInstance.post(
+        `/guardianAnnotation/`,
+        guardianAnnotation,
         {
           headers: {
             Authorization: accessToken,
           },
         }
       );
-
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -42,4 +52,4 @@ const getByClassIdAndDate = async (
   }
 };
 
-export default getByClassIdAndDate;
+export default createOrUpdateOne;

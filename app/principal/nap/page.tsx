@@ -68,7 +68,7 @@ const TeacherNap = () => {
       );
 
       if (result) {
-        toaster.create({
+        toaster.create({meta: { closable: true },
           type: "success",
           title: "Soneca apagada com sucesso.",
         });
@@ -104,7 +104,7 @@ const TeacherNap = () => {
       );
 
       if (napTimeMinutes < 15) {
-        toaster.create({
+        toaster.create({meta: { closable: true },
           duration: 8000,
           type: "error",
           title: "Erro!",
@@ -128,7 +128,7 @@ const TeacherNap = () => {
       });
 
       if (duplicatedNap) {
-        toaster.create({
+        toaster.create({meta: { closable: true },
           duration: 8000,
           type: "error",
           title: "Erro!",
@@ -176,7 +176,7 @@ const TeacherNap = () => {
         }
       );
     } else {
-      toaster.create({
+      toaster.create({meta: { closable: true },
         title: "Inserir horários para salvar soneca.",
       });
     }

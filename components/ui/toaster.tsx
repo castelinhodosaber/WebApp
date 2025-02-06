@@ -7,6 +7,7 @@ import {
   Toast,
   createToaster,
 } from "@chakra-ui/react";
+import { IoCloseSharp } from "react-icons/io5";
 export const toaster = createToaster({
   placement: "bottom-end",
   pauseOnPageIdle: true,
@@ -43,7 +44,11 @@ export const Toaster = () => {
             {toast.action && (
               <Toast.ActionTrigger>{toast.action.label}</Toast.ActionTrigger>
             )}
-            {toast.meta?.closable && <Toast.CloseTrigger />}
+            {toast.meta?.closable && (
+              <Toast.CloseTrigger>
+                <IoCloseSharp />
+              </Toast.CloseTrigger>
+            )}
           </Toast.Root>
         )}
       </ChakraToaster>
