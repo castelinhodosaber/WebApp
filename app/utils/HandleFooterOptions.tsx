@@ -53,6 +53,27 @@ const handleFooterOptions = (userRole: Role) => {
           pathname: ROUTES.public.logout,
         },
       ];
+    case "principal":
+      return [
+        {
+          icon: <IoHome style={{ height: "100%", width: "100%" }} />,
+          name: "Início",
+          pathname: [
+            ROUTES.private.teacher.dashboard,
+            ROUTES.private.teacher.home,
+          ],
+        },
+        {
+          icon: <FaEnvelope style={{ height: "100%", width: "100%" }} />,
+          name: "Criar Comunicado",
+          pathname: ROUTES.private.teacher.announcement,
+        },
+        {
+          icon: <RiLogoutBoxFill style={{ height: "100%", width: "100%" }} />,
+          name: "Sair",
+          pathname: ROUTES.public.logout,
+        },
+      ];
 
     default:
       return [];

@@ -11,6 +11,19 @@ export const TEACHER_ROUTES = {
   bathroom: "/teacher/bathroom",
 } as const;
 
+export const PRINCIPAL_ROUTES = {
+  annotation: "/teacher/annotation",
+  announcement: "/teacher/announcement",
+  dashboard: "/teacher/dashboard",
+  message: "/teacher/message",
+  attendance: "/teacher/attendance",
+  home: "/teacher/home",
+  meal: "/teacher/meal",
+  nap: "/teacher/nap",
+  bath: "/teacher/bath",
+  bathroom: "/teacher/bathroom",
+} as const;
+
 export const GUARDIAN_ROUTES = {
   annotation: "/guardian/annotation",
   announcement: "/guardian/announcement",
@@ -28,6 +41,7 @@ export const PUBLIC_ROUTES = {
 export const PRIVATE_ROUTES = {
   teacher: { ...TEACHER_ROUTES },
   guardian: { ...GUARDIAN_ROUTES },
+  principal: { ...PRINCIPAL_ROUTES },
 } as const;
 
 const ROUTES = {
