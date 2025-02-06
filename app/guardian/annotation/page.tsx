@@ -5,9 +5,7 @@ import { useGlobalContext } from "@/app/context/GlobalContext";
 import { useGuardianContext } from "@/app/context/GuardianContext";
 import { GuardianAnnotation } from "@/app/types/api/castelinho";
 import Pagination from "@/app/types/api/castelinho/pagination";
-import capitalize from "@/app/utils/capitalize";
 
-import formatRelationship from "@/app/utils/formatRelationship";
 import {
   DialogActionTrigger,
   DialogBody,
@@ -25,6 +23,7 @@ import {
   PaginationRoot,
 } from "@/components/ui/pagination";
 import { Radio, RadioGroup } from "@/components/ui/radio";
+import { toaster } from "@/components/ui/toaster";
 import { PaginationPageChangeDetails } from "@ark-ui/react";
 import { Button, Flex, HStack, Text, Textarea } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
@@ -55,21 +54,54 @@ const Annotations = () => {
       CASTELINHO_API_ENDPOINTS.guardianAnnotation
         .getByGuardian(accessToken, pagination)
         .then((res) => {
-          if (res?.status === 204 || res?.data) setIsLoading(false);
-          if (res) {
-            setAnnotations(res?.data || []);
+          setIsLoading(false);
+          if (res?.data) {
+            setAnnotations(res.data || []);
             setPagination({ ...pagination, ...res.pagination });
           }
         });
     }
   }, [accessToken]);
 
+  const handleDeleteAnnotation = (annotation: GuardianAnnotation) => {
+    if (accessToken) {
+      CASTELINHO_API_ENDPOINTS.guardianAnnotation
+        .deleteById(accessToken, annotation.id || 0)
+        .then((res) => {
+          if (res?.status === 200) {
+            toaster.create({
+              description: res.message,
+              type: "success",
+            });
+            setAnnotations(
+              annotations.filter((item) => item.id !== annotation.id)
+            );
+          }
+        });
+    }
+  };
+
   const handleSaveNewOrUpdatedAnnotation = () => {
     if (accessToken) {
-      CASTELINHO_API_ENDPOINTS.guardianAnnotation.createOrUpdateOne(
-        accessToken,
-        newOrUpdatedAnnotation
-      );
+      CASTELINHO_API_ENDPOINTS.guardianAnnotation
+        .createOrUpdateOne(accessToken, newOrUpdatedAnnotation)
+        .then((res) => {
+          if (res?.data[1]) {
+            setAnnotations([res.data[0], ...annotations]);
+          } else if (res?.data[0].id) {
+            setAnnotations(
+              annotations.map((item) =>
+                item.id === res.data[0].id
+                  ? { ...item, description: res.data[0].description }
+                  : item
+              )
+            );
+          }
+          toaster.create({
+            type: "success",
+            description: res?.message,
+          });
+        });
     }
   };
 
@@ -84,7 +116,7 @@ const Annotations = () => {
         .then((res) => {
           if (res?.status === 204 || res?.data) setIsLoading(false);
           if (res) {
-            setAnnotations(res?.data || []);
+            setAnnotations(res?.data?.length ? res.data : []);
             setPagination({ ...pagination, ...res.pagination });
             setIsLoading(false);
           }
@@ -197,14 +229,16 @@ const Annotations = () => {
                   Cancelar
                 </Button>
               </DialogActionTrigger>
-              <Button
-                fontWeight={700}
-                colorPalette="secondary"
-                onClick={handleSaveNewOrUpdatedAnnotation}
-                padding={["2px 5px"]}
-              >
-                {newOrUpdatedAnnotation.id ? "Atualizar" : "Salvar"}
-              </Button>
+              <DialogActionTrigger asChild>
+                <Button
+                  fontWeight={700}
+                  colorPalette="secondary"
+                  onClick={handleSaveNewOrUpdatedAnnotation}
+                  padding={["2px 5px"]}
+                >
+                  {newOrUpdatedAnnotation.id ? "Atualizar" : "Salvar"}
+                </Button>
+              </DialogActionTrigger>
             </DialogFooter>
           </DialogContent>
         </DialogRoot>
@@ -213,7 +247,7 @@ const Annotations = () => {
         )}
         {isLoading
           ? null
-          : annotations.map((annotation, index) => (
+          : annotations?.map((annotation, index) => (
               <Flex
                 align="center"
                 backgroundColor="secondary.50"
@@ -227,25 +261,6 @@ const Annotations = () => {
                 width={["90%", "90%", "90%", "85%"]}
               >
                 <Flex
-                  align="center"
-                  backgroundColor="secondary.solid"
-                  fontWeight={700}
-                  justify="center"
-                  wrap="wrap"
-                  width="100%"
-                >
-                  <Text>
-                    {`${annotation.guardian?.name.split(" ")[0]} - ${capitalize(
-                      formatRelationship(
-                        annotation.guardian?.gender || "female",
-                        annotation.relationship || "parent"
-                      )
-                    )} d${annotation.student?.gender === "male" ? "o" : "a"} ${
-                      annotation.student?.name
-                    }`}
-                  </Text>
-                </Flex>
-                <Flex
                   align="flex-start"
                   color="principal.solid"
                   direction="column"
@@ -253,11 +268,42 @@ const Annotations = () => {
                   padding="5px 20px"
                   width="100%"
                 >
-                  <Text>Recado: {annotation.description}</Text>
-                  <Text alignSelf="flex-start">
+                  <Text minH={["60px"]} marginBottom={["20px"]}>
+                    {annotation.description}
+                  </Text>
+                  <Text alignSelf="flex-start" fontSize={["14px"]}>
+                    Criança: {annotation.student?.name}
+                  </Text>
+                  <Text alignSelf="flex-start" fontSize={["14px"]}>
+                    Criado por:{" "}
+                    {annotation.guardianId === guardianState?.id
+                      ? "Você"
+                      : annotation.guardian?.name}
+                  </Text>
+                  <Text alignSelf="flex-start" fontSize={["14px"]}>
                     Data:{" "}
                     {new Date(annotation.date).toLocaleDateString("pt-BR")}
                   </Text>
+                  {annotation.guardianId === guardianState?.id ? (
+                    <Flex
+                      alignItems="center"
+                      fontSize={["13px"]}
+                      gap="20px"
+                      margin={["15px 0 0"]}
+                      justifyContent="center"
+                      width="100%"
+                    >
+                      <Button
+                        borderRadius={["6px"]}
+                        colorPalette="secondary"
+                        fontWeight={700}
+                        onClick={() => handleDeleteAnnotation(annotation)}
+                        width={["40%"]}
+                      >
+                        Apagar
+                      </Button>
+                    </Flex>
+                  ) : null}
                 </Flex>
               </Flex>
             ))}

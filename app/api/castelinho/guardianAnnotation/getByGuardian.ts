@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import castelinhoApiInstance, { CastelinhoApiResponseData } from "..";
 import { toaster } from "@/components/ui/toaster";
 import { GuardianAnnotation } from "@/app/types/api/castelinho";
@@ -19,7 +19,7 @@ const getByGuardian = async (
   CastelinhoApiGuardianAnnotationGetByGuardianResponse | undefined
 > => {
   try {
-    const response: CastelinhoApiGuardianAnnotationGetByGuardianResponse =
+    const response: AxiosResponse<CastelinhoApiGuardianAnnotationGetByGuardianResponse> =
       await castelinhoApiInstance.get(
         `/guardianAnnotation/?limit=${pagination.limit}&page=${
           pagination.page
@@ -31,7 +31,7 @@ const getByGuardian = async (
         }
       );
 
-    return response;
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       toaster.create({ type: "error", title: error.response?.data.message });

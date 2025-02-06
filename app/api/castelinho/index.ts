@@ -27,6 +27,7 @@ import getStudentDetailsByIdAndDate from "./student/getDetailsByIdAndDate";
 import getByPerson from "./announcement/getByPerson";
 import getByGuardian from "./guardianAnnotation/getByGuardian";
 import createOrUpdateOne from "./guardianAnnotation/createOrUpdateOne";
+import deleteGuardianAnnotationById from "./guardianAnnotation/deleteById";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -68,6 +69,7 @@ export const CASTELINHO_API_ENDPOINTS = {
     getByClassId: getByClassId,
     getByGuardian,
     createOrUpdateOne,
+    deleteById: deleteGuardianAnnotationById,
   },
   meal: {
     getByClassIdAndDate: getMealByClassIdAndDate,

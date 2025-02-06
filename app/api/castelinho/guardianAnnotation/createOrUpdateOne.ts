@@ -4,7 +4,18 @@ import { toaster } from "@/components/ui/toaster";
 import { GuardianAnnotation } from "@/app/types/api/castelinho";
 
 export type CastelinhoApiGuardianAnnotationCreateOrUpdateOneResponse =
-  CastelinhoApiResponseData;
+  CastelinhoApiResponseData & {
+    data: [
+      {
+        id?: number;
+        studentId: number;
+        description: string;
+        date: string;
+        guardianId: number;
+      },
+      boolean
+    ];
+  };
 
 const createOrUpdateOne = async (
   accessToken: string,
