@@ -20,39 +20,39 @@ const Home = () => {
   const HOME_ITEMS = [
     {
       name: "Alimentação",
-      path: ROUTES.private.teacher.meal,
+      path: ROUTES.private.principal.meal,
       icon: <GiKnifeFork size="100%" />,
     },
     {
       name: "Soneca",
-      path: ROUTES.private.teacher.nap,
+      path: ROUTES.private.principal.nap,
       icon: <GiNightSleep size="100%" />,
     },
     {
       name: "Banho",
-      path: ROUTES.private.teacher.bath,
+      path: ROUTES.private.principal.bath,
       icon: <FaBath size="100%" />,
     },
     {
       name: "Banheiro",
-      path: ROUTES.private.teacher.bathroom,
+      path: ROUTES.private.principal.bathroom,
       icon: <FaToilet size="100%" />,
     },
     {
       name: "Recados",
-      path: ROUTES.private.teacher.annotation,
+      path: ROUTES.private.principal.annotation,
       icon: <BiSolidMessageDetail size="100%" />,
     },
     {
       name: "Anotações",
-      path: ROUTES.private.teacher.message,
+      path: ROUTES.private.principal.message,
       icon: <FaBookOpen size="100%" />,
     },
   ];
 
   useEffect(() => {
     if (!selectedClass?.id)
-      return router.push(ROUTES.private.teacher.dashboard);
+      return router.push(ROUTES.private.principal.dashboard);
     setIsLoading(false);
   }, [selectedClass, router]);
 
@@ -126,7 +126,7 @@ const Home = () => {
           fontWeight={700}
           onClick={() => {
             setSelectedClass();
-            router.push(ROUTES.private.teacher.dashboard);
+            router.push(ROUTES.private.principal.dashboard);
           }}
           lineBreak="anywhere"
           padding="5px 20px"
@@ -140,7 +140,7 @@ const Home = () => {
           fontSize={["16px"]}
           fontWeight={700}
           onClick={() =>
-            router.push(ROUTES.private.teacher.attendance + "?edit=true")
+            router.push(ROUTES.private.principal.attendance + "?edit=true")
           }
           textTransform="uppercase"
           padding="5px 20px"

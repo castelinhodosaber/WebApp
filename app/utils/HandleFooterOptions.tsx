@@ -59,14 +59,14 @@ const handleFooterOptions = (userRole: Role) => {
           icon: <IoHome style={{ height: "100%", width: "100%" }} />,
           name: "Início",
           pathname: [
-            ROUTES.private.teacher.dashboard,
-            ROUTES.private.teacher.home,
+            ROUTES.private.principal.dashboard,
+            ROUTES.private.principal.home,
           ],
         },
         {
           icon: <FaEnvelope style={{ height: "100%", width: "100%" }} />,
           name: "Criar Comunicado",
-          pathname: ROUTES.private.teacher.announcement,
+          pathname: ROUTES.private.principal.announcement,
         },
         {
           icon: <RiLogoutBoxFill style={{ height: "100%", width: "100%" }} />,

@@ -39,7 +39,7 @@ const TeacherAttendance = () => {
         .then((result) => {
           if (result?.data?.length) {
             if (!editAttendance)
-              return router.push(ROUTES.private.teacher.home);
+              return router.push(ROUTES.private.principal.home);
 
             const newAttendances = result.data
               .filter((attendance) => attendance.student)
@@ -80,7 +80,7 @@ const TeacherAttendance = () => {
       );
 
       if (result) {
-        router.push(ROUTES.private.teacher.home);
+        router.push(ROUTES.private.principal.home);
 
         setContextAttendance(
           newAttendances.map((item, index) => ({
@@ -94,8 +94,8 @@ const TeacherAttendance = () => {
           type: "error",
           title: "Erro desconhecido. Tente novamente.",
         });
-        setIsLoading(false);
       }
+      setIsLoading(false);
     }
   };
 
@@ -255,7 +255,7 @@ const TeacherAttendance = () => {
           fontWeight={700}
           onClick={() => {
             setSelectedClass();
-            router.push(ROUTES.private.teacher.dashboard);
+            router.push(ROUTES.private.principal.dashboard);
           }}
           padding={["10px 30px"]}
           textTransform="uppercase"

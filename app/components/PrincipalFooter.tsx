@@ -21,7 +21,7 @@ const PrincipalFooter = () => {
     pathname: string | string[];
   }) => {
     switch (footerOption.pathname) {
-      case ROUTES.private.teacher.announcement:
+      case ROUTES.private.principal.announcement:
         router.push(footerOption.pathname);
         break;
       case ROUTES.public.logout:

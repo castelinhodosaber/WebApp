@@ -29,7 +29,7 @@ const TeacherDashboard = () => {
 
   useEffect(() => {
     if (selectedClass) {
-      router.push(ROUTES.private.teacher.attendance);
+      router.push(ROUTES.private.principal.attendance);
     } else setIsLoading(false);
   }, [selectedClass, router]);
 
@@ -49,6 +49,7 @@ const TeacherDashboard = () => {
           person?.name.split(" ")[0]
         }!`}
       </Text>
+
       <Flex
         align="center"
         direction="column"
@@ -60,31 +61,41 @@ const TeacherDashboard = () => {
         <Text fontSize={["16px"]} fontWeight={700}>
           Selecionar Turma
         </Text>
-        {classes?.length ? (
-          classes?.map((teacherClass, index) => (
-            <Button
-              color="secondary.100"
-              colorPalette="secondary"
-              border="1px solid orange"
-              borderRadius={["12px"]}
-              fontSize={["20px"]}
-              fontWeight={800}
-              height={["80px"]}
-              key={index}
-              onClick={() => {
-                handleSelectedClass(teacherClass.id);
-              }}
-              textTransform="uppercase"
-              width={["180px"]}
-            >
-              {teacherClass.name}
-            </Button>
-          ))
-        ) : (
-          <Text fontSize={["14px"]} fontWeight={400} textAlign="center">
-            Você não é responsável direto(a) por nenhuma turma no momento.
-          </Text>
-        )}
+        <Flex
+          align="center"
+          alignContent="center"
+          gap="15px 20px"
+          justify="center"
+          wrap="wrap"
+          width="90%"
+        >
+          {classes?.length ? (
+            classes?.map((principalClass, index) => (
+              <Button
+                color="secondary.100"
+                colorPalette="secondary"
+                border="1px solid orange"
+                borderRadius={["12px"]}
+                fontSize={["20px"]}
+                fontWeight={800}
+                height={["50px"]}
+                key={index}
+                onClick={() => {
+                  handleSelectedClass(principalClass.id);
+                }}
+                padding={["2px 5px"]}
+                textTransform="uppercase"
+                width={["45%"]}
+              >
+                {principalClass.name}
+              </Button>
+            ))
+          ) : (
+            <Text fontSize={["14px"]} fontWeight={400} textAlign="center">
+              Você não é responsável direto(a) por nenhuma turma no momento.
+            </Text>
+          )}
+        </Flex>
       </Flex>
     </Flex>
   );

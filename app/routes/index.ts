@@ -12,16 +12,16 @@ export const TEACHER_ROUTES = {
 } as const;
 
 export const PRINCIPAL_ROUTES = {
-  annotation: "/teacher/annotation",
-  announcement: "/teacher/announcement",
-  dashboard: "/teacher/dashboard",
-  message: "/teacher/message",
-  attendance: "/teacher/attendance",
-  home: "/teacher/home",
-  meal: "/teacher/meal",
-  nap: "/teacher/nap",
-  bath: "/teacher/bath",
-  bathroom: "/teacher/bathroom",
+  annotation: "/principal/annotation",
+  announcement: "/principal/announcement",
+  dashboard: "/principal/dashboard",
+  message: "/principal/message",
+  attendance: "/principal/attendance",
+  home: "/principal/home",
+  meal: "/principal/meal",
+  nap: "/principal/nap",
+  bath: "/principal/bath",
+  bathroom: "/principal/bathroom",
 } as const;
 
 export const GUARDIAN_ROUTES = {

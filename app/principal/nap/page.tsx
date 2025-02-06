@@ -453,7 +453,7 @@ const TeacherNap = () => {
           backgroundColor="secondaryButton"
           fontSize={["18px"]}
           fontWeight={[600]}
-          onClick={() => router.push(ROUTES.private.teacher.home)}
+          onClick={() => router.push(ROUTES.private.principal.home)}
           padding={["5px 20px"]}
         >
           Voltar
