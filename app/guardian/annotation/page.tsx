@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/pagination";
 import { Radio, RadioGroup } from "@/components/ui/radio";
 import { PaginationPageChangeDetails } from "@ark-ui/react";
-import { Button, Flex, HStack, Input, Text } from "@chakra-ui/react";
+import { Button, Flex, HStack, Text, Textarea } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 
 const Annotations = () => {
@@ -34,7 +34,7 @@ const Annotations = () => {
     state: { accessToken, date, person },
   } = useGlobalContext();
   const { state: guardianState } = useGuardianContext();
-  const createAnnotationDescriptionInputRef = useRef<HTMLInputElement>(null);
+  const createAnnotationDescriptionInputRef = useRef<HTMLTextAreaElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [annotations, setAnnotations] = useState<GuardianAnnotation[]>([]);
   const [newOrUpdatedAnnotation, setNewOrUpdatedAnnotation] =
@@ -64,7 +64,14 @@ const Annotations = () => {
     }
   }, [accessToken]);
 
-  const handleSaveNewOrUpdatedAnnotation = () => {};
+  const handleSaveNewOrUpdatedAnnotation = () => {
+    if (accessToken) {
+      CASTELINHO_API_ENDPOINTS.guardianAnnotation.createOrUpdateOne(
+        accessToken,
+        newOrUpdatedAnnotation
+      );
+    }
+  };
 
   const handlePagination = (ev: PaginationPageChangeDetails) => {
     if (accessToken) {
@@ -129,24 +136,35 @@ const Annotations = () => {
               Criar novo recado
             </Button>
           </DialogTrigger>
-          <DialogContent width={["80%"]}>
+          <DialogContent
+            backgroundColor="principal.700"
+            padding={["10px 15px"]}
+            width={["80%"]}
+          >
             <DialogHeader>
-              <DialogTitle>
+              <DialogTitle textAlign="center">
                 {newOrUpdatedAnnotation?.id ? "Editar Recado" : "Novo Recado"}
               </DialogTitle>
             </DialogHeader>
-            <DialogBody pb="4">
+            <DialogBody p={["14px 0"]}>
               <Flex direction="column" justify="center" align="center" gap="4">
-                <Input
-                  onClick={(ev) =>
+                <Textarea
+                  minH={["150px"]}
+                  height={["150px"]}
+                  maxH={["150px"]}
+                  onChange={(ev) =>
                     setNewOrUpdatedAnnotation({
                       ...newOrUpdatedAnnotation,
-                      description: (ev.target as HTMLInputElement).value,
+                      description: (ev.target as HTMLTextAreaElement).value,
                     })
                   }
+                  padding={["5px 8px"]}
                   placeholder="Escreva seu recado"
                   ref={createAnnotationDescriptionInputRef}
                 />
+                <Text textAlign={"left"} width={["100%"]}>
+                  Recado para:
+                </Text>
                 <RadioGroup
                   value={newOrUpdatedAnnotation.studentId?.toString()}
                   onValueChange={(e) =>
@@ -156,6 +174,7 @@ const Annotations = () => {
                     })
                   }
                   defaultValue="1"
+                  width={["100%"]}
                 >
                   <HStack gap="6">
                     {guardianState?.students.map((item, index) => (
@@ -169,13 +188,20 @@ const Annotations = () => {
             </DialogBody>
             <DialogFooter>
               <DialogActionTrigger asChild>
-                <Button variant="outline" colorPalette="principal">
+                <Button
+                  fontWeight={700}
+                  variant="solid"
+                  colorPalette="white"
+                  padding={["2px 5px"]}
+                >
                   Cancelar
                 </Button>
               </DialogActionTrigger>
               <Button
+                fontWeight={700}
                 colorPalette="secondary"
                 onClick={handleSaveNewOrUpdatedAnnotation}
+                padding={["2px 5px"]}
               >
                 {newOrUpdatedAnnotation.id ? "Atualizar" : "Salvar"}
               </Button>

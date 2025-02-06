@@ -26,6 +26,7 @@ import getAllAnnouncement from "./announcement/getAll";
 import getStudentDetailsByIdAndDate from "./student/getDetailsByIdAndDate";
 import getByPerson from "./announcement/getByPerson";
 import getByGuardian from "./guardianAnnotation/getByGuardian";
+import createOrUpdateOne from "./guardianAnnotation/createOrUpdateOne";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -66,6 +67,7 @@ export const CASTELINHO_API_ENDPOINTS = {
   guardianAnnotation: {
     getByClassId: getByClassId,
     getByGuardian,
+    createOrUpdateOne,
   },
   meal: {
     getByClassIdAndDate: getMealByClassIdAndDate,
