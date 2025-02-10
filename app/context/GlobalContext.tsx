@@ -126,14 +126,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         iso: formatInTimeZone(newDate, "America/Sao_Paulo", "yyyy-MM-dd"),
       },
     }));
-    if (
-      typeof Notification !== "undefined" &&
-      window.matchMedia("(display-mode: standalone)").matches &&
-      Notification.permission !== "granted" &&
-      state.accessToken
-    ) {
-      setShowNotificationBtn(true);
-    }
+
     if (
       "serviceWorker" in navigator &&
       window.matchMedia("(display-mode: standalone)").matches
@@ -154,6 +147,17 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       });
     }
   }, [newDate]);
+
+  useEffect(() => {
+    if (
+      typeof Notification !== "undefined" &&
+      window.matchMedia("(display-mode: standalone)").matches &&
+      Notification.permission !== "granted" &&
+      state.accessToken
+    ) {
+      setShowNotificationBtn(true);
+    }
+  }, [state]);
 
   useEffect(() => {
     if (redirectPath) {
