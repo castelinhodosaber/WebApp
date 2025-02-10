@@ -18,10 +18,10 @@ export const metadata: Metadata = {
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props;
   return (
-    <html suppressHydrationWarning>
-      <body>
+    <html suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true}>
         <Provider>
-          <ThemeProvider attribute="class" disableTransitionOnChange>
+          <ThemeProvider attribute="class">
             <Toaster />
             <GlobalProvider>{children}</GlobalProvider>
           </ThemeProvider>

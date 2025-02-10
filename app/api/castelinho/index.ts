@@ -28,6 +28,7 @@ import getByPerson from "./announcement/getByPerson";
 import getByGuardian from "./guardianAnnotation/getByGuardian";
 import createOrUpdateOne from "./guardianAnnotation/createOrUpdateOne";
 import deleteGuardianAnnotationById from "./guardianAnnotation/deleteById";
+import createOrUpdateFCMToken from "./notification/createOrUpdateFCMToken";
 
 export type CastelinhoApiResponseData = {
   message: string;
@@ -83,6 +84,9 @@ export const CASTELINHO_API_ENDPOINTS = {
     getByClassIdAndDate: getNapsByClassIdAndDate,
     deleteById: deleteNapById,
     createOne: createOneNap,
+  },
+  notification: {
+    createOrUpdateFCMToken,
   },
   student: {
     getDetailsByIdAndDate: getStudentDetailsByIdAndDate,

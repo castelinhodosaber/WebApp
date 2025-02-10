@@ -56,10 +56,6 @@ function App() {
     });
   }, []);
 
-  useEffect(() => {
-    if (role) handleSubmit();
-  }, [role]);
-
   const handleSubmit = async () => {
     setIsLoading(true);
     const data = await CASTELINHO_API_ENDPOINTS.auth.login(
@@ -104,6 +100,56 @@ function App() {
       }
     }
   };
+
+  useEffect(() => {
+    if (role) {
+      const handleSubmitHook = async () => {
+        setIsLoading(true);
+        const data = await CASTELINHO_API_ENDPOINTS.auth.login(
+          email,
+          password,
+          rememberUser,
+          role
+        );
+
+        if (data && "accessToken" in data.data) {
+          toaster.create({
+            meta: { closable: true },
+            type: "success",
+            title: "Bem vindo(a), " + data.data.person.name + ".",
+          });
+          globalContextLogin(data.data);
+        } else if (data && "roles" in data.data) {
+          toaster.create({
+            meta: { closable: true },
+            type: "info",
+            title: "Atenção",
+            description: data.message,
+          });
+
+          setRoles(data.data.roles);
+          setShowSetRole(true);
+        }
+        setIsLoading(false);
+
+        if (data && "accessToken" in data.data) {
+          switch (data.data.person.role) {
+            case "teacher":
+              return router.push(ROUTES.private.teacher.dashboard);
+
+            case "guardian":
+              return router.push(ROUTES.private.guardian.home);
+
+            case "principal":
+              return router.push(ROUTES.private.principal.dashboard);
+            default:
+              break;
+          }
+        }
+      };
+      handleSubmitHook();
+    }
+  }, [role]);
 
   return (
     <Flex

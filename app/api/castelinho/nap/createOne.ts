@@ -1,11 +1,3 @@
-// "data": {
-//         "id": 23,
-//         "studentId": 2,
-//         "napTimeMinutes": 60,
-//         "hour": "14:00:00",
-//         "date": "2024-12-17"
-//     }
-
 import { AxiosResponse } from "axios";
 import castelinhoApiInstance, { CastelinhoApiResponseData } from "..";
 import { Nap } from "@/app/types/api/castelinho";

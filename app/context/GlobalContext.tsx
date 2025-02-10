@@ -14,22 +14,8 @@ import verifyRoute from "../utils/verifyRoute";
 import { formatInTimeZone } from "date-fns-tz";
 import Loading from "../components/Loading";
 import { Button } from "@chakra-ui/react";
-import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
-
-// Configuração do Firebase (substitua pelos dados do seu projeto)
-const firebaseConfig = {
-  apiKey: "AIzaSyBbRyZgxWHV8W2s5Wt9tRI7LqeJF0Jivcs",
-  authDomain: "castelinho-notifications.firebaseapp.com",
-  projectId: "castelinho-notifications",
-  storageBucket: "castelinho-notifications.firebasestorage.app",
-  messagingSenderId: "852490723230",
-  appId: "1:852490723230:web:d210247b1cd90ae506c08f",
-  measurementId: "G-XT7ZEHMXHY",
-};
-
-// Inicialize o Firebase
-const app = initializeApp(firebaseConfig);
+import { initializeApp } from "firebase/app";
 
 interface AuthData {
   accessToken: string | null;
@@ -69,6 +55,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     date: { br: "", iso: "" },
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [newDate, _setNewDate] = useState(new Date());
   const [redirectPath, setRedirectPath] = useState<string>();
 
   const login = (data: AuthData) => {
@@ -129,7 +116,6 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     };
 
     validateAndRedirect();
-    const newDate = new Date();
 
     setState((oldState) => ({
       ...oldState,
@@ -143,7 +129,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     if (
       typeof Notification !== "undefined" &&
       window.matchMedia("(display-mode: standalone)").matches &&
-      Notification.permission !== "granted"
+      Notification.permission !== "granted" &&
+      state.accessToken
     ) {
       setShowNotificationBtn(true);
     }
@@ -166,7 +153,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         }
       });
     }
-  }, []);
+  }, [newDate]);
 
   useEffect(() => {
     if (redirectPath) {
@@ -182,38 +169,36 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [redirectPath]);
 
   const requestPermission = async () => {
-    if (
-      !window.matchMedia("(display-mode: standalone)").matches ||
-      typeof Notification === "undefined"
-    )
-      return;
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission === "granted") {
+    fetch("/api/firebaseConfig")
+      .then((res) => res.json())
+      .then(async (config) => {
+        const app = initializeApp(config);
         const messaging = getMessaging(app);
-        const token = await getToken(messaging, {
-          vapidKey:
-            "BLw4m1euAEwmBKDGCM-SDOvDDGNiooXLBGY8DgtLs_pngZTLaRmN6McSQ438ih8hsv3uRQRwtT3YdbNKuiwiWjw",
-        });
-
-        setTimeout(() => {
-          navigator.clipboard
-            .writeText(token)
-            .then(() => {
-              alert("Texto copiado para a área de transferência!");
-            })
-            .catch((err) => {
-              alert("Erro ao copiar texto: " + err);
+        if (
+          (!window.matchMedia("(display-mode: standalone)").matches ||
+            typeof Notification === "undefined") &&
+          !state.accessToken
+        )
+          return;
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission === "granted") {
+            const token = await getToken(messaging, {
+              vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY || "",
             });
-        }, 5000);
 
-        // Salve este token no seu servidor para enviar notificações para este dispositivo
-      } else {
-        console.error("Permission not granted for notifications");
-      }
-    } catch (error) {
-      console.error("Error getting permission for notifications:" + error);
-    }
+            CASTELINHO_API_ENDPOINTS.notification.createOrUpdateFCMToken(
+              state.accessToken || "",
+              token
+            );
+          } else {
+            console.error("Permission not granted for notifications");
+          }
+        } catch (error) {
+          console.error("Error getting permission for notifications:" + error);
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   // Chame esta função em um botão ou automaticamente, dependendo da lógica do seu app
