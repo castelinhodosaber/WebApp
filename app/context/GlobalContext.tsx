@@ -13,9 +13,7 @@ import { CASTELINHO_API_ENDPOINTS } from "../api/castelinho";
 import verifyRoute from "../utils/verifyRoute";
 import { formatInTimeZone } from "date-fns-tz";
 import Loading from "../components/Loading";
-import { Button } from "@chakra-ui/react";
-import { getMessaging, getToken } from "firebase/messaging";
-import { initializeApp } from "firebase/app";
+import requestNotificationsPermission from "../utils/requestNotificationsPermission";
 
 interface AuthData {
   accessToken: string | null;
@@ -27,6 +25,7 @@ interface AuthData {
     name: string;
     role: Role;
     roleId: number;
+    FCMToken: string;
   } | null;
 }
 
@@ -46,7 +45,6 @@ interface GlobalContextType {
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  const [showNotificationBtn, setShowNotificationBtn] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const [state, setState] = useState<GlobalState>({
@@ -86,11 +84,29 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         );
         if (result) {
           const {
-            data: { birthDate, cpf, gender, name, personId: id, roleId, role },
+            data: {
+              birthDate,
+              cpf,
+              gender,
+              name,
+              personId: id,
+              roleId,
+              role,
+              FCMToken,
+            },
           } = result;
           setState((oldState) => ({
             ...oldState,
-            person: { birthDate, cpf, gender, name, id, roleId, role },
+            person: {
+              birthDate,
+              cpf,
+              gender,
+              name,
+              id,
+              roleId,
+              role,
+              FCMToken,
+            },
             accessToken: accessToken,
           }));
 
@@ -153,9 +169,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       typeof Notification !== "undefined" &&
       window.matchMedia("(display-mode: standalone)").matches &&
       Notification.permission !== "granted" &&
-      state.accessToken
+      state.accessToken &&
+      state.person?.FCMToken !== localStorage.getItem("FCMToken")
     ) {
-      setShowNotificationBtn(true);
+      requestNotificationsPermission(state.accessToken);
     }
   }, [state]);
 
@@ -172,55 +189,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [redirectPath]);
 
-  const requestPermission = async () => {
-    fetch("/api/firebaseConfig")
-      .then((res) => res.json())
-      .then(async (config) => {
-        const app = initializeApp(config);
-        const messaging = getMessaging(app);
-        if (
-          (!window.matchMedia("(display-mode: standalone)").matches ||
-            typeof Notification === "undefined") &&
-          !state.accessToken
-        )
-          return;
-        try {
-          const permission = await Notification.requestPermission();
-          if (permission === "granted") {
-            const token = await getToken(messaging, {
-              vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY || "",
-            });
-
-            CASTELINHO_API_ENDPOINTS.notification.createOrUpdateFCMToken(
-              state.accessToken || "",
-              token
-            );
-          } else {
-            console.error("Permission not granted for notifications");
-          }
-        } catch (error) {
-          console.error("Error getting permission for notifications:" + error);
-        }
-      })
-      .catch((err) => console.error(err));
-  };
-
-  // Chame esta função em um botão ou automaticamente, dependendo da lógica do seu app
-
   return (
     <GlobalContext.Provider value={{ state, login, logout }}>
       {isLoading ? <Loading /> : children}
-      <Button
-        style={{
-          display: showNotificationBtn ? "block" : "none",
-          position: "absolute",
-          zIndex: 1000,
-          top: 0,
-        }}
-        onClick={requestPermission}
-      >
-        Receber notificacoes
-      </Button>
     </GlobalContext.Provider>
   );
 };

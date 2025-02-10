@@ -13,6 +13,7 @@ export type CastelinhoApiAuthValidadeTokenResponse =
       name: string;
       role: Role;
       roleId: number;
+      FCMToken: string;
       iat: number;
       exp: number;
     };

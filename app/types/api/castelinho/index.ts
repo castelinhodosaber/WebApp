@@ -18,6 +18,7 @@ export type Person = {
   cpf?: string;
   photo?: string;
   createdAt?: string;
+  FCMToken?: string;
   gender: Gender;
 };
 
