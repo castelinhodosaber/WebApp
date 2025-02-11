@@ -14,6 +14,28 @@ const verifyRoute = (route: string, role?: Role) => {
         )
           return "private";
 
+      case "principal":
+        const principalPrivateRoutesArr = Object.values(
+          PRIVATE_ROUTES.principal
+        );
+
+        if (
+          principalPrivateRoutesArr.some(
+            (principalRoute) => principalRoute === route
+          )
+        )
+          return "private";
+
+      case "guardian":
+        const guardianPrivateRoutesArr = Object.values(PRIVATE_ROUTES.guardian);
+
+        if (
+          guardianPrivateRoutesArr.some(
+            (guardianRoute) => guardianRoute === route
+          )
+        )
+          return "private";
+
       default:
         break;
     }

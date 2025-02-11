@@ -14,6 +14,7 @@ export type CastelinhoApiAuthLoginResponse = CastelinhoApiResponseData & {
           id: number;
           name: string;
           role: Role;
+          FCMToken: string;
           roleId: number;
         };
       }

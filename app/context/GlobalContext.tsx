@@ -14,6 +14,7 @@ import verifyRoute from "../utils/verifyRoute";
 import { formatInTimeZone } from "date-fns-tz";
 import Loading from "../components/Loading";
 import requestNotificationsPermission from "../utils/requestNotificationsPermission";
+import { Button } from "@chakra-ui/react";
 
 interface AuthData {
   accessToken: string | null;
@@ -54,6 +55,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [newDate, _setNewDate] = useState(new Date());
+  const [showNotificationButton, setShowNotificationButton] = useState(false);
   const [redirectPath, setRedirectPath] = useState<string>();
 
   const login = (data: AuthData) => {
@@ -117,6 +119,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
               case "guardian":
                 return setRedirectPath(ROUTES.private.guardian.home);
+
+              case "principal":
+                return setRedirectPath(ROUTES.private.principal.dashboard);
               default:
                 break;
             }
@@ -145,7 +150,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
     if (
       "serviceWorker" in navigator &&
-      window.matchMedia("(display-mode: standalone)").matches
+      !window.matchMedia("(display-mode: standalone)").matches
     ) {
       navigator.serviceWorker.ready.then((registration) => {
         if (!registration.active) {
@@ -167,12 +172,13 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (
       typeof Notification !== "undefined" &&
-      window.matchMedia("(display-mode: standalone)").matches &&
-      Notification.permission !== "granted" &&
+      !window.matchMedia("(display-mode: standalone)").matches &&
       state.accessToken &&
-      state.person?.FCMToken !== localStorage.getItem("FCMToken")
+      (state.person?.FCMToken !== localStorage.getItem("FCMToken") ||
+        !state.person?.FCMToken ||
+        Notification.permission !== "granted")
     ) {
-      requestNotificationsPermission(state.accessToken);
+      setShowNotificationButton(true);
     }
   }, [state]);
 
@@ -191,6 +197,20 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <GlobalContext.Provider value={{ state, login, logout }}>
+      {showNotificationButton ? (
+        <Button
+          position="absolute"
+          id="request-notification-button"
+          top="5px"
+          left="5px"
+          zIndex={1000}
+          onClick={() =>
+            requestNotificationsPermission(state.accessToken || "")
+          }
+        >
+          Exibir Notificações
+        </Button>
+      ) : null}
       {isLoading ? <Loading /> : children}
     </GlobalContext.Provider>
   );

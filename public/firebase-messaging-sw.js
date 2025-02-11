@@ -22,9 +22,9 @@ self.addEventListener("activate", (event) => {
 // Este código manipula mensagens recebidas em segundo plano
 self.addEventListener("push", (event) => {
   const payload = event.data.json();
-  const notificationTitle = payload.notification.title;
+  const notificationTitle = payload.notification?.title || "";
   const notificationOptions = {
-    body: payload.notification.body,
+    body: payload.notification?.body || {},
     icon: "/assets/icons/icon-192x192.png",
     badge: "/assets/icons/icon-192x192.png",
     data: { clickAction: "https://app.castelinhodosaber.com/teacher/meal" },

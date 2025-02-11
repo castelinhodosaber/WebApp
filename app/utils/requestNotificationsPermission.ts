@@ -3,6 +3,13 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 
 const requestNotificationsPermission = async (accessToken: string) => {
+  const requestNotificationButton: HTMLButtonElement | null =
+    document.getElementById(
+      "request-notification-button"
+    ) as HTMLButtonElement | null;
+
+  if (requestNotificationButton) requestNotificationButton.disabled = true;
+
   try {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
@@ -20,6 +27,10 @@ const requestNotificationsPermission = async (accessToken: string) => {
             .createOrUpdateFCMToken(accessToken || "", token)
             .then((_res) => {
               localStorage.setItem("FCMToken", token);
+              localStorage.removeItem("accessToken");
+              return requestNotificationButton
+                ? requestNotificationButton.remove()
+                : null;
             });
         });
     } else {
@@ -28,6 +39,8 @@ const requestNotificationsPermission = async (accessToken: string) => {
   } catch (error) {
     console.error("Error getting permission for notifications:" + error);
   }
+
+  if (requestNotificationButton) requestNotificationButton.disabled = false;
 };
 
 export default requestNotificationsPermission;
