@@ -24,7 +24,7 @@ self.addEventListener("push", (event) => {
   const payload = event.data.json();
   const notificationTitle = payload.notification?.title || "";
   const notificationOptions = {
-    body: payload.notification?.body || {},
+    body: payload.notification?.body || "",
     icon: "/assets/icons/icon-192x192.png",
     badge: "/assets/icons/icon-192x192.png",
     data: { clickAction: "https://app.castelinhodosaber.com/teacher/meal" },
@@ -39,7 +39,26 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   console.log("[Service Worker] Notificação clicada:", event.notification);
   event.notification.close();
-  if (event.notification.data && event.notification.data.clickAction) {
-    event.waitUntil(clients.openWindow(event.notification.data.clickAction));
-  }
+  event.waitUntil(
+    clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((windowClients) => {
+        const urlToOpen = new URL(
+          event.notification.data.click_action,
+          self.location.origin
+        ).href;
+
+        // Verifica se já há uma aba da PWA aberta
+        for (const client of windowClients) {
+          if (client.url === urlToOpen && "focus" in client) {
+            return client.focus();
+          }
+        }
+
+        // Se não houver aba aberta, abre uma nova
+        if (clients.openWindow) {
+          return clients.openWindow(urlToOpen);
+        }
+      })
+  );
 });
