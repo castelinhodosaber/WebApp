@@ -26,7 +26,7 @@ self.addEventListener("push", (event) => {
   const notificationOptions = {
     body: payload.notification?.body || "",
     icon: "/assets/icons/icon-192x192.png",
-    badge: "/assets/icons/icon-192x192.png",
+    //badge: "/assets/icons/icon-192x192.png",
     data: { clickAction: "https://app.castelinhodosaber.com/" },
   };
 

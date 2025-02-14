@@ -8,7 +8,7 @@ const requestNotificationsPermission = async (accessToken: string) => {
       "request-notification-button"
     ) as HTMLButtonElement | null;
 
-  if (requestNotificationButton) requestNotificationButton.disabled = true;
+  if (requestNotificationButton) requestNotificationButton.style.opacity = "0%";
 
   try {
     const permission = await Notification.requestPermission();
@@ -28,9 +28,6 @@ const requestNotificationsPermission = async (accessToken: string) => {
             .then((_res) => {
               localStorage.setItem("FCMToken", token);
               localStorage.removeItem("accessToken");
-              return requestNotificationButton
-                ? requestNotificationButton.remove()
-                : null;
             });
         });
     } else {
@@ -40,7 +37,7 @@ const requestNotificationsPermission = async (accessToken: string) => {
     console.log("Error getting permission for notifications:" + error);
   }
 
-  if (requestNotificationButton) requestNotificationButton.disabled = false;
+  if (requestNotificationButton) requestNotificationButton.remove();
 };
 
 export default requestNotificationsPermission;
