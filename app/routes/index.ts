@@ -27,7 +27,6 @@ export const PRINCIPAL_ROUTES = {
 export const GUARDIAN_ROUTES = {
   annotation: "/guardian/annotation",
   announcement: "/guardian/announcement",
-
   message: "/guardian/message",
   attendance: "/guardian/attendance",
   home: "/guardian/home",
