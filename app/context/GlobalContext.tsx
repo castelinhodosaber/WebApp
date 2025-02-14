@@ -150,7 +150,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
     if (
       "serviceWorker" in navigator &&
-      !window.matchMedia("(display-mode: standalone)").matches
+      window.matchMedia("(display-mode: standalone)").matches
     ) {
       navigator.serviceWorker.ready.then((registration) => {
         if (!registration.active) {
@@ -172,7 +172,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (
       typeof Notification !== "undefined" &&
-      !window.matchMedia("(display-mode: standalone)").matches &&
+      window.matchMedia("(display-mode: standalone)").matches &&
       state.accessToken &&
       (state.person?.FCMToken !== localStorage.getItem("FCMToken") ||
         !state.person?.FCMToken ||

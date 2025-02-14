@@ -34,10 +34,10 @@ const requestNotificationsPermission = async (accessToken: string) => {
             });
         });
     } else {
-      console.error("Permission not granted for notifications");
+      console.log("Permission not granted for notifications");
     }
   } catch (error) {
-    console.error("Error getting permission for notifications:" + error);
+    console.log("Error getting permission for notifications:" + error);
   }
 
   if (requestNotificationButton) requestNotificationButton.disabled = false;

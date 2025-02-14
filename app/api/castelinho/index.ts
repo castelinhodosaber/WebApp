@@ -97,7 +97,8 @@ export const CASTELINHO_API_ENDPOINTS = {
 };
 
 const castelinhoApiInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_CASTELINHO_API || "http://localhost:3001",
+  baseURL:
+    process.env.NEXT_PUBLIC_CASTELINHO_API || "http://192.168.1.117:3001",
   timeout: 5000,
   headers: {
     "ngrok-skip-browser-warning": true,
