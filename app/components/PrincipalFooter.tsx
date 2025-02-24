@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useGlobalContext } from "../context/GlobalContext";
 import handleFooterOptions from "../utils/HandleFooterOptions";
 import ROUTES from "../routes";
+import useMediaQuery from "../hooks/useMediaQuery";
+import { useEffect, useState } from "react";
 
 const PrincipalFooter = () => {
   const {
@@ -11,9 +13,22 @@ const PrincipalFooter = () => {
     state: { person },
   } = useGlobalContext();
 
+  const [hideFooter, setHideFooter] = useState(false);
   const FOOTER_OPTIONS = person ? handleFooterOptions(person.role) : null;
   const pathname = usePathname();
   const router = useRouter();
+  const isMobile = useMediaQuery("(max-width: 700px)");
+
+  useEffect(() => {
+    if (
+      pathname.includes(ROUTES.private.principal.management.home) &&
+      !isMobile
+    ) {
+      setHideFooter(true);
+    } else {
+      setHideFooter(false);
+    }
+  }, [isMobile, pathname]);
 
   const handleClick = (footerOption: {
     icon: JSX.Element;
@@ -41,7 +56,7 @@ const PrincipalFooter = () => {
     }
   };
 
-  return (
+  return !hideFooter ? (
     <Flex
       align="center"
       bgColor="#1C1C1C"
@@ -80,7 +95,7 @@ const PrincipalFooter = () => {
         </Flex>
       ))}
     </Flex>
-  );
+  ) : null;
 };
 
 export default PrincipalFooter;

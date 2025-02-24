@@ -5,6 +5,7 @@ export type TranslatedRole =
   | "estudante"
   | "diretoria"
   | "responsável";
+  
 export type Classes = {
   id: number;
   year: number;

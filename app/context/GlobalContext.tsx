@@ -171,6 +171,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (
+      (pathname.includes("dashboard") || pathname.includes("home")) &&
       typeof Notification !== "undefined" &&
       window.matchMedia("(display-mode: standalone)").matches &&
       state.accessToken &&
@@ -201,8 +202,11 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         <Button
           position="absolute"
           id="request-notification-button"
-          top="5px"
-          left="5px"
+          bottom={["80px"]}
+          left="50%"
+          transform="translateX(-50%)"
+          padding={["5px 15px"]}
+          fontWeight={700}
           zIndex={1000}
           onClick={() =>
             requestNotificationsPermission(state.accessToken || "")

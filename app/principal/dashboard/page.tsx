@@ -2,12 +2,14 @@
 import Loading from "@/app/components/Loading";
 import { useGlobalContext } from "@/app/context/GlobalContext";
 import { usePrincipalContext } from "@/app/context/PrincipalContext";
+import useMediaQuery from "@/app/hooks/useMediaQuery";
 import ROUTES from "@/app/routes";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const TeacherDashboard = () => {
+  const isMobile = useMediaQuery("(max-width: 700px)");
   const {
     state: { classes, selectedClass },
     setSelectedClass,
@@ -58,44 +60,58 @@ const TeacherDashboard = () => {
         justify="center"
         width="100%"
       >
-        <Text fontSize={["16px"]} fontWeight={700}>
-          Selecionar Turma
-        </Text>
         <Flex
           align="center"
           alignContent="center"
           gap="15px 20px"
+          grow={2}
           justify="center"
           wrap="wrap"
           width="90%"
         >
-          {classes?.length ? (
-            classes?.map((principalClass, index) => (
-              <Button
-                color="secondary.100"
-                colorPalette="secondary"
-                border="1px solid orange"
-                borderRadius={["12px"]}
-                fontSize={["20px"]}
-                fontWeight={800}
-                height={["50px"]}
-                key={index}
-                onClick={() => {
-                  handleSelectedClass(principalClass.id);
-                }}
-                padding={["2px 5px"]}
-                textTransform="uppercase"
-                width={["45%"]}
-              >
-                {principalClass.name}
-              </Button>
-            ))
-          ) : (
-            <Text fontSize={["14px"]} fontWeight={400} textAlign="center">
-              Você não é responsável direto(a) por nenhuma turma no momento.
+          <Flex
+            align="center"
+            justify="center"
+            margin="0 0 10px 0"
+            width="100%"
+          >
+            <Text fontSize={["16px"]} fontWeight={700}>
+              Selecionar Turma
             </Text>
-          )}
+          </Flex>
+          {classes?.map((principalClass, index) => (
+            <Button
+              color="secondary.100"
+              colorPalette="secondary"
+              border="1px solid orange"
+              borderRadius={["12px"]}
+              fontSize={["20px"]}
+              fontWeight={800}
+              height={["50px"]}
+              key={index}
+              onClick={() => {
+                handleSelectedClass(principalClass.id);
+              }}
+              padding={["2px 5px"]}
+              textTransform="uppercase"
+              width={["45%"]}
+            >
+              {principalClass.name}
+            </Button>
+          ))}
         </Flex>
+        {!isMobile ? (
+          <Flex grow="1" align="flex-end" justify="center">
+            <Button
+              onClick={() =>
+                router.push(ROUTES.private.principal.management.home)
+              }
+              padding={["5px 15px"]}
+            >
+              Área Administrativa
+            </Button>
+          </Flex>
+        ) : null}
       </Flex>
     </Flex>
   );

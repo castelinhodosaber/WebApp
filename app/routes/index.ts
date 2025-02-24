@@ -22,6 +22,7 @@ export const PRINCIPAL_ROUTES = {
   nap: "/principal/nap",
   bath: "/principal/bath",
   bathroom: "/principal/bathroom",
+  management: "/principal/management",
 } as const;
 
 export const GUARDIAN_ROUTES = {
